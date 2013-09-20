@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc13.html">Prev</a> | <a href="Instructions2.doc15.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="tableswitch"></a>
+<hr><h2>tableswitch</h2>
+<a name="tableswitch.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="70136"></a>
+Access jump table by index and jump<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="70107"></a>
+ <i>tableswitch</i>
+<td><a name="87535"></a>
+ 
+
+<tr><td><a name="70109"></a>
+ <0-3 byte pad\>
+<td><a name="87537"></a>
+ 
+
+<tr><td><a name="70111"></a>
+ <i>defaultbyte1</i>
+<td><a name="87539"></a>
+ 
+
+<tr><td><a name="70113"></a>
+ <i>defaultbyte2</i>
+<td><a name="87541"></a>
+ 
+
+<tr><td><a name="70115"></a>
+ <i>defaultbyte3</i>
+<td><a name="87543"></a>
+ 
+
+<tr><td><a name="70117"></a>
+ <i>defaultbyte4</i>
+<td><a name="87545"></a>
+ 
+
+<tr><td><a name="70119"></a>
+ <i>lowbyte1</i>
+<td><a name="87547"></a>
+ 
+
+<tr><td><a name="70121"></a>
+ <i>lowbyte2</i>
+<td><a name="87549"></a>
+ 
+
+<tr><td><a name="70123"></a>
+ <i>lowbyte3</i>
+<td><a name="87551"></a>
+ 
+
+<tr><td><a name="70125"></a>
+ <i>lowbyte4</i>
+<td><a name="87553"></a>
+ 
+
+<tr><td><a name="70127"></a>
+ <i>highbyte1</i>
+<td><a name="87555"></a>
+ 
+
+<tr><td><a name="70129"></a>
+ <i>highbyte2</i>
+<td><a name="87557"></a>
+ 
+
+<tr><td><a name="70131"></a>
+ <i>highbyte3</i>
+<td><a name="87559"></a>
+ 
+
+<tr><td><a name="70133"></a>
+ <i>highbyte4</i>
+<td><a name="87561"></a>
+ 
+
+<tr><td><a name="70135"></a>
+ <i>jump offsets</i>...
+<td><a name="87563"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="tableswitch.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="70137"></a>
+<i>tableswitch</i> = 170 (0xaa)</blockquote><p>
+<a name="tableswitch.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="70138"></a>
+..., <i>index</i><em> </em><img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="tableswitch.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="499986"></a>
+A <i>tableswitch</i> is a variable-length instruction. Immediately after the <i>tableswitch</i> opcode, between 0 and 3 null bytes (zeroed bytes, not the null object) are inserted as padding. The number of null bytes is chosen so that the following byte begins at an address that is a multiple of 4 bytes from the start of the current method (the opcode of its first instruction). Immediately after the padding follow bytes constituting three signed 32-bit values: <i>default</i>, <i>low</i>, and <i>high</i>. Immediately following those bytes are bytes constituting a series of <i>high </i>- <i>low </i>+ 1 signed 32-bit offsets. The value <i>low</i> must be less than or equal &#32;to <i>high</i>.  &#32;The <i>high </i>- <i>low </i>+ 1 &#32;signed 32-bit  &#32;offsets  &#32;are treated as a 0-based jump table. Each of these signed 32-bit values is constructed as (<i>byte1</i> << 24) | (<i>byte2</i> << 16) | (<i>byte3</i> << 8) | <i>byte4</i>.</blockquote><p>
+
+<blockquote><a name="70140"></a>
+The <i>index</i> must be of type <code>int</code> and is popped from the operand stack. If <i>index</i> is less than <i>low</i> or <i>index</i> is greater than <i>high</i>, then a target address is calculated by adding <i>default</i> to the address of the opcode of this <i>tableswitch</i> instruction. Otherwise, the offset at position <i>index </i>- <i>low</i> of the jump table is extracted. The target address is calculated by adding that offset to the address of the opcode of this <i>tableswitch</i> instruction. Execution then continues at the target address.</blockquote><p>
+<blockquote><a name="70141"></a>
+The target address that can be calculated from each jump table offset, as well as the ones that can be calculated from <i>default</i>, must be the address of an opcode of an instruction within the method that contains this <i>tableswitch</i> instruction.</blockquote><p>
+<a name="tableswitch.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="70142"></a>
+The alignment required of the 4-byte operands of the <i>tableswitch</i> instruction guarantees 4-byte alignment of those operands if and only if the method that contains the <i>tableswitch</i> starts on a 4-byte boundary.</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc13.html">Prev</a> | <a href="Instructions2.doc15.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

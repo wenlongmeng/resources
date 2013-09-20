@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc14.html">Prev</a> | <a href="Compiling.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="wide"></a>
+<hr><h2>wide</h2>
+<a name="wide.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="70155"></a>
+Extend local variable index by additional bytes<p><Table Border="1">
+</blockquote>
+
+<p><b>Format 1</b><br>
+<blockquote>
+
+<tr><td><a name="70148"></a>
+ <i>wide</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70150"></a>
+ <i>&lt;opcode&gt;</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70152"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70154"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<blockquote><a name="70156"></a>
+where <i>&lt;opcode&gt;</i> is one of <i>iload</i>, <i>fload</i>, <i>aload</i>, <i>lload</i>, <i>dload</i>, <i>istore</i>, <i>fstore</i>, <i>astore</i>, <i>lstore</i>, <i>dstore</i>, or <i>ret</i><p><Table Border="1">
+</blockquote>
+
+<p><b>Format 2</b><br>
+<blockquote>
+
+<tr><td><a name="70161"></a>
+ <i>wide</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70163"></a>
+ <i>iinc</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70165"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70167"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70169"></a>
+ <i>constbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70171"></a>
+ <i>constbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="wide.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="70172"></a>
+<i>wide</i> = 196 (0xc4)</blockquote><p>
+<a name="wide.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="70173"></a>
+Same as modified instruction</blockquote><p>
+<a name="wide.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="463477"></a>
+The <i>wide</i> instruction modifies the behavior of another instruction. It takes one of two formats, depending on the instruction being modified. The first form of the <i>wide</i> instruction modifies one of the instructions <i>iload</i>, <i>fload</i>, <i>aload</i>, <i>lload</i>, <i>dload</i>, <i>istore</i>, <i>fstore</i>, <i>astore</i>, <i>lstore</i>, <i>dstore</i>, or <i>ret</i>. The second form applies only to the <i>iinc</i> instruction.</blockquote><p>
+<blockquote><a name="463478"></a>
+In either case, the <i>wide</i> opcode itself is followed in the compiled code by the opcode of the instruction <i>wide</i> modifies. In either form, two unsigned bytes <i>indexbyte1</i> and <i>indexbyte2</i> follow the modified opcode and are assembled into a 16-bit unsigned index to a local variable in the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is </blockquote><p>
+
+<blockquote><a name="463468"></a>
+(<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The calculated index must be an index into the local variable array of the current frame. Where the <i>wide</i> instruction modifies an <i>lload</i>, <i>dload</i>, <i>lstore</i>, or <i>dstore</i> instruction, the index following the calculated index (index + 1) must also be an index into the local variable array. In the second form, two immediate unsigned bytes <i>constbyte1</i> and <i>constbyte2</i> follow <i>indexbyte1</i> and <i>indexbyte2</i> in the code stream. Those bytes are also assembled into a signed 16-bit constant, where the constant is (<i>constbyte1</i> << 8) | <i>constbyte2</i>.</blockquote><p>
+<blockquote><a name="70179"></a>
+The widened bytecode operates as normal, except for the use of the wider index and, in the case of the second form, the larger increment range.</blockquote><p>
+<a name="wide.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="70183"></a>
+Although we say that <i>wide</i> "modifies the behavior of another instruction," the <i>wide</i> instruction effectively treats the bytes constituting the modified instruction as operands, denaturing the embedded instruction in the process. In the case of a modified <i>iinc</i> instruction, one of the logical operands of the <i>iinc</i> is not even at the normal offset from the opcode. The embedded instruction must never be executed directly; its opcode must never be the target of any control transfer instruction.</blockquote><p>
+<blockquote><a name="70184"></a>
+</blockquote><p>
+<a name="66864"></a>
+<p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc14.html">Prev</a> | <a href="Compiling.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

@@ -1,0 +1,598 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm17.html">Prev</a> | <a href="VMSpecIX.fm19.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6960652"></a>
+<center><h1> S</h1></center>
+<dl><dt><b><strong>S character
+</strong></b><dl>
+<a name="6960655"></a>
+<dt><a href="ClassFile.doc.html#84705">meaning in field or method descriptor,&#32;101</a>
+</dl>
+<dt><b>saload <strong>instruction
+</strong></b><dl>
+<a name="6960658"></a>
+<dt><a href="Instructions2.doc13.html#saload">definition,&#32;354</a>
+</dl>
+<dt><b>sastore <strong>instruction
+</strong></b><dl>
+<a name="6960661"></a>
+<dt><a href="Instructions2.doc13.html#sastore">definition,&#32;355</a>
+</dl>
+<dt><b><strong>security
+</strong></b><dl>
+<a name="6960664"></a>
+<dt><em>See also</em> access_flags item
+<a name="6960666"></a>
+<dt>verification of class<a href="ClassFile.doc.html#88597"> files,&#32;140</a>
+</dl>
+<dt><b>SecurityException
+</b><dl>
+<a name="6960669"></a>
+<dt><a href="Concepts.doc.html#24909">definition,&#32;44</a>
+</dl>
+<dt><b><strong>semantics
+</strong></b><dl>
+<a name="6960672"></a>
+<dt><a href="ClassFile.doc.html#3097">attributes, optional,&#32;116</a>
+<a name="6960674"></a>
+<dt><a href="Overview.doc.html#31340">integer and floating-point operator support,&#32;85</a>
+<a name="6960676"></a>
+<dt>invokespecial<a href="ClassFile.doc.html#75639"> instruction, access flag  use to select alternatives,&#32;96</a>
+<a name="6960678"></a>
+<dt><a href="Overview.doc.html#15644">Java virtual machine, strategies for implementing,&#32;92</a>
+<a name="6960680"></a>
+<dt><a href="Overview.doc.html#31951">types that have no direct integer  arithmetic support,&#32;84</a>
+</dl>
+<dt><b><strong>shadowing
+</strong></b><dl>
+<a name="6960683"></a>
+<dt><em>See</em> overriding
+</dl>
+<dt><b><strong>shift
+</strong></b><dl>
+<a name="6960686"></a>
+<dt>left int, ishl<a href="Instructions2.doc6.html#ishl">,&#32;297</a>
+<a name="6960688"></a>
+<dt>left long, lshl<a href="Instructions2.doc8.html#lshl">,&#32;328</a>
+<a name="6960690"></a>
+<dt>right int
+<dl>
+<a name="6960691"></a>
+<dt>arithmetic, ishr<a href="Instructions2.doc6.html#ishr">,&#32;298</a>
+<a name="6960693"></a>
+<dt>logical, iushr<a href="Instructions2.doc6.html#iushr">,&#32;302</a>
+</dl>
+<a name="6960695"></a>
+<dt>right long
+<dl>
+<a name="6960696"></a>
+<dt>arithmetic, lshr<a href="Instructions2.doc8.html#lshr">,&#32;329</a>
+<a name="6960698"></a>
+<dt>logical, lushr<a href="Instructions2.doc8.html#lushr">,&#32;333</a>
+</dl>
+</dl>
+<dt><b>short <strong>type
+</strong></b><dl>
+<a name="6960701"></a>
+<dt>converting int to, i2s<a href="Instructions2.doc6.html#i2s">,&#32;259</a>
+<a name="6960703"></a>
+<dt><a href="Overview.doc.html#11455">definition,&#32;62</a>
+<a name="6960705"></a>
+<dt><a href="Overview.doc.html#">instruction set handling,&#32;81</a>
+<a name="6960707"></a>
+<dt><a href="Overview.doc.html#31951">integer arithmetic not directly supported,&#32;84</a>
+<a name="6960709"></a>
+<dt>loading from arrays, saload<a href="Instructions2.doc13.html#saload">,&#32;354</a>
+<a name="6960711"></a>
+<dt>pushing, sipush<a href="Instructions2.doc13.html#sipush">,&#32;356</a>
+<a name="6960713"></a>
+<dt>storing into arrays, sastore<a href="Instructions2.doc13.html#sastore">,&#32;355</a>
+<a name="6960715"></a>
+<dt><a href="Overview.doc.html#29416">value range,&#32;63</a>
+</dl>
+<dt><b><strong>signature
+</strong></b><dl>
+<a name="6960718"></a>
+<dt><a href="Concepts.doc.html#18291">definition,&#32;32</a>
+</dl>
+<dt><b>sipush <strong>instruction
+</strong></b><dl>
+<a name="6960721"></a>
+<dt><a href="Instructions2.doc13.html#sipush">definition,&#32;356</a>
+</dl>
+<dt><b><strong>size
+</strong></b><dl>
+<a name="6960724"></a>
+<dt><a href="Overview.doc.html#15728">operand stacks,&#32;73</a>
+<a name="6960726"></a>
+<dt>Sun's JDK and Java 2 SDK
+<dl>
+<a name="6960727"></a>
+<dt>heap, setting with -ms and -mx<a href="Overview.doc.html#30988"> flags,&#32;69</a>
+<a name="6960729"></a>
+<dt>Java virtual machine stack, setting  with -oss<a href="Overview.doc.html#36275"> flag,&#32;68</a>
+<a name="6960731"></a>
+<dt><a href="Overview.doc.html#31002">method area, constraints,&#32;69</a>
+<a name="6960733"></a>
+<dt>native method stacks, setting  with -ss <a href="Overview.doc.html#36289">flag,&#32;71</a>
+</dl>
+</dl>
+<dt><b><strong>slashes
+</strong></b><dl>
+<a name="6960736"></a>
+<dt><a href="ClassFile.doc.html#14922">class name use,&#32;99</a>
+</dl>
+<dt><b>SourceFile_attribute <strong>structure
+</strong></b><dl>
+<a name="6960739"></a>
+<dt>(attributes table of ClassFile<a href="ClassFile.doc.html#79869"> structure),&#32;128</a>
+</dl>
+<dt><b>sourcefile_index <strong>item
+</strong></b><dl>
+<a name="6960742"></a>
+<dt>(SourceFile_attribute<a href="ClassFile.doc.html#79893"> structure),&#32;129</a>
+</dl>
+<dt><b>StackOverflowError
+</b><dl>
+<a name="6960745"></a>
+<dt><a href="Concepts.doc.html#24984">definition,&#32;45</a>
+<a name="6960747"></a>
+<dt><a href="Overview.doc.html#21922">as Java virtual machine stack-related error,&#32;68</a>
+<a name="6960749"></a>
+<dt><a href="Overview.doc.html#21973">as native method stack-related error,&#32;71</a>
+</dl>
+<dt><b><strong>stacks
+</strong></b><dl>
+<a name="6960752"></a>
+<dt>errors
+<dl>
+<a name="6960753"></a>
+<dt>OutOfMemoryError<a href="Overview.doc.html#23252">,&#32;71</a>
+<a name="6960755"></a>
+<dt>StackOverflowError<a href="Overview.doc.html#21922">,&#32;68</a>, <a href="Overview.doc.html#21973">71</a>
+</dl>
+<a name="6960758"></a>
+<dt><a href="Overview.doc.html#30934">Java,&#32;67</a>
+<a name="6960760"></a>
+<dt>Java virtual machine
+<dl>
+<a name="6960761"></a>
+<dt><a href="Overview.doc.html#15581">frames allocated from,&#32;71</a>
+<a name="6960763"></a>
+<dt>size, setting with -oss<a href="Overview.doc.html#36275"> flag, Sun's JDK and Java 2 SDK,&#32;68</a>
+</dl>
+<a name="6960765"></a>
+<dt><a href="Overview.doc.html#25597">native method,&#32;70</a>
+<dl>
+<a name="6960767"></a>
+<dt>size, setting with -oss<a href="Overview.doc.html#36275"> flag, Sun's JDK and Java 2 SDK,&#32;68</a>
+</dl>
+<a name="6960769"></a>
+<dt>operand
+<dl>
+<a name="6960770"></a>
+<dt><a href="ClassFile.doc.html#11934">code verification, Pass 3 - bytecode verifier,&#32;143</a>
+<a name="6960772"></a>
+<dt><a href="ClassFile.doc.html#9779">data-flow analysis,&#32;142</a>
+<a name="6960774"></a>
+<dt>duplicating value(s), dup2<a href="Instructions2.doc3.html#dup2">,&#32;221</a>
+<a name="6960776"></a>
+<dt>duplicating value(s), dup2_x1<a href="Instructions2.doc3.html#dup2_x1">,&#32;222</a>
+<a name="6960778"></a>
+<dt>duplicating value(s), dup2_x2<a href="Instructions2.doc3.html#dup2_x2">,&#32;223</a>
+<a name="6960780"></a>
+<dt>duplicating value, dup<a href="Instructions2.doc3.html#dup">,&#32;218</a>
+<a name="6960782"></a>
+<dt>duplicating value, dup_x1<a href="Instructions2.doc3.html#dup_x1">,&#32;219</a>
+<a name="6960784"></a>
+<dt>duplicating value, dup_x2<a href="Instructions2.doc3.html#dup_x2">,&#32;220</a>
+<a name="6960786"></a>
+<dt><a href="Overview.doc.html#16561">management instruction summary,&#32;88</a>
+<a name="6960788"></a>
+<dt><a href="ClassFile.doc.html#1570">maximum depth,&#32;121</a>
+<a name="6960790"></a>
+<dt><a href="ClassFile.doc.html#9825">merging, during data-flow analysis,&#32;145</a>
+<a name="6960792"></a>
+<dt>pop value(s), pop2<a href="Instructions2.doc11.html#pop2">,&#32;347</a>
+<a name="6960794"></a>
+<dt>pop value, pop<a href="Instructions2.doc11.html#pop">,&#32;346</a>
+<a name="6960796"></a>
+<dt><a href="ClassFile.doc.html#36730">size limitation,&#32;152</a>
+<a name="6960798"></a>
+<dt><a href="ClassFile.doc.html#29477">structural constraints on instructions,&#32;137</a>
+<a name="6960800"></a>
+<dt>swap values, swap<a href="Instructions2.doc13.html#swap">,&#32;357</a>
+</dl>
+</dl>
+<dt><b><strong>standards
+</strong></b><dl>
+<a name="6960803"></a>
+<dt><a href="Concepts.doc.html#19367">IEEE 754,&#32;7</a>
+<dl>
+<a name="6960805"></a>
+<dt>adding double, conformance, dadd<a href="Instructions2.doc3.html#dadd">,&#32;198</a>
+<a name="6960807"></a>
+<dt>adding float, conformance, fadd<a href="Instructions2.doc4.html#fadd">,&#32;228</a>
+<a name="6962466"></a>
+<dt>comparing double, conformance, dcmp&lt;op&gt;<a href="Instructions2.doc3.html#dcmpop">,&#32;202</a>
+<a name="6962472"></a>
+<dt>
+<a name="6962483"></a>
+<a name="6962468"></a>
+<dt>comparing float, conformance, fcmp&lt;op&gt;<a href="Instructions2.doc4.html#fcmpop">,&#32;232</a>
+<a name="6960813"></a>
+<dt>dividing double, conformance, ddiv<a href="Instructions2.doc3.html#ddiv">,&#32;205</a>
+<a name="6960815"></a>
+<dt>dividing float, conformance, fdiv<a href="Instructions2.doc4.html#fdiv">,&#32;235</a>
+<a name="6960817"></a>
+<dt><a href="Overview.doc.html#32045">floating-point comparison, conformance,&#32;85</a>, <a href="Overview.doc.html#31288">89</a>
+<a name="6960820"></a>
+<dt>floating-point double format bit layout, high_bytes and low_bytes<a href="ClassFile.doc.html#23957"> items,&#32;109</a>
+<a name="6960822"></a>
+<dt><a href="Overview.doc.html#14562">floating-point operation conformance to,&#32;85</a>
+<a name="6960824"></a>
+<dt>multiplying double, conformance, dmul<a href="Instructions2.doc3.html#dmul">,&#32;209</a>
+<a name="6960826"></a>
+<dt>multiplying float, conformance, fmul<a href="Instructions2.doc4.html#fmul">,&#32;239</a>
+<a name="6960828"></a>
+<dt>remainder, drem not the same as, drem<a href="Instructions2.doc3.html#drem">,&#32;212</a>
+<a name="6960830"></a>
+<dt>remainder, frem not the same as, frem<a href="Instructions2.doc4.html#frem">,&#32;242</a>
+<a name="6960832"></a>
+<dt>subtracting double, conformance, dsub<a href="Instructions2.doc3.html#dsub">,&#32;217</a>
+<a name="6960834"></a>
+<dt>subtracting float, conformance, fsub<a href="Instructions2.doc4.html#fsub">,&#32;247</a>
+</dl>
+<a name="6960836"></a>
+<dt><a href="ClassFile.doc.html#6111">UTF-8 format, bibliographic reference,&#32;111</a>
+</dl>
+<dt><b>start_pc <strong>item
+</strong></b><dl>
+<a name="6960839"></a>
+<dt>(exception_table array of Code_attribute<a href="ClassFile.doc.html#6511"> structure),&#32;122</a>
+<a name="6960841"></a>
+<dt>(line_number_table array of LineNumberTable_attribute<a href="ClassFile.doc.html#1612"> structure),&#32;130</a>
+<a name="6960843"></a>
+<dt>(local_variable_table array of LocalVariableTable_attribute<a href="ClassFile.doc.html#16777"> structure),&#32;132</a>
+</dl>
+<dt><b><strong>startup
+</strong></b><dl>
+<a name="6960846"></a>
+<dt><a href="Concepts.doc.html#19042">Java virtual machine,&#32;46</a>, <a href="ConstantPool.doc.html#72012">158</a>
+</dl>
+<dt><b>static <strong>modifier</strong>
+</b><dl>
+<a name="6960850"></a>
+<dt><em>See also</em> ACC_STATIC modifier; class(es)
+<a name="6960852"></a>
+<dt>fields
+<dl>
+<a name="6960853"></a>
+<dt>get from classes, getstatic<a href="Instructions2.doc5.html#getstatic">,&#32;250</a>
+<a name="6960855"></a>
+<dt>put into classes, putstatic<a href="Instructions2.doc11.html#putstatic">,&#32;350</a>
+</dl>
+<a name="6960857"></a>
+<dt><a href="Concepts.doc.html#32316">initializers,&#32;33</a>
+<dl>
+<a name="6960859"></a>
+<dt><a href="Concepts.doc.html#19011">execution of during initialization,&#32;51</a>
+<a name="6960861"></a>
+<dt><a href="Concepts.doc.html#20425">not members of a class,&#32;29</a>
+</dl>
+<a name="6962523"></a>
+<dt>
+<a name="6962524"></a>
+<dt>methods
+<dl>
+<a name="6962526"></a>
+<dt>invoking, invokestatic<a href="Instructions2.doc6.html#invokestatic">,&#32;288</a>
+</dl>
+</dl>
+<dt><b><strong>storage
+</strong></b><dl>
+<a name="6960867"></a>
+<dt><a href="Overview.doc.html#21949">automatic management system,  garbage collection as,&#32;68</a>
+<a name="6960869"></a>
+<dt><a href="Overview.doc.html#1962">data, frame use for,&#32;71</a>
+<a name="6960871"></a>
+<dt><a href="Overview.doc.html#15581">frame allocation,&#32;71</a>
+<a name="6960873"></a>
+<dt>runtime data areas
+<dl>
+<a name="6960874"></a>
+<dt><a href="Overview.doc.html#21949">heap,&#32;68</a>
+<a name="6960876"></a>
+<dt><a href="Overview.doc.html#30934">Java virtual machine stack,&#32;67</a>
+<a name="6960878"></a>
+<dt><a href="Overview.doc.html#6657">method area,&#32;69</a>
+<a name="6960880"></a>
+<dt><a href="Overview.doc.html#36284">native method stacks,&#32;70</a>
+<a name="6960882"></a>
+<dt>pc<a href="Overview.doc.html#25816"> register,&#32;67</a>
+<a name="6960884"></a>
+<dt><a href="Overview.doc.html#22973">runtime constant pool,&#32;70</a>
+</dl>
+</dl>
+<dt><b><strong>storing
+</strong></b><dl>
+<a name="6960887"></a>
+<dt>into arrays of type
+<dl>
+<a name="6960888"></a>
+<dt>byte or boolean, bastore<a href="Instructions2.doc1.html#bastore">,&#32;189</a>
+<a name="6960890"></a>
+<dt>char, castore<a href="Instructions2.doc2.html#castore">,&#32;192</a>
+<a name="6960892"></a>
+<dt>double, dastore<a href="Instructions2.doc3.html#dastore">,&#32;201</a>
+<a name="6960894"></a>
+<dt>float, fastore<a href="Instructions2.doc4.html#fastore">,&#32;231</a>
+<a name="6960896"></a>
+<dt>int, iastore<a href="Instructions2.doc6.html#iastore">,&#32;263</a>
+<a name="6960898"></a>
+<dt>long, lastore<a href="Instructions2.doc8.html#laload">,&#32;310</a>
+<a name="6960900"></a>
+<dt>reference, aastore<a href="Instructions2.doc.html#aastore">,&#32;176</a>
+<a name="6960902"></a>
+<dt>short, sastore<a href="Instructions2.doc13.html#sastore">,&#32;355</a>
+</dl>
+<a name="6960904"></a>
+<dt>into local variables of type
+<dl>
+<a name="6960905"></a>
+<dt>double, dstore<a href="Instructions2.doc3.html#dstore">,&#32;215</a>
+<a name="6960907"></a>
+<dt>double, dstore_&lt;n&gt;<a href="Instructions2.doc3.html#dstore_n">,&#32;216</a>
+<a name="6960909"></a>
+<dt>float, fstore<a href="Instructions2.doc4.html#fstore">,&#32;245</a>
+<a name="6960911"></a>
+<dt>float, fstore_&lt;n&gt;<a href="Instructions2.doc4.html#fstore_n">,&#32;246</a>
+<a name="6960913"></a>
+<dt>int, istore<a href="Instructions2.doc6.html#istore">,&#32;299</a>
+<a name="6960915"></a>
+<dt>int, istore_&lt;n&gt;<a href="Instructions2.doc6.html#istore_n">,&#32;300</a>
+<a name="6960917"></a>
+<dt>long, lstore<a href="Instructions2.doc8.html#lstore">,&#32;330</a>
+<a name="6960919"></a>
+<dt>long, lstore_&lt;n&gt;<a href="Instructions2.doc8.html#lstore_n">,&#32;331</a>
+<a name="6960921"></a>
+<dt>reference, astore<a href="Instructions2.doc.html#astore">,&#32;184</a>
+<a name="6960923"></a>
+<dt>reference, astore_&lt;n&gt;<a href="Instructions2.doc.html#astore_n">,&#32;185</a>
+</dl>
+</dl>
+<dt><b>strictfp <strong>modifier
+</strong></b><dl>
+<a name="6960926"></a>
+<dt><em>See also</em> ACC_STRICT flag, FP-strict  floating-point mode
+<a name="6960928"></a>
+<dt>definition
+<dl>
+<a name="6960929"></a>
+<dt><a href="Concepts.doc.html#32968">class,&#32;28</a>
+<a name="6960931"></a>
+<dt><a href="Concepts.doc.html#33004">in method declarations,&#32;33</a>
+</dl>
+</dl>
+<dt><b>String <strong>class
+</strong></b><dl>
+<a name="6960934"></a>
+<dt><a href="Concepts.doc.html#25486">definition,&#32;12</a>
+</dl>
+<dt><b>string_index <strong>item
+</strong></b><dl>
+<a name="6960937"></a>
+<dt>(CONSTANT_String_info<a href="ClassFile.doc.html#6664"> structure),&#32;106</a>
+</dl>
+<dt><b><strong>strings
+</strong></b><dl>
+<a name="6960940"></a>
+<dt><em>See also</em> String class, CONSTANT_Utf8_info structure
+<a name="6960942"></a>
+<dt><a href="Concepts.doc.html#23424">conversion context,&#32;16</a>
+<a name="6960944"></a>
+<dt><a href="Concepts.doc.html#29971">definition,&#32;6</a>
+<a name="6960946"></a>
+<dt>String<a href="Concepts.doc.html#24330"> new instances creation triggered by,&#32;54</a>
+</dl>
+<dt><b><strong>structures
+</strong></b><dl>
+<a name="6960949"></a>
+<dt>class<a href="ClassFile.doc.html#74328"> file structures,&#32;93</a>
+</dl>
+<dt><b><strong>subclass
+</strong></b><dl>
+<a name="6960952"></a>
+<dt><a href="Concepts.doc.html#20359">definition,&#32;29</a>
+</dl>
+<dt><b><strong>subpackages
+</strong></b><dl>
+<a name="6960955"></a>
+<dt><a href="Concepts.doc.html#26053">definition,&#32;25</a>
+</dl>
+<dt><b><strong>subroutine
+</strong></b><dl>
+<a name="6960958"></a>
+<dt>jump to
+<dl>
+<a name="6960959"></a>
+<dt>jsr<a href="Instructions2.doc7.html#jsr">,&#32;304</a>
+<a name="6960961"></a>
+<dt>wide index, jsr_w<a href="Instructions2.doc7.html#jsr_w">,&#32;305</a>
+</dl>
+<a name="6960963"></a>
+<dt>return from, ret<a href="Instructions2.doc12.html#ret">,&#32;352</a>
+</dl>
+<dt><b><strong>subtracting
+</strong></b><dl>
+<a name="6960966"></a>
+<dt>double, dsub<a href="Instructions2.doc3.html#dsub">,&#32;217</a>
+<a name="6960968"></a>
+<dt>float, fsub<a href="Instructions2.doc4.html#fsub">,&#32;247</a>
+<a name="6960970"></a>
+<dt>int, isub<a href="Instructions2.doc6.html#isub">,&#32;301</a>
+<a name="6960972"></a>
+<dt>long, lsub<a href="Instructions2.doc8.html#lsub">,&#32;332</a>
+</dl>
+<dt><b>super_class <strong>item
+</strong></b><dl>
+<a name="6960975"></a>
+<dt>(ClassFile<a href="ClassFile.doc.html#29250"> structure),&#32;97</a>
+</dl>
+<dt><b>super <strong>method
+</strong></b><dl>
+<a name="6960978"></a>
+<dt><a href="Concepts.doc.html#18321">definition,&#32;34</a>
+</dl>
+<dt><b><strong>superclasses
+</strong></b><dl>
+<a name="6960981"></a>
+<dt><em>See also</em> ACC_SUPER flag
+<a name="6960983"></a>
+<dt><a href="ClassFile.doc.html#9773">checking for,&#32;141</a>
+<a name="6960985"></a>
+<dt><a href="Concepts.doc.html#20344">definition,&#32;29</a>
+<a name="6960987"></a>
+<dt>super<a href="Concepts.doc.html#18321"> method as constructor invocation,&#32;34</a>
+<a name="6960989"></a>
+<dt>super modifier
+<dl>
+<a name="6960990"></a>
+<dt><a href="Concepts.doc.html#17564">accessing, overridden methods with,&#32;32</a>
+</dl>
+</dl>
+<dt><b><strong>superinterfaces
+</strong></b><dl>
+<a name="6960993"></a>
+<dt><a href="Concepts.doc.html#20603">definition,&#32;36</a>
+</dl>
+<dt><b>swap <strong>instruction
+</strong></b><dl>
+<a name="6960996"></a>
+<dt><a href="Instructions2.doc13.html#swap">definition,&#32;357</a>
+</dl>
+<dt><b><strong>swapping
+</strong></b><dl>
+<a name="6960999"></a>
+<dt>operand stack values, swap<a href="Instructions2.doc13.html#swap">,&#32;357</a>
+<a name="6961001"></a>
+<dt>swap<a href="Overview.doc.html#15729"> instruction, operand stack  manipulation constraints,&#32;73</a>
+<a name="6961003"></a>
+<dt><a href="Threads.doc.html#23866">threads example,&#32;406</a>
+</dl>
+<dt><b><strong>symbolic references
+</strong></b><dl>
+<a name="6961006"></a>
+<dt><a href="ConstantPool.doc.html#73367">deriving from class or interface representation,&#32;156</a>
+<a name="6961008"></a>
+<dt><a href="ConstantPool.doc.html#74024">resolving,&#32;165</a>
+</dl>
+<dt><b><strong>symbols
+</strong></b><dl>
+<a name="6961011"></a>
+<dt><em>See</em> names
+</dl>
+<dt><b><strong>synchronization
+</strong></b><dl>
+<a name="6961014"></a>
+<dt><em>See also</em> ACC_SYNCHRONIZED flag; threads
+<a name="6961016"></a>
+<dt><a href="Compiling.doc.html#6531">compilation examples,&#32;394</a>
+<a name="6961018"></a>
+<dt><a href="Concepts.doc.html#28949">exception handling integration with,&#32;40</a>
+<a name="6961020"></a>
+<dt><a href="Threads.doc.html#24410">locks,&#32;412</a>
+<a name="6961022"></a>
+<dt>synchronized method
+<dl>
+<a name="6961023"></a>
+<dt>double value return from, dreturn<a href="Instructions2.doc3.html#dreturn">,&#32;214</a>
+<a name="6961025"></a>
+<dt>float value return from, freturn<a href="Instructions2.doc4.html#freturn">,&#32;244</a>
+<a name="6961027"></a>
+<dt>int value return from, ireturn<a href="Instructions2.doc6.html#ireturn">,&#32;296</a>
+<a name="6961029"></a>
+<dt>long value return from, lreturn<a href="Instructions2.doc8.html#lreturn">,&#32;327</a>
+<a name="6961031"></a>
+<dt>reference value return from, areturn<a href="Instructions2.doc.html#areturn">,&#32;182</a>
+<a name="6961033"></a>
+<dt>void value return from, return<a href="Instructions2.doc12.html#return">,&#32;353</a>
+</dl>
+<a name="6961035"></a>
+<dt>synchronized modifier
+<dl>
+<a name="6961036"></a>
+<dt><a href="Concepts.doc.html#16386">in method declarations,&#32;33</a>
+<a name="6961038"></a>
+<dt><a href="Concepts.doc.html#22134">multithreaded actions,&#32;59</a>
+<a name="6961040"></a>
+<dt><a href="Threads.doc.html#24410">operations,&#32;412</a>
+<a name="6961042"></a>
+<dt><a href="Threads.doc.html#24410">specification,&#32;412</a>
+<a name="6961044"></a>
+<dt><a href="Concepts.doc.html#22139">thread-memory interaction, ordering rules,&#32;60</a>
+</dl>
+</dl>
+<dt><b><strong>syntax
+</strong></b><dl>
+<a name="6961047"></a>
+<dt>class<a href="ClassFile.doc.html#44115"> file specification,&#32;94</a>
+<a name="6961049"></a>
+<dt><a href="ClassFile.doc.html#14150">field and method descriptor grammar,&#32;99</a>
+<a name="6961051"></a>
+<dt><a href="ClassFile.doc.html#14922">internal form of class and interface names,&#32;99</a>
+</dl>
+<dt><b>Synthetic_attribute <strong>structure
+</strong></b><dl>
+<a name="6961054"></a>
+<dt>(attributes table of field_info or method_info<a href="ClassFile.doc.html#88571"> structure),&#32;127</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm17.html">Prev</a> | <a href="VMSpecIX.fm19.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

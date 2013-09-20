@@ -1,0 +1,242 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc10.html">Prev</a> | <a href="Instructions2.doc12.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="pop"></a>
+<hr><h2>pop</h2>
+<a name="pop.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69883"></a>
+Pop the top operand stack value<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69882"></a>
+ <i>pop</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="pop.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69884"></a>
+<i>pop</i> = 87 (0x57)</blockquote><p>
+<a name="pop.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69885"></a>
+..., <i>value</i><em> </em><img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="pop.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69886"></a>
+Pop the top value from the operand stack. </blockquote><p>
+<blockquote><a name="69887"></a>
+The <i>pop</i> instruction must not be used unless <i>value</i> is a value of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+
+<a name="pop2"></a>
+<hr><h2>pop2</h2>
+<a name="pop2.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69898"></a>
+Pop the top one or two operand stack values<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69897"></a>
+ <i>pop2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="pop2.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69899"></a>
+<i>pop2</i> = 88 (0x58)</blockquote><p>
+<a name="pop2.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69900"></a>
+Form 1:</blockquote><p>
+<blockquote><a name="364912"></a>
+...,<em> </em><i>value2</i>, <i>value1</i><em> </em><img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<blockquote><a name="349874"></a>
+where each of <i>value1</i> and <i>value2</i> is a value of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="364915"></a>
+Form 2:</blockquote><p>
+<a name="pop2."></a>
+<blockquote><a name="349878"></a>
+...,<em> </em><i>value</i><em> </em><img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<blockquote><a name="364916"></a>
+where <i>value</i> is a value of a category 2 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<a name="pop2.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69901"></a>
+Pop the top one or two values from the operand stack. </blockquote><p>
+
+<a name="putfield"></a>
+<hr><h2>putfield</h2>
+<a name="putfield.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69920"></a>
+Set field in object<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69915"></a>
+ <i>putfield</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69917"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69919"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="putfield.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69921"></a>
+<i>putfield</i> = 181 (0xb5)</blockquote><p>
+<a name="putfield.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69922"></a>
+..., <i>objectref</i>, <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="putfield.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69925"></a>
+The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are used to construct an index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The runtime constant pool item at that index must be a symbolic reference to a field <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>, which gives the name and descriptor of the field as well as a symbolic reference to the class in which the field is to be found. The class of <i>objectref</i> must not be an array. If the field is <code>protected</code> <a href="ClassFile.doc.html#1513">(&#167;4.6)</a>, and it is either a member of the current class or a member of a superclass of the current class, then the class of <i>objectref</i> must be either the current class or a subclass of the current class.</blockquote><p>
+<blockquote><a name="349444"></a>
+The referenced field is resolved <a href="ConstantPool.doc.html#71685">(&#167;5.4.3.2)</a>. The type of a <i>value</i> stored by a <i>putfield</i> instruction must be compatible with the descriptor of the referenced field <a href="ClassFile.doc.html#14152">(&#167;4.3.2)</a>. If the field descriptor type is <code>boolean</code>, <code>byte</code>, <code>char</code>, <code>short</code>, or <code>int</code>, then the <i>value</i> must be an <code>int</code>. If the field descriptor type is <code>float</code>, <code>long</code>, or <code>double</code>, then the <i>value</i> must be a <code>float</code>, <code>long</code>, or <code>double</code>, respectively. If the field descriptor type is a reference type, then the <i>value</i> must be of a type that is assignment compatible <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a> with the field descriptor type. If the field is <code>final</code>, it should be declared in the current class. Otherwise, an <code>IllegalAccessError</code> is thrown.</blockquote><p>
+<blockquote><a name="366839"></a>
+</blockquote><p>
+
+<blockquote><a name="375133"></a>
+The <i>value</i> and <i>objectref</i> are popped from the operand stack. The <i>objectref</i> must be of type <code>reference</code>. The <i>value</i> undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>, and the referenced field in <i>objectref</i> is set to <i>value'</i>.</blockquote><p>
+<a name="putfield.Linking"></a>
+<p><b>Linking Exceptions</b><br>
+<blockquote><a name="177870"></a>
+During resolution of the symbolic reference to the field, any of the exceptions pertaining to field resolution documented in <a href="ConstantPool.doc.html#71685">Section 5.4.3.2</a> can be thrown.</blockquote><p>
+<a name="putfield."></a>
+<p><b></b><br>
+<blockquote><a name="119381"></a>
+Otherwise, if the resolved field is a <code>static</code> field, <i>putfield</i> throws an <code>IncompatibleClassChangeError</code>.</blockquote><p>
+<blockquote><a name="366513"></a>
+Otherwise, if the field is <code>final</code>, it must be declared in the current class. Otherwise, an <code>IllegalAccessError</code> is thrown.</blockquote><p>
+<a name="putfield.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="349460"></a>
+Otherwise, if <i>objectref</i><em> </em>is <code>null</code>, the <i>putfield</i> instruction throws a <code>NullPointerException</code>.</blockquote><p>
+
+<a name="putstatic"></a>
+<hr><h2>putstatic</h2>
+<a name="putstatic.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69961"></a>
+Set <code>static</code> field in class<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69956"></a>
+ <i>putstatic</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69958"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69960"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="putstatic.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69962"></a>
+<i>putstatic</i> = 179 (0xb3)</blockquote><p>
+<a name="putstatic.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69963"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="putstatic.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69966"></a>
+The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are used to construct an index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The runtime constant pool item at that index must be a symbolic reference to a field <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>, which gives the name and descriptor of the field as well as a symbolic reference to the class or interface in which the field is to be found. The referenced field is resolved <a href="ConstantPool.doc.html#71685">(&#167;5.4.3.2)</a>.</blockquote><p>
+<blockquote><a name="283089"></a>
+On successful resolution of the field the class or interface that declared the resolved field is initialized <a href="ConstantPool.doc.html#77976">(&#167;5.5)</a> if that class or interface has not already been initialized.</blockquote><p>
+<blockquote><a name="366507"></a>
+The type of a <i>value</i> stored by a <i>putstatic </i>instruction must be compatible with the descriptor of the referenced field <a href="ClassFile.doc.html#14152">(&#167;4.3.2)</a>. If the field descriptor type is <code>boolean</code>, <code>byte</code>, <code>char</code>, <code>short</code>, or <code>int</code>, then the <i>value</i> must be an <code>int</code>. If the field descriptor type is <code>float</code>, <code>long</code>, or <code>double</code>, then the <i>value</i> must be a <code>float</code>, <code>long</code>, or <code>double</code>, respectively. If the field descriptor type is a reference type, then the <i>value</i> must be of a type that is assignment compatible <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a> with the field descriptor type. If the field is <code>final</code>, it should be declared in the current class. Otherwise, an <code>IllegalAccessError</code> is thrown.</blockquote><p>
+
+<blockquote><a name="69986"></a>
+The <i>value</i> is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The class field is set to <i>value'</i>.</blockquote><p>
+<a name="putstatic.Linking"></a>
+<p><b>Linking Exceptions</b><br>
+<blockquote><a name="177872"></a>
+During resolution of the symbolic reference to the class or interface field, any of the exceptions pertaining to field resolution documented in <a href="ConstantPool.doc.html#71685">Section 5.4.3.2</a> can be thrown.</blockquote><p>
+<blockquote><a name="108678"></a>
+Otherwise, if the resolved field is not a <code>static</code> (class) field or an interface field, <i>putstatic</i> throws an <code>IncompatibleClassChangeError</code>.</blockquote><p>
+<blockquote><a name="366518"></a>
+Otherwise, if the field is <code>final</code>, it must be declared in the current class. Otherwise, an <code>IllegalAccessError</code> is thrown.</blockquote><p>
+<a name="putstatic.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="318097"></a>
+Otherwise, if execution of this <i>putstatic</i> instruction causes initialization of the referenced class or interface, <i>putstatic</i> may throw an <code>Error</code> as detailed in <a href="Concepts.doc.html#24237">Section 2.17.5</a>.</blockquote><p>
+<a name="putstatic.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="315560"></a>
+A <i>putstatic</i> instruction may be used only to set the value of an interface field on the initialization of that field. Interface fields may be assigned to only once, on execution of an interface variable initialization expression when the interface is initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>. </blockquote><p>
+<blockquote><a name="69990"></a>
+</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc10.html">Prev</a> | <a href="Instructions2.doc12.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

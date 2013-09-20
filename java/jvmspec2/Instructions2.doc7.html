@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc6.html">Prev</a> | <a href="Instructions2.doc8.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="jsr"></a>
+<hr><h2>jsr</h2>
+<a name="jsr.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69164"></a>
+Jump subroutine<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69159"></a>
+ <i>jsr</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69161"></a>
+ <i>branchbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69163"></a>
+ <i>branchbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="jsr.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69165"></a>
+<i>jsr</i> = 168 (0xa8)</blockquote><p>
+<a name="jsr.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69166"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>address</i></blockquote><p>
+<a name="jsr.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69167"></a>
+The <i>address</i> of the opcode of the instruction immediately following this <i>jsr</i> instruction is pushed onto the operand stack as a value of type <code>returnAddress</code>. The unsigned <i>branchbyte1</i> and <i>branchbyte2</i> are used to construct a signed 16-bit offset, where the offset is (<i>branchbyte1</i> << 8) | <i>branchbyte2</i>. Execution proceeds at that offset from the address of this <i>jsr</i> instruction. The target address must be that of an opcode of an instruction within the method that contains this <i>jsr </i>instruction.</blockquote><p>
+<a name="jsr.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69168"></a>
+The <i>jsr</i> instruction is used with the <i>ret</i> instruction in the implementation of the <code>finally</code> clauses of the Java programming language (see <a href="Compiling.doc.html#13789">Section 7.13, "Compiling <code>finally</code>"</a>). Note that <i>jsr</i> pushes the address onto the operand stack and <i>ret</i> gets it out of a local variable. This asymmetry is intentional.</blockquote><p>
+
+<a name="jsr_w"></a>
+<hr><h2>jsr_w</h2>
+<a name="jsr_w.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69186"></a>
+Jump subroutine (wide index)<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69177"></a>
+ <i>jsr_w</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69179"></a>
+ <i>branchbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69181"></a>
+ <i>branchbyte2</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69183"></a>
+ <i>branchbyte3</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69185"></a>
+ <i>branchbyte4</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="jsr_w.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69187"></a>
+<i>jsr_w</i> = 201 (0xc9)</blockquote><p>
+<a name="jsr_w.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69188"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>address</i></blockquote><p>
+<a name="jsr_w.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69189"></a>
+The <i>address</i> of the opcode of the instruction immediately following this <i>jsr_w</i> instruction is pushed onto the operand stack as a value of type <code>returnAddress</code>. The unsigned <i>branchbyte1</i>, <i>branchbyte2</i>, <i>branchbyte3</i>, and <i>branchbyte4</i> are used to construct a signed 32-bit offset, where the offset is (<i>branchbyte1</i> << 24) | (<i>branchbyte2</i> << 16) | (<i>branchbyte3</i> << 8) | <i>branchbyte4</i>. Execution proceeds at that offset from the address of this <i>jsr_w</i> instruction. The target address must be that of an opcode of an instruction within the method that contains this <i>jsr_w </i>instruction.</blockquote><p>
+<a name="jsr_w.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69190"></a>
+The <i>jsr_w</i> instruction is used with the <i>ret</i> instruction in the implementation of the <code>finally</code> clauses of the Java programming language (see <a href="Compiling.doc.html#13789">Section 7.13, "Compiling <code>finally</code>"</a>). Note that <i>jsr_w</i> pushes the address onto the operand stack and <i>ret</i> gets it out of a local variable. This asymmetry is intentional.</blockquote><p>
+<blockquote><a name="69194"></a>
+Although the <i>jsr_w</i> instruction takes a 4-byte branch offset, other factors limit the size of a method to 65535 bytes <a href="ClassFile.doc.html#88659">(&#167;4.10)</a>. This limit may be raised in a future release of the Java virtual machine.</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc6.html">Prev</a> | <a href="Instructions2.doc8.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

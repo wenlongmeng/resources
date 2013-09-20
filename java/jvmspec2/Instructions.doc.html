@@ -1,0 +1,180 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  The Java Virtual Machine Instruction Set</title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="ConstantPool.doc.html">Prev</a> | <a href="Instructions2.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<hr><br>
+ 
+<a name="13311"></a>
+<p><strong>CHAPTER 6 </strong></p>
+<a name="13312"></a>
+<h1>The Java Virtual Machine Instruction Set</h1>
+<hr><p>
+<a name="67861"></a>
+A Java virtual machine instruction consists of an opcode specifying the operation 
+to be performed, followed by zero or more operands embodying values to be operated
+upon. This chapter gives details about the format of each Java virtual machine 
+instruction and the operation it performs.
+<p><a name="67862"></a>
+<hr><h2>6.1    Assumptions: The Meaning of "Must"</h2>
+<a name="68035"></a>
+The description of each instruction is always given in the context of Java virtual machine code that satisfies the static and structural constraints of <a href="ClassFile.doc.html#80959">Chapter 4</a>, <a href="ClassFile.doc.html#80961">"The <code>class</code> File Format."</a> In the description of individual Java virtual machine instructions, we frequently state that some situation "must" or "must not" be the case: "The <i>value2</i> must be of type <code>int</code>." The constraints of Chapter <a href="ClassFile.doc.html#80959">4</a> guarantee that all such expectations will in fact be met. If some constraint (a "must" or "must not") in an instruction description is not satisfied at run time, the behavior of the Java virtual machine is undefined.<p>
+<a name="53494"></a>
+The Java virtual machine checks that Java virtual machine code satisfies the static and structural constraints at link time using a <code>class</code> file verifier (see <a href="ClassFile.doc.html#88597">Section 4.9, "Verification of <code>class</code> Files"</a>). Thus, a Java virtual machine will only attempt to execute code from valid <code>class</code> files. Performing verification at link time is attractive in that the checks are performed just once, substantially reducing the amount of work that must be done at run time. Other implementation strategies are possible, provided that they comply with <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i> and <em>The Java</em><sup><font size=-2>TM</font></sup><em> Virtual Machine Specification</em>.<p>
+<a name="60105"></a>
+<hr><h2>6.2    Reserved Opcodes</h2>
+<a name="60106"></a>
+In addition to the opcodes of the instructions specified later in this chapter, which 
+are used in <code>class</code> files (see Chapter <a href="ClassFile.doc.html#80959">4</a>, <a href="ClassFile.doc.html#80961">"The <code>class</code> File Format"</a>), three opcodes are 
+reserved for internal use by a Java virtual machine implementation. If Sun extends 
+the instruction set of the Java virtual machine in the future, these reserved opcodes 
+are guaranteed not to be used.
+<p><a name="63970"></a>
+Two of the reserved opcodes, numbers 254 (0xfe) and 255 (0xff), have the mnemonics <i>impdep1</i> and <i>impdep2</i>, respectively. These instructions are intended to provide "back doors" or traps to implementation-specific functionality implemented in software and hardware, respectively. The third reserved opcode, number 202 (0xca), has the mnemonic <i>breakpoint</i> and is intended to be used by debuggers to implement breakpoints.<p>
+<a name="64007"></a>
+Although these opcodes have been reserved, they may be used only inside a Java virtual machine implementation. They cannot appear in valid <code>class</code> files. Tools such as debuggers or JIT code generators <a href="Overview.doc.html#28439">(&#167;3.13)</a> that might directly interact with Java virtual machine code that has been already loaded and executed may encounter these opcodes. Such tools should attempt to behave gracefully if they encounter any of these reserved instructions.<p>
+<a name="66654"></a>
+<hr><h2>6.3    Virtual Machine Errors</h2>
+<a name="66655"></a>
+A Java virtual machine implementation throws an object that is an instance of a subclass
+of the class <code>VirtualMachineError</code> when an internal error or resource limitation
+prevents it from correctly implementing the Java programming language. The 
+Java virtual machine specification cannot predict where resource limitations or 
+internal errors may be encountered and does not mandate precisely when they can 
+be reported. Thus, any of the virtual machine errors listed as subclasses of 
+<code>VirtualMachineError</code> in <a href="Concepts.doc.html#24870">Section 2.16.4</a> may be thrown at any time during the 
+operation of the Java virtual machine.
+<p><a name="66646"></a>
+<hr><h2>6.4    Format of Instruction Descriptions</h2>
+<a name="66503"></a>
+Java virtual machine instructions are represented in this chapter by entries of the 
+form shown in <a href="Instructions.doc.html#60065">Figure 6.1</a>, in alphabetical order and each beginning on a new page.  For example:
+<p><a name="60065"></a>
+
+<hr><h2>mnemonic</h2>
+<p><b>Operation</b><br>
+<blockquote>
+Short description of the instruction<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+<tr><td>
+ <i>mnemonic</i>
+<td>
+ 
+
+<tr><td>
+ <i>operand1</i>
+<td>
+
+<tr><td>
+ <i>operand2</i>
+<td>
+
+<tr><td>
+ <i>...</i>
+<td> 
+
+</Table><br><br></blockquote><p>
+<p><b>Forms</b><br>
+<blockquote>
+<i>mnemonic</i> = opcode</blockquote><p>
+<p><b>Operand Stack</b><br>
+<blockquote>
+..., <i>value1</i>, <i>value2</i><em> </em><img src="chars/arrwdbrt.gif"> ..., <i>value3</i> </blockquote><p>
+<p><b>Description</b><br>
+<blockquote>
+A longer description detailing constraints on operand stack contents or constant
+pool entries, the operation performed, the type of the results, etc.
+</blockquote>
+
+<p><b>Linking Exceptions</b><br>
+<blockquote>
+If any linking exceptions may be thrown by the execution of this instruction, they
+are set off one to a line, in the order in which they must be thrown.
+</blockquote>
+
+<p><b>Runtime Exceptions</b><br>
+<blockquote>
+If any runtime exceptions can be thrown by the execution of an instruction, they are
+set off one to a line, in the order in which they must be thrown.
+<p>
+Other than the linking and runtime exceptions, if any, listed for an instruction,
+that instruction must not throw any runtime exceptions except for instances of
+<code>VirtualMachineError</code> or its subclasses.
+</blockquote><p>
+
+<p><b>Notes</b><br>
+<blockquote>
+Comments not strictly part of the specification of an instruction are set aside
+as notes at the end of the description.
+</blockquote>
+
+<hr>
+
+<p>
+Each cell in the instruction format diagram represents a single 8-bit byte. The instruction's <i>mnemonic</i> is its name. Its opcode is its numeric representation and is given in both decimal and hexadecimal forms. Only the numeric representation is actually present in the Java virtual machine code in a <code>class</code> file.<p>
+<a name="67769"></a>
+Keep in mind that there are "operands" generated at compile time and embedded within Java virtual machine instructions, as well as "operands" calculated at run time and supplied on the operand stack. Although they are supplied from several different areas, all these operands represent the same thing: values to be operated upon by the Java virtual machine instruction being executed. By implicitly taking many of its operands from its operand stack, rather than representing them explicitly in its compiled code as additional operand bytes, register numbers, etc., the Java virtual machine's code stays compact.<p>
+<a name="60067"></a>
+Some instructions are presented as members of a family of related instructions sharing a single description, format, and operand stack diagram. As such, a family of instructions includes several opcodes and opcode mnemonics; only the family mnemonic appears in the instruction format diagram, and a separate forms line lists all member mnemonics and opcodes. For example, the forms line for the <i>lconst_&lt;l&gt;</i> family of instructions, giving mnemonic and opcode information for the two instructions in that family (<i>lconst_0</i> and <i>lconst_1</i>), is<p>
+<a name="60069"></a>
+<strong>Forms</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>lconst_0</i> = 9 (0x9) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>lconst_1</i> = 10 (0xa)<p>
+<a name="60073"></a>
+In the description of the Java virtual machine instructions, the effect of an instruction's execution on the operand stack <a href="Overview.doc.html#28851">(&#167;3.6.2)</a> of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> is represented textually, with the stack growing from left to right and each value represented separately. Thus,<p>
+<a name="60084"></a>
+<strong>Operand Stack</strong><br><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...<em>, </em><i>value1</i><em>, </em><i>value2</i><em> </em><img src="chars/arrwdbrt.gif">
+...<em>, </em><i>result</i><p>
+<a name="60086"></a>
+shows an operation that begins by having <i>value2</i> on top of the operand stack with 
+<i>value1</i> just beneath it. As a result of the execution of the instruction, <i>value1</i> and 
+<i>value2</i> are popped from the operand stack and replaced by <i>result</i> value, which has 
+been calculated by the instruction. The remainder of the operand stack, represented 
+by an ellipsis (...), is unaffected by the instruction's execution.
+<p><a name="60087"></a>
+Values of types <code>long</code> and <code>double</code> are represented by a single entry on the operand stack.<a href="#67925"><sup>1</sup></a> <p>
+
+
+<hr>
+<sup>1</sup><a name="67925"></a>
+ Note that, in the first edition of this specification, values on the operand stack of types <code>long</code> and <code>double</code> were each represented in the stack diagram by two entries.<p>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="ConstantPool.doc.html">Prev</a> | <a href="Instructions2.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

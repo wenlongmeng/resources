@@ -1,0 +1,1354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  Java Programming  Language Concepts</title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Introduction.doc.html">Prev</a> | <a href="Overview.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> <sup><font size=-2>TM</font></sup>Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="27073"></a>
+<p><strong>CHAPTER 2 </strong></p>
+<a name="27074"></a>
+<h1>Java Programming Language Concepts</h1>
+<hr><p>
+<a name="27075"></a>
+The Java virtual machine was designed to support the Java programming language.
+Some concepts and vocabulary from the Java programming language are 
+thus useful when attempting to understand the virtual machine. This chapter gives 
+an overview intended to support the specification of the Java virtual machine, but is 
+not itself a part of that specification. 
+<p><a name="33110"></a>
+The content of this chapter has been condensed from the first edition of <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i>, by James Gosling, Bill Joy, and Guy Steele.<a href="#33132"><sup>1</sup></a> Readers familiar with the Java programming language, but not with <i>The</i> <i>Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i>, should at least skim this chapter for the terminology it introduces. Any discrepancies between this chapter and <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification </i>should be resolved in favor of <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i>. <p>
+<a name="22928"></a>
+This chapter does not attempt to provide an introduction to the Java programming language. For such an introduction, see <i>The Java</i><sup><font size=-2>TM</font></sup><i> Programming Language, Second Edition</i>, by Ken Arnold and James Gosling.<p>
+<a name="25310"></a>
+<hr><h2>2.1    Unicode</h2>
+<a name="39673"></a>
+Programs written in the Java programming language supported by JDK release 1.1.7 
+and the Java 2 platform, v1.2 use the<i> Unicode</i> character encoding, version 2.1, as 
+specified in <em>The Unicode Standard, Version 2.0</em>, ISBN 0-201-48345-9, and the 
+update information for Version 2.1 of the Unicode Standard available at <code>http://
+www.unicode.org</code>. Programs written in the Java programming language used version
+2.0.14 of the Unicode Standard in JDK releases 1.1 through 1.1.6 and used version
+1.1.5 of the Unicode Standard in JDK release 1.0.
+<p><a name="23148"></a>
+Except for comments, identifiers <a href="Concepts.doc.html#25339">(&#167;2.2)</a>, and the contents of character and string literals <a href="Concepts.doc.html#20359">(&#167;2.3)</a>, all input elements in a program written in the Java programming language are formed from only <i>ASCII</i> characters. ASCII (ANSI X3.4) is the American Standard Code for Information Interchange. The first 128 characters of the Unicode character encoding are the ASCII characters.<p>
+<a name="25339"></a>
+<hr><h2>2.2    Identifiers</h2>
+<a name="28702"></a>
+An <i>identifier</i> is an unlimited-length sequence of Unicode <i>letters</i> and <i>digits</i>, the first 
+of which must be a letter. Letters and digits may be drawn from the entire Unicode 
+character set, which supports most writing scripts in use in the world today. This 
+allows programmers to use identifiers in their programs that are written in their 
+native languages.
+<p><a name="23858"></a>
+The method <a href="Concepts.doc.html#16317">(&#167;2.10)</a> <code>Character.isJavaLetter</code> returns <code>true</code> when passed a Unicode character that is considered to be a letter in an identifier. The method <code>Character.isJavaLetterOrDigit</code> returns <code>true</code> when passed a Unicode character that is considered to be a letter or digit in an identifier.<p>
+<a name="29956"></a>
+Two identifiers are the same only if they have the same Unicode character for each letter or digit; identifiers that have the same external appearance may still be different. An identifier must not be the same as a boolean literal <a href="Concepts.doc.html#20359">(&#167;2.3)</a>, the null literal <a href="Concepts.doc.html#20359">(&#167;2.3)</a>, or a keyword in the Java programming language.<p>
+<a name="20359"></a>
+<hr><h2>2.3    Literals</h2>
+A <i>literal</i> is the source code representation of a value of a primitive type <a href="Concepts.doc.html#19511">(&#167;2.4.1)</a>, the 
+<code>String</code> type <a href="Concepts.doc.html#25486">(&#167;2.4.8)</a>, or the null type <a href="Concepts.doc.html#22930">(&#167;2.4)</a>. String literals and, more generally, 
+strings that are the values of constant expressions are "interned" so as to share 
+unique instances, using the method <code>String.intern</code>. 
+<p><a name="27355"></a>
+The null type has one value, the null reference, denoted by the literal <code>null</code>. The <code>boolean</code> type has two values, denoted by the literals <code>true</code> and <code>false</code>.<p>
+<a name="22930"></a>
+<hr><h2>2.4    Types and Values</h2>
+<a name="17177"></a>
+The Java programming language is <i>strongly typed</i>, which means that every variable 
+and every expression has a type that is known at compile time. Types limit the values
+that a variable <a href="Concepts.doc.html#17203">(&#167;2.5)</a> can hold or that an expression can produce, limit the operations
+supported on those values, and determine the meaning of those operations. 
+Strong typing helps detect errors at compile time. 
+<p><a name="23869"></a>
+The types of the Java programming language are divided into two categories: <i>primitive types</i> <a href="Concepts.doc.html#19511">(&#167;2.4.1)</a> and <i>reference types</i> <a href="Concepts.doc.html#29375">(&#167;2.4.6)</a>. There is also a special <i>null type</i>, the type of the expression <code>null</code>, which has no name. The null reference is the only possible value of an expression of null type and can always be converted to any reference type. In practice, the programmer can ignore the null type and just pretend that <code>null</code> is a special literal that can be of any reference type.<p>
+<a name="23205"></a>
+Corresponding to the primitive types and reference types, there are two categories of data values that can be stored in variables, passed as arguments, returned by methods, and operated upon: <i>primitive values</i> <a href="Concepts.doc.html#19511">(&#167;2.4.1)</a> and <i>reference values</i> <a href="Concepts.doc.html#29375">(&#167;2.4.6)</a>.<p>
+<a name="19511"></a>
+<h3>2.4.1    Primitive Types and Values</h3>
+<a name="27843"></a>
+A <i>primitive type</i> is a type that is predefined by the Java programming language and 
+named by a reserved keyword. <i>Primitive values</i> do not share state with other primitive
+values. A variable whose type is a primitive type always holds a primitive value 
+of that type.<a href="#27846"><sup>2</sup></a>
+<p><a name="23025"></a>
+The primitive types are the <code>boolean</code> type and the <i>numeric types</i>. The numeric types are the <i>integral types</i> and the <i>floating-point types. </i><p>
+<a name="23026"></a>
+The integral types are <code>byte</code>, <code>short</code>, <code>int</code>, and <code>long</code>, whose values are 8-bit, 16-bit, 32-bit, and 64-bit signed two's-complement integers, respectively, and <code>char</code>, whose values are 16-bit unsigned integers representing Unicode characters <a href="Concepts.doc.html#25310">(&#167;2.1)</a>. <p>
+<a name="19367"></a>
+The floating-point types are <code>float</code> and <code>double</code>, which are conceptually associated with the 32-bit single-precision and 64-bit double-precision IEEE 754 values and operations as specified in <i>IEEE Standard for Binary Floating-Point Arithmetic</i>, ANSI/IEEE Standard 754-1985 (IEEE, New York). <p>
+<a name="23033"></a>
+The <code>boolean</code> type has the truth values <code>true</code> and <code>false</code>.<p>
+<a name="17876"></a>
+<h3>2.4.2    Operators on Integral Values</h3>
+<a name="17881"></a>
+The Java programming language provides a number of operators that act on integral 
+values, including numerical comparison, arithmetic operators, increment and decrement,
+bitwise logical and shift operators, and numeric cast <a href="Concepts.doc.html#18168">(&#167;2.6.9)</a>.
+<p><a name="20881"></a>
+Operands of certain unary and binary operators are subject to numeric promotion <a href="Concepts.doc.html#16021">(&#167;2.6.10)</a>.<p>
+<a name="17886"></a>
+The built-in integer operators do not indicate (positive or negative) overflow in any way; they wrap around on overflow. The only integer operators that can throw an exception are the integer divide and integer remainder operators, which can throw an <code>ArithmeticException</code> if the right-hand operand is zero.<p>
+<a name="33376"></a>
+Any value of any integral type may be cast to or from any numeric type. There are no casts between integral types and the type <code>boolean</code>.<p>
+<a name="33377"></a>
+<h3>2.4.3    Floating-Point Types, Value Sets, and Values</h3>
+<a name="34259"></a>
+The IEEE 754 standard includes not only positive and negative sign-magnitude 
+numbers, but also positive and negative zeros, positive and negative <i>infinities</i>, and a 
+special <i>Not-a-Number </i>value (hereafter abbreviated as "NaN"). The NaN value is 
+used to represent the result of certain invalid operations such as dividing zero by 
+zero.
+<p><a name="34556"></a>
+Every implementation of the Java programming language is required to support two standard sets of floating-point values, called the <i>float value set</i> and the <i>double value set</i>. In addition, an implementation of the Java programming language may support either or both of two extended-exponent floating-point value sets, called the<i> float-extended-exponent value set</i> and the<i> double-extended-exponent value set</i>. These extended-exponent value sets may, under certain circumstances, be used instead of the standard value sets to represent the values of expressions of type float or double.<p>
+<a name="34707"></a>
+The finite nonzero values of any floating-point value set can all be expressed in the form s &#183; <i>m</i>&#183; &#32;2<sup>(e &#32;-N &#32;+ &#32;1)</sup>, where <i>s</i> is +1 or -1, <i>m</i> is a positive integer less than 2<sup>N</sup>, and <i>e</i> is an integer between <i>E</i>min = - (2<sup>K &#32;- &#32;1</sup>-2) and <i>E</i>max = 2<sup>K &#32;- &#32;1</sup>-1, inclusive, and where <i>N</i> and <i>K</i> are parameters that depend on the value set. Some values can be represented in this form in more than one way; for example, supposing that a value <i>v</i> in a value set might be represented in this form using certain values for <i>s</i>, <i>m</i>, and <i>e</i>, then if it happened that <i>m</i> was even and <i>e</i> was less than 2<sup>K &#32;-1</sup>, one could halve <i>m</i> and increase <i>e</i> by 1 to produce a second representation for the same value <i>v</i>. A representation in this form is called <i>normalized</i> if <i>m</i> <img src="chars/gtequal.gif"> 2<sup>N &#32;-1</sup>; otherwise the representation is said to be <i>denormalized</i>. If a value in a value set cannot be represented in such a way that <i>m</i> <img src="chars/gtequal.gif"> 2<sup>N &#32;-1</sup>, then the value is said to be a <i>denormalized value</i>, because it has no normalized representation.<p>
+<a name="34798"></a>
+The constraints on the parameters <i>N</i> and <i>K</i> (and on the derived parameters <i>E</i>min and <i>E</i>max) for the two required and two optional floating-point value sets are summarized in <a href="Concepts.doc.html#34798">Table 2.1</a>.<p><Table Border="1">
+<tr><th><b><i>
+</i></b>
+<b><i>Parameter
+</i></b>
+<th><b><i>
+</i></b>
+<b><i>float
+</i></b>
+<th><b><i>float-extended-exponent
+</i></b>
+<th><b><i>
+</i></b>
+<b><i>double
+</i></b>
+<th><b><i>double-extended-exponent
+</i></b>
+<tr><td><a name="34592"></a>
+<i>N</i>
+<td><a name="34594"></a>
+24
+<td><a name="34596"></a>
+24
+<td><a name="34598"></a>
+53
+<td><a name="34600"></a>
+53
+
+<tr><td><a name="34602"></a>
+K
+<td><a name="34604"></a>
+8
+<td><a name="34606"></a>
+<img src="chars/gtequal.gif"> 11
+<td><a name="34608"></a>
+11
+<td><a name="34610"></a>
+<img src="chars/gtequal.gif"> 15
+
+<tr><td><a name="34612"></a>
+<i>E</i>max
+<td><a name="34614"></a>
++127
+<td><a name="34616"></a>
+<img src="chars/gtequal.gif"> +1023
+<td><a name="34618"></a>
++1023
+<td><a name="34620"></a>
+<img src="chars/gtequal.gif"> +16383
+
+<tr><td><a name="34622"></a>
+<i>E</i>min
+<td><a name="34624"></a>
+-126
+<td><a name="34626"></a>
+<img src="chars/lt_equal.gif"> -1022
+<td><a name="34628"></a>
+-1022
+<td><a name="34630"></a>
+<img src="chars/lt_equal.gif"> -16382
+
+</Table><br><br><p>
+<a name="37314"></a>
+<p>
+<a name="38861"></a>
+Where one or both extended-exponent value sets are supported by an implementation, then for each supported extended-exponent value set there is a specific implementation-dependent constant <i>K</i>, whose value is constrained by <a href="Concepts.doc.html#34798">Table 2.1</a>; this value <i>K</i> in turn dictates the values for <i>E</i>min and <i>E</i>max.<p>
+<a name="34634"></a>
+Each of the four value sets includes not only the finite nonzero values that are ascribed to it above, but also the five values positive zero, negative zero, positive infinity, negative infinity, and NaN.<p>
+<a name="34635"></a>
+Note that the constraints in <a href="Concepts.doc.html#34798">Table 2.1</a> are designed so that every element of the float value set is necessarily also an element of the float-extended-exponent value set, the double value set, and the double-extended-exponent value set. Likewise, each element of the double value set is necessarily also an element of the double-extended-exponent value set. Each extended-exponent value set has a larger range of exponent values than the corresponding standard value set, but does not have more precision.<p>
+<a name="34636"></a>
+The elements of the float value set are exactly the values that can be represented using the single floating-point format defined in the IEEE 754 standard, except that there is only one NaN value (IEEE 754 specifies 2<sup>24</sup> - 2 distinct NaN values). The elements of the double value set are exactly the values that can be represented using the double floating-point format defined in the IEEE 754 standard, except that there is only one NaN value (IEEE 754 specifies 2<sup>53</sup> - 2 distinct NaN values). Note, however, that the elements of the float-extended-exponent and double-extended-exponent value sets defined here do <i>not</i> correspond to the values that can be represented using IEEE 754 single extended and double extended formats, respectively.<p>
+<a name="34643"></a>
+The float, float-extended-exponent, double, and double-extended-exponent value sets are not types. It is always correct for an implementation of the Java programming language to use an element of the float value set to represent a value of type float; however, it may be permissible in certain regions of code for an implementation to use an element of the float-extended-exponent value set instead. Similarly, it is always correct for an implementation to use an element of the double value set to represent a value of type double; however, it may be permissible in certain regions of code for an implementation to use an element of the double-extended-exponent value set instead.<p>
+<a name="34287"></a>
+Except for NaN, floating-point values are <i>ordered</i>; arranged from smallest to largest, they are negative infinity, negative finite nonzero values, positive and negative zero, positive finite nonzero values, and positive infinity.<p>
+<a name="34288"></a>
+On comparison, positive zero and negative zero are equal; thus the result of the expression 0.0 &#32;== &#32;-0.0 is true and the result of 0.0 &#32;&gt; &#32;-0.0 is false. But other operations can distinguish positive and negative zero; for example, 1.0/0.0 has the value positive infinity, while the value of 1.0/-0.0 is negative infinity.<p>
+<a name="34289"></a>
+NaN is <i>unordered</i>, so the numerical comparison operators &lt;, &lt;=, &gt;, and &gt;= return false if either or both operands are NaN. The equality operator == returns false if either operand is NaN, and the inequality operator != returns true if either operand is NaN. In particular, x &#32;!= &#32;x is true if and only if x is NaN, and (x&lt;y) == !(x&gt;=y) will be false if x or y is NaN.<p>
+<a name="34290"></a>
+Any value of a floating-point type may be cast to or from any numeric type. There are no casts between floating-point types and the type boolean.<p>
+<a name="33499"></a>
+<h3>2.4.4    Operators on Floating-Point Values</h3>
+<a name="17902"></a>
+The Java programming language provides a number of operators that act on floating-point
+values, including numerical comparison, arithmetic operators, increment 
+and decrement, and numeric cast <a href="Concepts.doc.html#18168">(&#167;2.6.9)</a>.
+<p><a name="19472"></a>
+If at least one of the operands to a binary operator is of floating-point type, then the operation is a floating-point operation, even if the other operand is integral. Operands of certain unary and binary operators are subject to numeric promotion <a href="Concepts.doc.html#16021">(&#167;2.6.10)</a>.<p>
+<a name="23051"></a>
+The values returned by operators on floating-point numbers are those specified by IEEE 754. In particular, the Java programming language requires support of IEEE 754 <i>denormalized</i> floating-point numbers and <i>gradual underflow</i>, which make it easier to prove desirable properties of particular numerical algorithms.<p>
+<a name="17932"></a>
+The Java programming language requires that floating-point arithmetic behave as if every floating-point operator rounded its floating-point result to the result precision. <i>Inexact</i> results must be rounded to the representable value nearest to the infinitely precise result; if the two nearest representable values are equally near, the one having zero as its least significant bit is chosen. This is the IEEE 754 standard's default rounding mode known as <i>round to nearest</i> mode.<p>
+<a name="17933"></a>
+When converting a floating-point value to an integer, <i>round towards zero</i> mode is used <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. Round towards zero mode acts as though the number were truncated, discarding the significand bits. Round towards zero mode chooses as its result the format's value closest to and no greater in magnitude than the infinitely precise result.<p>
+<a name="17934"></a>
+The floating-point operators of the Java programming language produce no exceptions <a href="Concepts.doc.html#22727">(&#167;2.16)</a>. An operation that overflows produces a signed infinity; an operation that underflows produces a denormalized value or a signed zero; and an operation that has no mathematically definite result produces NaN. All numeric operations (except for numeric comparison) with NaN as an operand produce NaN as a result.<p>
+<a name="23230"></a>
+Any value of any floating-point type may be cast <a href="Concepts.doc.html#18168">(&#167;2.6.9)</a> to or from any numeric type. There are no casts between floating-point types and the type <code>boolean</code>.<p>
+<a name="17937"></a>
+<h3>2.4.5    Operators on <code>boolean</code> Values </h3>
+<a name="29372"></a>
+The boolean operators include relational operators and logical operators. Only 
+<code>boolean</code> expressions can be used in control flow statements and as the first operand 
+of the conditional operator <code>?:</code>. An integral value <code>x</code> can be converted to a value of 
+type <code>boolean</code>, following the C language convention that any nonzero value is <code>true</code>, 
+by the expression <code>x!=0</code>. An object reference <code>obj</code> can be converted to a value of type 
+<code>boolean</code>, following the C language convention that any reference other than <code>null</code> is 
+<code>true</code>, by the expression <code>obj!=null</code>.
+<p><a name="29373"></a>
+There are no casts between the type <code>boolean</code> and any other type.<p>
+<a name="29375"></a>
+<h3>2.4.6    Reference Types, Objects, and Reference Values</h3>
+<a name="25380"></a>
+There are three kinds of reference types: the <i>class types</i> <a href="Concepts.doc.html#29321">(&#167;2.8)</a>, the <i>interface types</i> 
+<a href="Concepts.doc.html#16432">(&#167;2.13)</a>, and the <i>array types</i> <a href="Concepts.doc.html#16446">(&#167;2.15)</a>. An <i>object</i> is a dynamically created class 
+instance or an array. The reference values (often just <i>references</i>) are <i>pointers </i>to 
+these objects and a special null reference, which refers to no object.
+<p><a name="25388"></a>
+A class instance is explicitly created by a <i>class instance creation expression</i>, or by invoking the <code>newInstance</code> method of class <code>Class</code>. An array is explicitly created by an <i>array creation expression</i>. An object is created in the heap and is garbage-collected after there are no more references to it. Objects cannot be reclaimed or freed by explicit language directives.<p>
+<a name="25389"></a>
+There may be many references to the same object. Most objects have state, stored in the fields of objects that are instances of classes or in the variables that are the components of an array object. If two variables contain references to the same object, the state of the object can be modified using one variable's reference to the object, and then the altered state can be observed through the other variable's reference.<p>
+<a name="25393"></a>
+Each object has an associated <i>lock</i> (<a href="Concepts.doc.html#33308">&#167;2.19</a>, <a href="Threads.doc.html#22500">&#167;8.13)</a> that is used by <code>synchronized</code> methods and by the <code>synchronized</code> statement to provide control over concurrent access to state by multiple threads (<a href="Concepts.doc.html#33308">&#167;2.19</a>, <a href="Threads.doc.html#22488">&#167;8.12)</a>.<p>
+<a name="39351"></a>
+Reference types form a hierarchy. Each class type is a subclass of another class type, except for the class <code>Object</code> <a href="Concepts.doc.html#27433">(&#167;2.4.7)</a>, which is the superclass <a href="Concepts.doc.html#32983">(&#167;2.8.3)</a> of all other class and array types. All objects, including arrays, support the methods of class <code>Object</code>. String literals <a href="Concepts.doc.html#20359">(&#167;2.3)</a> are references to instances of class <code>String</code> <a href="Concepts.doc.html#25486">(&#167;2.4.8)</a>.<p>
+<a name="27433"></a>
+<h3>2.4.7    The Class <code>Object</code></h3>
+<a name="25481"></a>
+The standard class <code>Object</code> is the superclass <a href="Concepts.doc.html#32983">(&#167;2.8.3)</a> of all other classes. A variable 
+of type <code>Object</code> can hold a reference to any object, whether it is an instance of a 
+class or an array. All class and array types inherit the methods of class <code>Object</code>.
+<p><a name="25486"></a>
+<h3>2.4.8    The Class <code>String</code> </h3>
+<a name="25487"></a>
+Instances of class <code>String</code> represent sequences of Unicode characters <a href="Concepts.doc.html#25310">(&#167;2.1)</a>. A 
+<code>String</code> object has a constant, unchanging value. String literals <a href="Concepts.doc.html#20359">(&#167;2.3)</a> are references 
+to instances of class <code>String</code>.
+<p><a name="17255"></a>
+<h3>2.4.9    Operators on Objects</h3>
+<a name="23253"></a>
+The operators on objects include field access, method invocation, cast, string concatenation,
+comparison for equality, <code>instanceof</code>, and the conditional operator <code>?:</code>.
+<p><a name="17203"></a>
+<hr><h2>2.5    Variables</h2>
+<a name="17290"></a>
+A <i>variable</i> is a storage location. It has an associated type, sometimes called its <i>compile-time
+type</i>, that is either a primitive type <a href="Concepts.doc.html#19511">(&#167;2.4.1)</a> or a reference type <a href="Concepts.doc.html#29375">(&#167;2.4.6)</a>. A 
+variable always contains a value that is assignment compatible <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a> with its type. 
+A variable of a primitive type always holds a value of that exact primitive type. A 
+variable of reference type can hold either a null reference or a reference to any 
+object whose class is assignment compatible <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a> with the type of the variable. 
+<p><a name="25533"></a>
+Compatibility of the value of a variable with its type is guaranteed by the design of the language because default values <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a> are compatible and all assignments to a variable are checked, at compile time, for assignment compatibility. There are seven kinds of variables:<p>
+<ol>
+<a name="17990"></a>
+<li>A <i>class variable </i>is a field of a class type declared using the keyword <code>static</code> <a href="Concepts.doc.html#29882">(&#167;2.9.1)</a> within a class declaration, or with or without the keyword <code>static</code> in an interface declaration. Class variables are created when the class or interface is loaded <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a> and are initialized on creation to default values <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a>. The class variable effectively ceases to exist when its class or interface is unloaded <a href="Concepts.doc.html#32202">(&#167;2.17.8)</a>.<p>
+<a name="17982"></a>
+<li>An <i>instance variable</i> is a field declared within a class declaration without using the keyword <code>static</code> <a href="Concepts.doc.html#29882">(&#167;2.9.1)</a>. If a class T has a field a that is an instance variable, then a new instance variable a is created and initialized to a default value <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a> as part of each newly created object of class T or of any class that is a subclass of T. The instance variable effectively ceases to exist when the object of which it is a field is no longer referenced, after any necessary finalization of the object <a href="Concepts.doc.html#19147">(&#167;2.17.7)</a> has been completed.<p>
+<a name="17995"></a>
+<li><i>Array components</i> are unnamed variables that are created and initialized to default values <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a> whenever a new object that is an array is created <a href="Concepts.doc.html#19124">(&#167;2.17.6)</a>. The array components effectively cease to exist when the array is no longer referenced.<p>
+<a name="17996"></a>
+<li><i>Method parameters</i> name argument values passed to a method. For every parameter declared in a method declaration, a new parameter variable is created each time that method is invoked. The new variable is initialized with the corresponding argument value from the method invocation. The method parameter effectively ceases to exist when the execution of the body of the method is complete.<p>
+<a name="23360"></a>
+<li><i>Constructor parameters</i> name argument values passed to a constructor. For every parameter declared in a constructor declaration, a new parameter variable is created each time a class instance creation expression or explicit constructor invocation is evaluated. The new variable is initialized with the corresponding argument value from the creation expression or constructor invocation. The constructor parameter effectively ceases to exist when the execution of the body of the constructor is complete.<p>
+<a name="17997"></a>
+<li>An <i>exception-handler parameter</i> variable is created each time an exception is caught by a <code>catch</code> clause of a <code>try</code> statement <a href="Concepts.doc.html#22746">(&#167;2.16.2)</a>. The new variable is initialized with the actual object associated with the exception <a href="Concepts.doc.html#24863">(&#167;2.16.3)</a>. The exception-handler parameter effectively ceases to exist when execution of the block associated with the <code>catch</code> clause <a href="Concepts.doc.html#22746">(&#167;2.16.2)</a> is complete.<p>
+<a name="18000"></a>
+<li><i>Local variables </i>are declared by local variable declaration statements. Whenever the flow of control enters a block or a <code>for</code> statement, a new variable is created for each local variable declared in a local variable declaration statement immediately contained within that block or <code>for</code> statement. The local variable is not initialized, however, until the local variable declaration statement that declares it is executed. The local variable effectively ceases to exist when the execution of the block or <code>for</code> statement is complete.
+</ol>
+<a name="15858"></a>
+<h3>2.5.1    Initial Values of Variables</h3>
+<a name="15862"></a>
+Every variable in a program must have a value before it is used:
+<p><ul><li>Each class variable, instance variable, and array component is initialized with a <i>default value</i> when it is created:<p>
+<li>For type <code>byte</code>, the default value is zero, that is, the value of <code>(byte)0</code>.<p>
+<li>For type <code>short</code>, the default value is zero, that is, the value of <code>(short)0</code>.<p>
+<li>For type <code>int</code>, the default value is zero, that is, <code>0</code>.<p>
+<li>For type <code>long</code>, the default value is zero, that is, <code>0L</code>.<p>
+<li>For type <code>float</code>, the default value is positive zero, that is, <code>0.0f</code>.<p>
+<li>For type <code>double</code>, the default value is positive zero, that is, <code>0.0</code>.<p>
+<li>For type <code>char</code>, the default value is the null character, that is, <code>'\u0000'</code>.<p>
+<li>For type <code>boolean</code>, the default value is <code>false</code>.<p>
+<li>For all reference types <a href="Concepts.doc.html#29375">(&#167;2.4.6)</a>, the default value is <code>null</code> <a href="Concepts.doc.html#20359">(&#167;2.3)</a>.<p>
+<li>Each method parameter <a href="Concepts.doc.html#17203">(&#167;2.5)</a> is initialized to the corresponding argument value provided by the invoker of the method.<p>
+<li>Each constructor parameter <a href="Concepts.doc.html#17203">(&#167;2.5)</a> is initialized to the corresponding argument value provided by an object creation expression or explicit constructor invocation.<p>
+<li>An exception-handler parameter <a href="Concepts.doc.html#22746">(&#167;2.16.2)</a> is initialized to the thrown object representing the exception <a href="Concepts.doc.html#24863">(&#167;2.16.3)</a>. <p>
+<li>A local variable must be explicitly given a value, by either initialization or assignment, before it is used.
+</ul><a name="23409"></a>
+<h3>2.5.2    Variables Have Types, Objects Have Classes</h3>
+<a name="25606"></a>
+Every object belongs to some particular class. This is the class that was mentioned 
+in the class instance creation expression that produced the object, or the class whose 
+class object was used to invoke the <code>newInstance</code> method to produce the object. 
+This class is called <em>the</em> class of the object. An object is said to be an <i>instance</i> of its 
+class and of all superclasses of its class. Sometimes the class of an object is called its 
+"runtime type," but "class" is the more accurate term.
+<p><a name="15939"></a>
+(Sometimes a variable or expression is said to have a "runtime type," but that is an abuse of terminology; it refers to the class of the object referred to by the value of the variable or expression at run time, assuming that the value is not <code>null</code>. Properly speaking, type is a compile-time notion. A variable or expression has a type; an object or array has no type, but belongs to a class.)<p>
+<a name="25614"></a>
+The type of a variable is always declared, and the type of an expression can be deduced at compile time. The type limits the possible values that the variable can hold or the expression can produce at run time. If a runtime value is a reference that is not <code>null</code>, it refers to an object or array that has a class (not a type), and that class will necessarily be compatible with the compile-time type.<p>
+<a name="25612"></a>
+Even though a variable or expression may have a compile-time type that is an interface type, there are no instances of interfaces <a href="Concepts.doc.html#16432">(&#167;2.13)</a>. A variable or expression whose type is an interface type can reference any object whose class implements that interface.<p>
+<a name="25629"></a>
+Every array also has a class. The classes for arrays have strange names that are not valid identifiers; for example, the class for an array of <code>int</code> components has the name <code>"[I"</code>.<p>
+<a name="25611"></a>
+<hr><h2>2.6    Conversions and Promotions</h2>
+<a name="15943"></a>
+A <i>conversion</i> from type S to type T allows an expression of type S to be treated at 
+compile time as if it were of type T instead. In some cases this will require a corresponding
+action at run time to check the validity of the conversion or to translate the 
+runtime value of the expression into a form appropriate for the new type T. 
+<p><a name="25645"></a>
+<i>Numeric promotions</i> are conversions that change an operand of a numeric operation to a wider type, or both operands of a numeric operation to a common type, so that an operation can be performed.<p>
+<a name="18104"></a>
+In the Java programming language, there are six broad kinds of conversions:<p>
+<ul><li>Identity conversions<p>
+<li>Widening primitive conversions<p>
+<li>Narrowing primitive conversions<p>
+<li>Widening reference conversions<p>
+<li>Narrowing reference conversions<p>
+<li>String conversions
+</ul><a name="23424"></a>
+There are five <i>conversion contexts</i> in which conversion expressions can occur. Each context allows conversions in some of the above-named categories but not others. The conversion contexts are:<p>
+<ul><li>Assignment conversion <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a>, which converts the type of an expression  to the type of a specified variable. The conversions permitted for assignment are limited in such a way that assignment conversion never causes an exception.<p>
+<li>Method invocation conversion <a href="Concepts.doc.html#19685">(&#167;2.6.8)</a>, which is applied to each argument  in a method or constructor invocation, and, except in one case, performs the same conversions that assignment conversion does. Method invocation conversion never causes an exception.<p>
+<li>Casting conversion <a href="Concepts.doc.html#18168">(&#167;2.6.9)</a>, which converts the type of an expression to a type explicitly specified by a cast operator. It is more inclusive than assignment or method invocation conversion, allowing any specific conversion other than a string conversion, but certain casts to a reference type may cause an exception at run time.<p>
+<li>String conversion, which allows any type to be converted to type <code>String</code> <a href="Concepts.doc.html#25486">(&#167;2.4.8)</a>.<p>
+<li>Numeric promotion, which brings the operands of a numeric operator to a common type so that an operation can be performed.
+</ul><a name="15976"></a>
+String conversion only applies to operands of the binary <code>+</code> and <code>+=</code> operators when one of the arguments is a <code>String</code>; it will not be covered further. <p>
+<a name="19691"></a>
+<h3>2.6.1    Identity Conversions</h3>
+<a name="23436"></a>
+A conversion from a type to that same type is permitted for any type.
+<p><a name="23435"></a>
+<h3>2.6.2    Widening Primitive Conversions</h3>
+<a name="19693"></a>
+The following conversions on primitive types are called the <i>widening primitive conversions
+</i>:
+<p><ul><li><code>byte</code> to <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, or <code>double</code><p>
+<li><code>short</code> to <code>int</code>, <code>long</code>, <code>float</code>, or <code>double</code><p>
+<li><code>char</code> to <code>int</code>, <code>long</code>, <code>float</code>, or <code>double</code><p>
+<li><code>int</code> to <code>long</code>, <code>float</code>, or <code>double</code><p>
+<li><code>long</code> to <code>float</code> or <code>double</code><p>
+<li><code>float</code> to <code>double</code>
+</ul><a name="19697"></a>
+Widening conversions do not lose information about the sign or order of magnitude of a numeric value. Conversions widening from an integral type to another integral type do not lose any information at all; the numeric value is preserved exactly. Conversions widening from <code>float</code> to <code>double</code> in <code>strictfp</code> expressions <a href="Concepts.doc.html#24465">(&#167;2.18)</a> also preserve the numeric value exactly; however, such conversions that are not <code>strictfp</code> may lose information about the overall magnitude of the converted value.<p>
+<a name="38745"></a>
+Conversion of an <code>int</code> or a <code>long</code> value to <code>float</code>, or of a <code>long</code> value to <code>double</code>, may lose precision, that is, the result may lose some of the least significant bits of the value; the resulting floating-point value is a correctly rounded version of the integer value, using IEEE 754 round to nearest mode <a href="Concepts.doc.html#33499">(&#167;2.4.4)</a>.<p>
+<a name="19699"></a>
+According to this rule, a widening conversion of a signed integer value to an integral type simply sign-extends the two's-complement representation of the integer value to fill the wider format. A widening conversion of a value of type <code>char</code> to an integral type zero-extends the representation of the character value to fill the wider format.<p>
+<a name="19700"></a>
+Despite the fact that loss of precision may occur, widening conversions among primitive types never result in a runtime exception <a href="Concepts.doc.html#22727">(&#167;2.16)</a>.<p>
+<a name="26142"></a>
+<h3>2.6.3    Narrowing Primitive Conversions</h3>
+<a name="19766"></a>
+The following conversions on primitive types are called <i>narrowing primitive conversions
+</i>:
+<p><ul><li><code>byte</code> to <code>char</code><p>
+<li><code>short</code> to <code>byte</code> or <code>char</code><p>
+<li><code>char</code> to <code>byte</code> or <code>short</code><p>
+<li><code>int</code> to <code>byte</code>, <code>short</code>, or <code>char</code><p>
+<li><code>long</code> to <code>byte</code>, <code>short</code>, <code>char</code>, or <code>int</code><p>
+<li><code>float</code> to <code>byte</code>, <code>short</code>, <code>char</code>, <code>int</code>, or <code>long</code><p>
+<li><code>double</code> to <code>byte</code>, <code>short</code>, <code>char</code>, <code>int</code>, <code>long</code>, or <code>float</code>
+</ul><a name="19707"></a>
+Narrowing conversions may lose information about the sign or order of magnitude, or both, of a numeric value (for example, narrowing an <code>int</code> value <code>32763</code> to type <code>byte</code> produces the value <code>-5</code>). Narrowing conversions may also lose precision.<p>
+<a name="19708"></a>
+A narrowing conversion of a signed integer to an integral type simply discards all but the <i>n</i> lowest-order bits, where <i>n</i> is the number of bits used to represent the type. This may cause the resulting value to have a different sign from the input value.<p>
+<a name="19798"></a>
+A narrowing conversion of a character to an integral type likewise simply discards all but the <i>n</i> lowest bits, where <i>n</i> is the number of bits used to represent the type. This may cause the resulting value to be a negative number, even though characters represent 16-bit unsigned integer values.<p>
+<a name="19709"></a>
+In a narrowing conversion of a floating-point number to an integral type, if the floating-point number is NaN, the result of the conversion is <code>0</code> of the appropriate type. If the floating-point number is too large to be represented by the integral type or is positive infinity, the result is the largest representable value of the integral type. If the floating-point number is too small to be represented or is negative infinity, the result is the smallest representable value of the integral type. Otherwise, the result is the floating-point number rounded towards zero to an integer value using IEEE 754 round towards zero mode <a href="Concepts.doc.html#33499">(&#167;2.4.4)</a><p>
+<a name="19713"></a>
+A narrowing conversion from <code>double</code> to <code>float</code> behaves in accordance with IEEE 754. The result is correctly rounded using IEEE 754 round to nearest mode <a href="Concepts.doc.html#33499">(&#167;2.4.4)</a>. A value too small to be represented as a <code>float</code> is converted to a positive or negative zero; a value too large to be represented as a <code>float</code> is converted to a positive or negative infinity. A <code>double</code> <code></code>NaN is always converted to a <code>float</code> <code></code>NaN.<p>
+<a name="19715"></a>
+Despite the fact that overflow, underflow, or loss of precision may occur, narrowing conversions among primitive types never result in a runtime exception.<p>
+<a name="25679"></a>
+<h3>2.6.4    Widening Reference Conversions</h3>
+<a name="25680"></a>
+<em>Widening reference conversions</em> never require a special action at run time and therefore
+never throw an exception at run time. Because they do not affect the Java virtual 
+machine, they will not be considered further.
+<p><a name="32879"></a>
+<h3>2.6.5    Narrowing Reference Conversions</h3>
+<a name="32881"></a>
+The following permitted conversions are called the <i>narrowing reference conversions</i>:
+<p><ul><li>From any class type S to any class type T, provided that S is a superclass of T. (An important special case is that there is a narrowing conversion from the class type <code>Object</code> to any other class type.)<p>
+<li>From any class type S to any interface type K, provided that S is not <code>final</code> and does not implement K. (An important special case is that there is a narrowing conversion from the class type <code>Object</code> to any interface type.)<p>
+<li>From type <code>Object</code> to any array type.<p>
+<li>From type <code>Object</code> to any interface type.<p>
+<li>From any interface type J to any class type T that is not <code>final</code>.<p>
+<li>From any interface type J to any class type T that is <code>final</code>, provided that T implements J.<p>
+<li>From any interface type J to any interface type K, provided that J is not a subinterface of K and there is no method name m such that J and K both declare a method named m with the same signature but different return types.<p>
+<li>From any array type SC<code>[]</code> to any array type TC<code>[]</code>, provided that SC and TC are reference types and there is a permitted narrowing conversion from SC to TC.
+</ul><a name="25694"></a>
+Such conversions require a test at run time to find out whether the actual reference 
+value is a legitimate value of the new type. If it is not, the Java virtual machine 
+throws a <code>ClassCastException</code>.
+<p><a name="32922"></a>
+<h3>2.6.6    Value Set Conversion</h3>
+<a name="34313"></a>
+<i>Value set conversion</i> is the process of mapping a floating-point value from one value 
+set <a href="Concepts.doc.html#33377">(&#167;2.4.3)</a> to another without changing its type.
+<p><a name="34314"></a>
+For each operation in an expression that is not FP-strict <a href="Concepts.doc.html#24465">(&#167;2.18)</a>, value set conversion allows an implementation of the Java programming language to choose between two options:<p>
+<ul><li>If the value is an element of the float-extended-exponent value set, then the implementation may map the value to the nearest element of the float value set. This conversion may result in overflow (in which case the value is replaced by an infinity of the same sign) or underflow (in which case the value may lose precision because it is replaced by a denormalized number or zero of the same sign).<p>
+<li>If the value is an element of the double-extended-exponent value set, then the implementation may map the value to the nearest element of the double value set. This conversion may result in overflow (in which case the value is replaced by an infinity of the same sign) or underflow (in which case the value may lose precision because it is replaced by a denormalized number or zero of the same sign).
+</ul><a name="34317"></a>
+Within an FP-strict expression, value set conversion does not provide any choices; every implementation must behave in the same way:<p>
+<ul><li>If the value is of type float and is not an element of the float value set, then the implementation must map the value to the nearest element of the float value set. This conversion may result in overflow or underflow.<p>
+<li>If the value is of type double and is not an element of the double value set, then the implementation must map the value to the nearest element of the double value set. This conversion may result in overflow or underflow.
+</ul><a name="34320"></a>
+Within an FP-strict expression, mapping values from the float-extended-exponent value set or double-extended-exponent value set is necessary only when a method is called whose declaration is not FP-strict and the implementation has chosen to represent the result of the method call as an element of an extended-exponent value set.<p>
+<a name="34321"></a>
+Whether in FP-strict code or code that is not FP-strict, value set conversion always leaves unchanged any value whose type is neither float nor double.<p>
+<a name="19674"></a>
+<h3>2.6.7    Assignment Conversion</h3>
+<a name="25744"></a>
+<i>Assignment conversion</i> occurs when the value of an expression is assigned to a variable:
+the type of the expression must be converted to the type of the variable. 
+Assignment contexts allow the use of an identity conversion <a href="Concepts.doc.html#19691">(&#167;2.6.1)</a>, a widening 
+primitive conversion <a href="Concepts.doc.html#23435">(&#167;2.6.2)</a>, or a widening reference conversion <a href="Concepts.doc.html#25679">(&#167;2.6.4)</a>. In addition,
+a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a> may be used if all of the following 
+conditions are satisfied:
+<p><ul><li>The expression is a constant expression of type <code>int</code>.<p>
+<li>The type of the variable is <code>byte</code>, <code>short</code>, or <code>char</code>. <p>
+<li>The value of the expression is representable in the type of the variable.
+</ul><a name="19829"></a>
+If the type of the expression can be converted to the type of a variable by assignment conversion, we say the expression (or its value) is <i>assignable</i> to the variable or, equivalently, that the type of the expression is <i>assignment compatible</i> with the type of the variable.<p>
+<a name="32947"></a>
+If the type of the variable is <code>float</code> or <code>double</code>, then value set conversion <a href="Concepts.doc.html#32922">(&#167;2.6.6)</a> is applied after the type conversion:<p>
+<ul><li>If the value is of type <code>float</code> and is an element of the float-extended-exponent value set, then the implementation must map the value to the nearest element of the float value set. This conversion may result in overflow or underflow.<p>
+<li>If the value is of type <code>double</code> and is an element of the double-extended-exponent value set, then the implementation must map the value to the nearest element of the double value set. This conversion may result in overflow or underflow.
+</ul><a name="19677"></a>
+An assignment conversion never causes an exception. A value of primitive type must not be assigned to a variable of reference type. A value of reference type must not be assigned to a variable of primitive type. A value of type <code>boolean</code> can be assigned only to a variable of type <code>boolean</code>. A value of the null type may be assigned to a variable of any reference type.<p>
+<a name="21076"></a>
+Assignment of a value of compile-time reference type S (source) to a variable of compile-time reference type T (target) is permitted:<p>
+<ul><li>If S is a class type:<p>
+<ul><li>If T is a class type, then S must be the same class as T, or S must be  a subclass of T.<p>
+<li>If T is an interface type, then S must implement interface T.<p>
+</ul>
+<li>If S is an interface type:<p>
+<ul><li>If T is a class type, then T must be <code>Object</code>.<p>
+<li>If T is an interface type, then T must be the same interface as S, or T  must be a superinterface of S.<p>
+</ul>
+<li>If S is an array type SC<code>[]</code>, that is, an array of components of type SC:<p>
+<ul><li>If T is a class type, then T must be <code>Object</code>.<p>
+<li>If T is an interface type, then T must be either <code>Cloneable</code> or <code>java.io.Serializable</code>.<p>
+<li>If T is an array type TC<code>[]</code>, that is, an array of components of type TC,  then either<p>
+<ul>
+<li>TC and SC must be the same primitive type, or<p>
+<li>TC and SC are both reference types and type SC is assignable to TC.
+</ul></ul></ul><a name="19685"></a>
+<h3>2.6.8    Method Invocation Conversion</h3>
+<a name="25833"></a>
+<i>Method invocation conversion</i> is applied to each argument value in a method or constructor
+invocation: the type of the argument expression must be converted to the 
+type of the corresponding parameter. Method invocation contexts allow the use of an 
+identity conversion <a href="Concepts.doc.html#19691">(&#167;2.6.1)</a>, a widening primitive conversion <a href="Concepts.doc.html#23435">(&#167;2.6.2)</a>, or a widening
+reference conversion <a href="Concepts.doc.html#25679">(&#167;2.6.4)</a>. Method invocation conversions specifically do 
+not include the implicit narrowing of integer constants that is part of assignment 
+conversion <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a>.
+<p><a name="34377"></a>
+If the type of an argument expression is either float or double, then value set conversion <a href="Concepts.doc.html#32922">(&#167;2.6.6)</a> is applied after the type conversion:<p>
+<ul><li>If an argument value of type <code>float</code> is an element of the float-extended-exponent value set, then the implementation must map the value to the nearest element of the float value set. This conversion may result in overflow or underflow.<p>
+<li>If an argument value of type <code>double</code> is an element of the double-extended-exponent value set, then the implementation must map the value to the nearest element of the double value set. This conversion may result in overflow or underflow.
+</ul><a name="18168"></a>
+<h3>2.6.9    Casting Conversion</h3>
+<a name="19492"></a>
+<i>Casting conversions </i>are more powerful than assignment or method invocation conversions
+applied to the operand of a cast operator: the type of the operand expression 
+must be converted to the type explicitly named by the cast operator. Casting contexts 
+allow the use of an identity conversion <a href="Concepts.doc.html#19691">(&#167;2.6.1)</a>, a widening primitive conversion 
+<a href="Concepts.doc.html#23435">(&#167;2.6.2)</a>, a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>, a widening reference conversion
+<a href="Concepts.doc.html#25679">(&#167;2.6.4)</a>, or a narrowing reference conversion <a href="Concepts.doc.html#32879">(&#167;2.6.5)</a>. Thus, casting conversions
+are more inclusive than assignment or method invocation conversions: a cast 
+can do any permitted conversion other than a string conversion.
+<p><a name="34401"></a>
+Value set conversion <a href="Concepts.doc.html#32922">(&#167;2.6.6)</a> is applied after the type conversion.<p>
+<a name="18837"></a>
+Casting can convert a value of any numeric type to any other numeric type. A value of type <code>boolean</code> cannot be cast to another type. A value of reference type cannot be cast to a value of primitive type. <p>
+<a name="20937"></a>
+Some casts can be proven incorrect at compile time and result in a compile-time error. Otherwise, either the cast can be proven correct at compile time, or a runtime validity check is required. (See <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i> for details.) If the value at run time is a null reference, then the cast is allowed. If the check at run time fails, a <code>ClassCastException</code> is thrown.<p>
+<a name="16021"></a>
+<h3>2.6.10    Numeric Promotion</h3>
+<a name="16022"></a>
+<i>Numeric promotion </i>is applied to the operands of an arithmetic operator. Numeric 
+promotion contexts allow the use of an identity conversion <a href="Concepts.doc.html#19691">(&#167;2.6.1)</a> or a widening 
+primitive conversion <a href="Concepts.doc.html#23435">(&#167;2.6.2)</a><i>.
+</i><p><a name="28838"></a>
+Numeric promotions are used to convert the operands of a numeric operator to a common type where an operation can be performed. The two kinds of numeric promotion are <i>unary numeric promotion</i> and <i>binary numeric promotion</i>. The analogous conversions in C are called "the usual unary conversions" and "the usual binary conversions." Numeric promotion is not a general feature of the Java programming language, but rather a property of specific built-in operators. <p>
+<a name="20080"></a>
+An operator that applies unary numeric promotion to a single operand of numeric type converts an operand of type <code>byte</code>, <code>short</code>, or <code>char</code> to <code>int</code> by a widening primitive conversion, and otherwise leaves the operand alone. Value set conversion <a href="Concepts.doc.html#32922">(&#167;2.6.6)</a> is then applied. The operands of the shift operators are promoted independently using unary numeric promotions.<p>
+<a name="20091"></a>
+When an operator applies binary numeric promotion to a pair of numeric operands, the following rules apply, in order, using widening primitive conversion to convert operands as necessary:<p>
+<ul><li>If either operand is of type <code>double</code>, the other is converted to <code>double</code>.<p>
+<li>Otherwise, if either operand is of type <code>float</code>, the other is converted to <code>float</code>.<p>
+<li>Otherwise, if either operand is of type <code>long</code>, the other is converted to <code>long</code>.<p>
+<li>Otherwise, both operands are converted to type <code>int</code>.
+</ul><a name="32967"></a>
+After type conversion, if any, value set conversion is applied to each operand.<p>
+<a name="21272"></a>
+<hr><h2>2.7    Names and Packages</h2>
+<a name="37331"></a>
+<i>Names</i> are used to refer to entities declared in a program. A declared entity is a 
+package, type, member (field or method) of a type, parameter, or local variable. Programs
+are organized sets of <i>packages</i>. 
+<p><a name="21410"></a>
+<h3>2.7.1    Simple Names and Qualified Names</h3>
+<a name="29689"></a>
+A <i>simple name</i> is a single identifier <a href="Concepts.doc.html#25339">(&#167;2.2)</a>. <i>Qualified names</i> <a href="Concepts.doc.html#18914">(&#167;2.7.4)</a> provide access 
+to members of packages and reference types. A <i></i>qualified name consists of a name, a 
+"." token, and an identifier. 
+<p><a name="18902"></a>
+Not all identifiers are part of a name. Identifiers are also used in declarations, where the identifier determines the name by which an entity will be known, in field access expressions and method invocation expressions, and in statement labels and <code>break</code> and <code>continue</code> statements that refer to statement labels.<p>
+<a name="20319"></a>
+<h3>2.7.2    Packages</h3>
+<a name="18906"></a>
+A package consists of a number of compilation units and has a hierarchical name. 
+Packages are independently developed, and each package has its own set of names, 
+which helps to prevent name conflicts. Each Java virtual machine implementation 
+determines how packages, compilation units, and subpackages are created and 
+stored; which top-level package names are in scope in a particular compilation; and 
+which packages are accessible. Packages may be stored in a local file system, in a 
+distributed file system, or in some form of database.
+<p><a name="20320"></a>
+A package name component or class name might contain a character that cannot legally appear in a host file system's ordinary directory or file name: for instance, a Unicode character on a system that allows only ASCII characters in file names. <p>
+<a name="26168"></a>
+A Java virtual machine implementation must support at least one unnamed package; it may support more than one but is not required to do so. Which compilation units are in each unnamed package is determined by the host system. Unnamed packages are provided principally for convenience when developing small or temporary applications or when just beginning development.<p>
+<a name="20328"></a>
+An <code>import</code> declaration allows a type declared in another package to be known by a simple name rather than by the fully qualified name <a href="Concepts.doc.html#20207">(&#167;2.7.5)</a> of the type. An import declaration affects only the type declarations of a single compilation unit. A compilation unit automatically imports each of the <code>public</code> type names declared in the predefined package <code>java.lang</code>.<p>
+<a name="26049"></a>
+<h3>2.7.3    Members</h3>
+<a name="26053"></a>
+Packages and reference types have <i>members</i>. The members of a package <a href="Concepts.doc.html#20319">(&#167;2.7.2)</a> 
+are subpackages and all the class <a href="Concepts.doc.html#29321">(&#167;2.8)</a> and interface <a href="Concepts.doc.html#16432">(&#167;2.13)</a> types declared in all 
+the compilation units of the package. The members of a reference type are fields 
+<a href="Concepts.doc.html#16338">(&#167;2.9)</a>, methods <a href="Concepts.doc.html#16317">(&#167;2.10)</a>, and nested classes and interfaces.
+<p><a name="27480"></a>
+<h4>2.7.3.1    The Members of a Package</h4>
+<a name="27481"></a>
+In general, the subpackages of a package are determined by the host system. However,
+the standard package <code>java</code> always has the subpackages <code>lang</code>, <code>util</code>, <code>io</code>, and 
+<code>net</code>. No two distinct members of the same package may have the same simple name 
+<a href="Concepts.doc.html#21410">(&#167;2.7.1)</a>, but members of different packages may have the same simple name.
+<p><a name="26071"></a>
+<h4>2.7.3.2    The Members of a Class Type</h4>
+<a name="26072"></a>
+The members of a class type <a href="Concepts.doc.html#29321">(&#167;2.8)</a> are fields <a href="Concepts.doc.html#16338">(&#167;2.9)</a>, methods <a href="Concepts.doc.html#16317">(&#167;2.10)</a>, and nested 
+classes and interfaces. These include members inherited from its direct superclass 
+<a href="Concepts.doc.html#32983">(&#167;2.8.3)</a>, if it has one, members inherited from any direct superinterfaces <a href="Concepts.doc.html#20603">(&#167;2.13.2)</a>, 
+and any members declared in the body of the class. There is no restriction against a 
+field and a method of a class type having the same simple name. 
+<p><a name="26073"></a>
+A class type may have two or more methods with the same simple name if they have different numbers of parameters or different parameter types in at least one parameter position. Such a method member name is said to be <i>overloaded</i>. A class type may contain a declaration for a method with the same name and the same signature as a method that would otherwise be inherited from a superclass or superinterface. In this case, the method of the superclass or superinterface is not inherited. If the method not inherited is <code>abstract</code>, the new declaration is said to <i>implement</i> the method; if it is not <code>abstract</code>, the new declaration is said to <i>override</i> it.<p>
+<a name="26076"></a>
+<h4>2.7.3.3    The Members of an Interface Type</h4>
+<a name="26077"></a>
+The members of an interface type <a href="Concepts.doc.html#16432">(&#167;2.13)</a> are fields, methods, and nested classes and 
+interfaces. The members of an interface are the members inherited from any direct 
+superinterfaces <a href="Concepts.doc.html#20603">(&#167;2.13.2)</a> and members declared in the body of the interface.
+<p><a name="26078"></a>
+<h4>2.7.3.4    The Members of an Array Type</h4>
+<a name="26079"></a>
+The members of an array type <a href="Concepts.doc.html#16446">(&#167;2.15)</a> are the members inherited from its superclass, 
+the class <code>Object</code> <a href="Concepts.doc.html#27433">(&#167;2.4.7)</a>, and the field <code>length</code>, which is a constant (<code>final</code>) field of 
+every array.
+<p><a name="18914"></a>
+<h3>2.7.4    Qualified Names and Access Control</h3>
+<a name="28883"></a>
+Qualified names <a href="Concepts.doc.html#21410">(&#167;2.7.1)</a> are a means of access to members of packages and reference
+types; related means of access include field access expressions and method 
+invocation expressions. All three are syntactically similar in that a "." token appears, 
+preceded by some indication of a package, type, or expression having a type and followed
+by an identifier that names a member of the package or type. These are collectively
+known as constructs for <i>qualified access</i>. 
+<p><a name="28884"></a>
+The Java programming language provides mechanisms for limiting qualified access, to prevent users of a package or class from depending on unnecessary details of the implementation of that package or class. Access control also applies to constructors.<p>
+<a name="26122"></a>
+Whether a package is accessible is determined by the host system.<p>
+<a name="26129"></a>
+A class or interface may be declared <code>public</code>, in which case it may be accessed, using a qualified name, by any class or interface that can access the package in which it is declared. A class or interface that is not declared <code>public</code> may be accessed from, and only from, anywhere in the package in which it is declared.<p>
+<a name="26130"></a>
+Every field or method of an interface must be <code>public</code>. Every member of a <code>public</code> interface is implicitly <code>public</code>, whether or not the keyword <code>public</code> appears in its declaration. It follows that a member of an interface is accessible if and only if the interface itself is accessible.<p>
+<a name="26131"></a>
+A field, method, or constructor of a class may be declared using at most one of the <code>public</code>, <code>private</code>, or <code>protected</code> keywords. A <code>public</code> member may be accessed by any class or interface. A <code>private</code> member may be accessed only from within the class that contains its declaration. A member that is not declared <code>public</code>, <code>protected</code>, or <code>private</code> is said to have <i>default access</i> and may be accessed from, and only from, anywhere in the package in which it is declared.<p>
+<a name="26127"></a>
+A <code>protected</code> member of an object may be accessed only by code responsible for the implementation of that object. To be precise, a <code>protected</code> member may be accessed from anywhere in the package in which it is declared and, in addition, it may be accessed from within any declaration of a subclass of the class type that contains its declaration, provided that certain restrictions are obeyed. <p>
+<a name="20207"></a>
+<h3>2.7.5    Fully Qualified Names</h3>
+<a name="26136"></a>
+Every package, class, interface, array type, and primitive type has a fully qualified 
+name. It follows that every type except the null type has a fully qualified name.
+<p><ul><li>The fully qualified name of a primitive type is the keyword for that primitive type, namely, <code>boolean</code>, <code>char</code>, <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, or <code>double</code>.<p>
+<li>The fully qualified name of a named package that is not a subpackage of a named package is its simple name.<p>
+<li>The fully qualified name of a named package that is a subpackage of another named package consists of the fully qualified name of the containing package followed by "<code>.</code>" followed by the simple (member) name of the subpackage.<p>
+<li>The fully qualified name of a class or interface that is declared in an unnamed package is the simple name of the class or interface.<p>
+<li>The fully qualified name of a class or interface that is declared in a named package consists of the fully qualified name of the package followed by "<code>.</code>" followed by the simple name of the class or interface.<p>
+<li>The fully qualified name of an array type consists of the fully qualified name of the component type of the array type followed by "<code>[]</code>".
+</ul><a name="29321"></a>
+<hr><h2>2.8    Classes</h2>
+<a name="29324"></a>
+A <i>class declaration </i>specifies a new reference type and provides its implementation. 
+Each class is implemented as an extension or subclass of a single existing class. A 
+class may also implement one or more interfaces.
+<p><a name="18225"></a>
+The body of a class declares members (fields and methods), static initializers, and constructors.<p>
+<a name="20389"></a>
+<h3>2.8.1    Class Names</h3>
+<a name="23195"></a>
+If a class is declared in a named package with the fully qualified name P, then the 
+class has the fully qualified name P<code>.</code><i>Identifier</i>. If the class is in an unnamed package, 
+then the class has the fully qualified name <i>Identifier</i>.
+<p><a name="23744"></a>
+Two classes are the <i>same class</i> (and therefore the <i>same type</i>) if they are loaded by the same class loader <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a> and they have the same fully qualified name <a href="Concepts.doc.html#20207">(&#167;2.7.5)</a>.<p>
+<a name="20340"></a>
+<h3>2.8.2    Class Modifiers</h3>
+<a name="20346"></a>
+A class declaration may include <i>class modifiers</i>. A class may be declared <code>public</code>, 
+as discussed in <a href="Concepts.doc.html#18914">&#167;2.7.4</a>.
+<p><a name="35615"></a>
+An <code>abstract</code> class is a class that is incomplete, or considered incomplete. Only <code>abstract</code> classes may have <code>abstract</code> methods <a href="Concepts.doc.html#16348">(&#167;2.10.3)</a>, that is, methods that are declared but not yet implemented.<p>
+<a name="20342"></a>
+A class can be declared <code>final</code> if its definition is complete and no subclasses are desired or required. Because a <code>final</code> class never has any subclasses, the methods of a <code>final</code> class cannot be overridden in a subclass. A class cannot be both <code>final</code> and <code>abstract</code>, because the implementation of such a class could never be completed.<p>
+<a name="32968"></a>
+A class can be declared <code>strictfp</code><code></code> to indicate that all expressions in the methods of the class are FP-strict <a href="Concepts.doc.html#24465">(&#167;2.18)</a>, whether or not the methods themselves are declared FP-strict.<p>
+<a name="32976"></a>
+A class is declared <code>public</code> to make its type available to packages other than the one in which it is declared. A <code>public</code> class is accessible from other packages, using either its fully qualified name or a shorter name created by an <code>import</code> declaration <a href="Concepts.doc.html#20319">(&#167;2.7.2)</a>, whenever the host permits access to its package. If a class lacks the <code>public</code> modifier, access to the class declaration is limited to the package in which it is declared.<p>
+<a name="32983"></a>
+<h3>2.8.3    Superclasses and Subclasses</h3>
+<a name="20344"></a>
+The optional <code>extends</code> clause in a class declaration specifies the <i>direct superclass</i> of 
+the current class, the class from whose implementation the implementation of the 
+current class is derived. A class is said to be a <i>direct subclass</i> of the class it 
+<code>extends</code>. Only the class <code>Object</code> <a href="Concepts.doc.html#27433">(&#167;2.4.7)</a> has no direct superclass. If the <code>extends</code> 
+clause is omitted from a class declaration, then the superclass of the new class is 
+<code>Object</code>.
+<p>
+The <i>subclass</i> relationship is the transitive closure of the direct subclass relationship. A class A is a subclass of a class C if A is a direct subclass of C, or if there is a direct subclass B of C and class A is a subclass of B. Class A is said to be a <i>superclass</i> of class C whenever C is a subclass of A.<p>
+<a name="18846"></a>
+<h3>2.8.4    The Class Members</h3>
+<a name="18847"></a>
+The members of a class type include all of the following:
+<p><ul><li>Members inherited from its direct superclass <a href="Concepts.doc.html#32983">(&#167;2.8.3)</a>, except in class <code>Object</code>, which has no direct superclass.<p>
+<li>Members inherited from any direct superinterfaces <a href="Concepts.doc.html#20603">(&#167;2.13.2)</a>.<p>
+<li>Members declared in the body of the class.
+</ul><a name="20425"></a>
+Members of a superclass that are declared <code>private</code> are not inherited by subclasses of that class. Members of a class that are not declared <code>private</code>, <code>protected</code>, or <code>public</code> are not inherited by subclasses declared in a package other than the one in which the class is declared. Constructors <a href="Concepts.doc.html#16411">(&#167;2.12)</a> and static initializers <a href="Concepts.doc.html#32316">(&#167;2.11)</a> are not members and therefore are not inherited.<p>
+<a name="16338"></a>
+<hr><h2>2.9    Fields</h2>
+<a name="26290"></a>
+The variables of a class type are its <i>fields</i>. Class (<code>static</code>) variables exist once per 
+class. Instance variables exist once per instance of the class. Fields may include initializers
+and may be modified using various modifier keywords. 
+<p><a name="29539"></a>
+If the class declares a field with a certain name, then the declaration of that field is said to <i>hide</i> any and all accessible declarations of fields with the same name in the superclasses and superinterfaces of the class. A class inherits from its direct superclass and direct superinterfaces all the fields of the superclass and superinterfaces that are accessible to code in the class and are not hidden by a declaration in the class. A hidden field can be accessed by using a qualified name (if it is <code>static</code>) or by using a field access expression that contains a cast to a superclass type or the keyword <code>super</code>.<p>
+<a name="34419"></a>
+A value stored in a field of type float is always an element of the float value set <a href="Concepts.doc.html#33377">(&#167;2.4.3)</a>; similarly, a value stored in a field of type double is always an element of the double value set. It is not permitted for a field of type float to contain an element of the float-extended-exponent value set that is not also an element of the float value set, nor for a field of type double to contain an element of the double-extended-exponent value set that is not also an element of the double value set.<p>
+<a name="29882"></a>
+<h3>2.9.1    Field Modifiers</h3>
+<a name="29888"></a>
+Fields may be declared <code>public</code>, <code>protected</code>, or <code>private</code>, as discussed in <a href="Concepts.doc.html#18914">&#167;2.7.4</a>.
+<p><a name="29890"></a>
+If a field is declared <code>static</code>, there exists exactly one incarnation of the field, no matter how many instances (possibly zero) of the class may eventually be created. A <code>static</code> field, sometimes called a <i>class variable</i>, is incarnated when the class is initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>.<p>
+<a name="26398"></a>
+A field that is not declared <code>static</code> is called an <i>instance variable</i>. Whenever a new instance of a class is created, a new variable associated with that instance is created for every instance variable declared in that class or in any of its superclasses. <p>
+<a name="29863"></a>
+A field can be declared <code>final</code>, in which case its declarator must include a variable initializer <a href="Concepts.doc.html#16320">(&#167;2.9.2)</a>. Both class and instance variables (<code>static</code> and non-<code>static</code> fields) may be declared <code>final</code>. Once a <code>final</code> field has been initialized, it always contains the same value. If a <code>final</code> field holds a reference to an object, then the state of the object may be changed by operations on the object, but the field will always refer to the same object.<p>
+<a name="18858"></a>
+Variables may be marked <code>transient</code> to indicate that they are not part of the persistent state of an object. The <code>transient</code> attribute can be used by an implementation to support special system services. <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i> does not yet specify details of such services.<p>
+<a name="18279"></a>
+The Java programming language allows threads that access shared variables to keep private working copies of the variables; this allows a more efficient implementation of multiple threads <a href="Concepts.doc.html#33308">(&#167;2.19)</a>. These working copies need to be reconciled with the master copies in the shared main memory only at prescribed synchronization points, namely, when objects are locked or unlocked <a href="Concepts.doc.html#33308">(&#167;2.19)</a>. As a rule, to make sure that shared variables are consistently and reliably updated, a thread should ensure that it has exclusive access to such variables by obtaining a lock that conventionally enforces mutual exclusion for those shared variables. <p>
+<a name="37311"></a>
+Alternatively, a field may be declared <code>volatile</code>, in which case a thread must reconcile its working copy of the field with the master copy every time it accesses the variable. Moreover, operations on the master copies of one or more volatile variables on behalf of a thread are performed by the main memory in exactly the order that the thread requested. A <code>final</code> field cannot also be declared <code>volatile</code>.<p>
+<a name="16320"></a>
+<h3>2.9.2    Initialization of Fields</h3>
+<a name="16324"></a>
+If a field declaration contains a variable initializer, then it has the semantics of an 
+assignment to the declared variable, and:
+<p><ul><li>If the declaration is for a class variable (that is, a <code>static</code> field), then the variable initializer is evaluated and the assignment performed exactly once, when the class is initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>.<p>
+<li>If the declaration is for an instance variable (that is, a field that is not <code>static</code>), then the variable initializer is evaluated and the assignment performed each time an instance of the class is created.
+</ul><a name="16317"></a>
+<hr><h2>2.10    Methods</h2>
+<a name="17564"></a>
+A <i>method </i>declares executable code that can be invoked, passing a fixed number of 
+values as arguments. Every method declaration belongs to some class. A class inherits
+from its direct superclass <a href="Concepts.doc.html#32983">(&#167;2.8.3)</a> and any direct superinterfaces <a href="Concepts.doc.html#20603">(&#167;2.13.2)</a> all the 
+accessible methods of the superclass and superinterfaces, with one exception: if a 
+name is declared as a method in the new class, then no method with the same signature
+<a href="Concepts.doc.html#34442">(&#167;2.10.2)</a> is inherited. Instead, the newly declared method is said to <i>override</i> 
+any such method declaration. An overriding method must not conflict with the definition
+that it overrides, for instance, by having a different return type. Overridden 
+methods of the superclass can be accessed using a method invocation expression 
+involving the <code>super</code> keyword.
+<p><a name="26454"></a>
+<h3>2.10.1    Formal Parameters</h3>
+<a name="34437"></a>
+The <i>formal parameters</i> of a method, if any, are specified by a list of comma-separated
+parameter specifiers. Each parameter specifier consists of a type and an identifier
+that specifies the name of the parameter. When the method is invoked, the values 
+of the actual argument expressions initialize newly created parameter variables 
+<a href="Concepts.doc.html#17203">(&#167;2.5)</a>, each of the declared type<i>,</i> before execution of the body of the method.
+<p><a name="34448"></a>
+A method parameter of type float always contains an element of the float value set <a href="Concepts.doc.html#33377">(&#167;2.4.3)</a>; similarly, a method parameter of type double always contains an element of the double value set. It is not permitted for a method parameter of type float to contain an element of the float-extended-exponent value set that is not also an element of the float value set, nor for a method parameter of type double to contain an element of the double-extended-exponent value set that is not also an element of the double value set. <p>
+<a name="34446"></a>
+Where an actual argument expression corresponding to a parameter variable is not FP-strict <a href="Concepts.doc.html#24465">(&#167;2.18)</a>, evaluation of that actual argument expression is permitted to use values drawn from the appropriate extended-exponent value sets. Prior to being stored in the parameter variable, the result of such an expression is mapped to the nearest value in the corresponding standard value set by method invocation conversion <a href="Concepts.doc.html#19685">(&#167;2.6.8)</a>.<p>
+<a name="34442"></a>
+<h3>2.10.2    Method Signature</h3>
+<a name="18291"></a>
+The <i>signature</i> of a method consists of the name of the method and the number and 
+type of formal parameters <a href="Concepts.doc.html#26454">(&#167;2.10.1)</a> of the method. A class may not declare two 
+methods with the same signature. 
+<p><a name="16348"></a>
+<h3>2.10.3    Method Modifiers</h3>
+<a name="18311"></a>
+The access modifiers <code>public</code>, <code>protected</code>, and <code>private</code> are discussed in <a href="Concepts.doc.html#18914">Section 
+2.7.4</a>.
+<p><a name="16355"></a>
+An <code>abstract</code> method declaration introduces the method as a member, providing its signature <a href="Concepts.doc.html#34442">(&#167;2.10.2)</a>, return type, and <code>throws</code> clause (if any), but does not provide an implementation. The declaration of an <code>abstract</code> method m must appear within an <code>abstract</code> class (call it A). Every subclass of A that is not itself <code>abstract</code> must provide an implementation for m. A method declared <code>abstract</code> cannot also be declared to be <code>private</code>, <code>static</code>, <code>final</code>, <code>native</code>, <code>strictfp</code>, or <code>synchronized</code>.<p>
+<a name="26498"></a>
+A method that is declared <code>static</code> is called a <i>class method</i>. A class method is always invoked without reference to a particular object. A class method may refer to other fields and methods of the class by simple name only if they are class methods and class (<code>static</code>) variables.<p>
+<a name="26500"></a>
+A method that is not declared <code>static</code> is an <i>instance method</i>. An instance method is always invoked with respect to an object, which becomes the current object to which the keywords <code>this</code> and <code>super</code> refer during execution of the method body.<p>
+<a name="16359"></a>
+A method can be declared <strong></strong><code>final</code> to prevent subclasses from overriding or hiding it. A <code>private</code> method and all methods declared in a <code>final</code> class <a href="Concepts.doc.html#20340">(&#167;2.8.2)</a> are implicitly <code>final</code>, because it is impossible to override them. If a method is <code>final</code> or implicitly <code>final</code>, a compiler or a runtime code generator can safely "inline" the body of a <code>final</code> method, replacing an invocation of the method with the code in its body.<p>
+<a name="16386"></a>
+A <code>synchronized</code> method will acquire a monitor lock <a href="Concepts.doc.html#33308">(&#167;2.19)</a> before it executes. For a class (<code>static</code>) method, the lock associated with the class object for the method's class is used. For an instance method, the lock associated with <code>this</code> (the object for which the method is invoked) is used. The same per-object lock is used by the <code>synchronized</code> statement.<p>
+<a name="33004"></a>
+A method can be declared <code>strictfp</code> to indicate that all expressions in the method are FP-strict <a href="Concepts.doc.html#24465">(&#167;2.18)</a>.<p>
+<a name="32312"></a>
+A method can be declared <code>native</code> to indicate that it is implemented in platform-dependent code, typically written in another programming language such as C, C++, or assembly language. A method may not be declared to be both <code>native</code> and <code>strictfp</code>.<p>
+<a name="32316"></a>
+<hr><h2>2.11    Static Initializers</h2>
+<a name="32319"></a>
+Any <i>static initializers</i> declared in a class are executed when the class is initialized 
+<a href="Concepts.doc.html#19075">(&#167;2.17.4)</a> and, together with any field initializers <a href="Concepts.doc.html#16320">(&#167;2.9.2)</a> for class variables, may be 
+used to initialize the class variables of the class <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>.
+<p><a name="20493"></a>
+The static initializers and class variable initializers are executed in textual order. They may not refer to class variables declared in the class whose declarations appear textually after the use, even though these class variables are in scope. This restriction is designed to catch, at compile time, most circular or otherwise malformed initializations.<p>
+<a name="16411"></a>
+<hr><h2>2.12    Constructors</h2>
+<a name="16407"></a>
+A <i>constructor</i> is used in the creation of an object that is an instance of a class. The 
+constructor declaration looks like a method declaration that has no result type. Constructors
+are invoked by class instance creation expressions <a href="Concepts.doc.html#19124">(&#167;2.17.6)</a>, by the conversions
+and concatenations caused by the string concatenation operator <code>+</code>, and by 
+explicit constructor invocations from other constructors; they are never invoked by 
+method invocation expressions. 
+<p><a name="33052"></a>
+Constructor declarations are not members. They are never inherited and therefore are not subject to hiding or overriding.<p>
+<a name="18321"></a>
+If a constructor body does not begin with an explicit constructor invocation and the constructor being declared is not part of the primordial class <code>Object</code>, then the constructor body is implicitly assumed by the compiler to begin with a superclass constructor invocation "<code>super();</code>", an invocation of the constructor of the direct superclass that takes no arguments.<p>
+<a name="20504"></a>
+If a class declares no constructors then a <i>default constructor</i>, which takes no arguments, is automatically provided. If the class being declared is <code>Object</code>, then the default constructor has an empty body. Otherwise, the default constructor takes no arguments and simply invokes the superclass constructor with no arguments. If the class is declared <code>public</code>, then the default constructor is implicitly given the access modifier <code>public</code>. Otherwise, the default constructor has the default access implied by no access modifier <a href="Concepts.doc.html#18914">(&#167;2.7.4)</a>.<p>
+<a name="26585"></a>
+A class can be designed to prevent code outside the class declaration from creating instances of the class by declaring at least one constructor, in order to prevent the creation of an implicit constructor, and declaring all constructors to be <code>private</code>.<p>
+<a name="33032"></a>
+<h3>2.12.1    Constructor Modifiers</h3>
+<a name="39383"></a>
+Access to constructors is governed by the access modifiers <code>public</code>, <code>protected</code>, 
+and <code>private</code> <a href="Concepts.doc.html#18914">(&#167;2.7.4)</a>. 
+<p><a name="39392"></a>
+A constructor cannot be <code>abstract</code>, <code>static</code>, <code>final</code>, <code>native</code>, or <code>synchronized</code>. A constructor cannot be declared to be <code>strictfp</code>. This difference in the definitions for method modifiers <a href="Concepts.doc.html#16348">(&#167;2.10.3)</a> and constructor modifiers is an intentional language design choice; it effectively ensures that a constructor is FP-strict <a href="Concepts.doc.html#24465">(&#167;2.18)</a> if and only if its class is FP-strict, so to speak.<p>
+<a name="16432"></a>
+<hr><h2>2.13    Interfaces&#32;</h2>
+<a name="16436"></a>
+An <i>interface</i> is a reference type whose members are constants and <code>abstract</code> methods.
+This type has no implementation, but otherwise unrelated classes can implement
+it by providing implementations for its <code>abstract</code> methods. Programs can use 
+interfaces to make it unnecessary for related classes to share a common <code>abstract</code> 
+superclass or to add methods to <code>Object</code>.
+<p><a name="26594"></a>
+An interface may be declared to be a <i>direct extension </i>of one or more other interfaces, meaning that it implicitly specifies all the <code>abstract</code> methods and constants of the interfaces it extends, except for any constants that it may hide, and perhaps adds newly declared members of its own.<p>
+<a name="20581"></a>
+A class may be declared to <i>directly implement</i> one or more interfaces, meaning that any instance of the class implements all the <code>abstract</code> methods specified by that interface. A class necessarily implements all the interfaces that its direct superclasses and direct superinterfaces do. This (multiple) interface inheritance allows objects to support (multiple) common behaviors without sharing any implementation.<p>
+<a name="16441"></a>
+A variable whose declared type is an interface type may have as its value a reference to an object that is an instance of any class that is declared to implement the specified interface. It is not sufficient that the class happens to implement all the <code>abstract</code> methods of the interface; the class or one of its superclasses must actually be declared to implement the interface, or else the class is not considered to implement the interface.<p>
+<a name="18339"></a>
+<h3>2.13.1    Interface Modifiers</h3>
+<a name="18340"></a>
+An interface declaration may be preceded by the interface modifiers <code>public</code>, 
+<code>strictfp</code>, and <code>abstract</code>. The access modifier <code>public</code> is discussed in <a href="Concepts.doc.html#18914">(&#167;2.7.4)</a>. 
+Every interface is implicitly <code>abstract</code>. All members of interfaces are implicitly 
+<code>public</code>.
+<p><a name="26882"></a>
+An interface cannot be <code>final</code>, because the implementation of such a class could never be completed.<p>
+<a name="20603"></a>
+<h3>2.13.2    Superinterfaces</h3>
+<a name="20604"></a>
+If an <code>extends</code> clause is provided, then the interface being declared extends each of 
+the other named interfaces and therefore inherits the methods and constants of each 
+of the other named interfaces. Any class that <code>implements</code> the declared interface is 
+also considered to implement all the interfaces that this interface extends and that 
+are accessible to the class.
+<p><a name="26623"></a>
+The <code>implements</code> clause in a class declaration lists the names of interfaces that are <i>direct superinterfaces</i> of the class being declared. All interfaces in the current package are accessible. Interfaces in other packages are accessible if the host system permits access to the package and the interface is declared <code>public</code>.<p>
+<a name="26624"></a>
+An interface type K is a <i>superinterface</i> of class type C if K is a direct superinterface of C &#32;; or if C has a direct superinterface J that has K as a superinterface; or if K is a superinterface of the direct superclass of C. A class is said to <i>implement</i> all its superinterfaces.<p>
+<a name="20616"></a>
+There is no analogue of the class <code>Object</code> for interfaces; that is, while every class is an extension of class <code>Object</code>, there is no single interface of which all interfaces are extensions.<p>
+<a name="18345"></a>
+<h3>2.13.3    Interface Members</h3>
+<a name="20636"></a>
+The members of an interface are those members inherited from direct superinterfaces
+and those members declared in the interface. The interface inherits, from the 
+interfaces it extends, all members of those interfaces, except for fields with the same 
+names as fields it declares. Interface members are either fields or methods.
+<p><a name="18349"></a>
+<h4>2.13.3.1    Interface (Constant) Fields</h4>
+<a name="18354"></a>
+Every field declaration in the body of an interface is implicitly <code>static</code> and <code>final</code>. 
+Interfaces do not have instance variables. Every field declaration in an interface is 
+itself implicitly <code>public</code>. A constant declaration in an interface must not include 
+either of the modifiers <code>transient</code> or <code>volatile</code>.
+<p><a name="26677"></a>
+Every field in the body of an interface must have an initialization expression, which need not be a constant expression. The variable initializer is evaluated and the assignment performed exactly once, when the interface is initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>.<p>
+<a name="20648"></a>
+<h4>2.13.3.2    Interface (Abstract) Methods</h4>
+<a name="20649"></a>
+Every method declaration in the body of an interface is implicitly <code>abstract</code> and 
+implicitly <code>public</code>.
+<p><a name="26648"></a>
+A method declared in the body of an interface must not be declared <code>static</code>, because <code>static</code> methods cannot be <code>abstract</code>. <p>
+<a name="39418"></a>
+A method declared in the body of an interface must not be declared <code>native</code>, <code>strictfp</code>, or <code>synchronized</code>, because those keywords describe implementation properties rather than interface properties; however, a method declared in an interface may be implemented by a method that is declared <code>native</code>, <code>strictfp</code>, or <code>synchronized</code> in a class that implements the interface. A method declared in the body of an interface must not be declared <code>final</code>; however, one may be implemented by a method that is declared <code>final</code> in a class that implements the interface.<p>
+<a name="26697"></a>
+<h3>2.13.4    Overriding, Inheritance, and Overloading in Interfaces</h3>
+<a name="26698"></a>
+If the interface declares a method, then the declaration of that method is said to 
+<i>override</i> any and all methods with the same signature in the superinterfaces of the 
+interface that would otherwise be accessible to code in this interface. 
+<p><a name="39417"></a>
+An interface inherits from its direct superinterfaces all methods of the superinterfaces that are not overridden by a method declared in the interface.<p>
+<a name="26708"></a>
+If two methods of an interface (whether both are declared in the same interface, or both are inherited by an interface, or one is declared and one is inherited) have the same name but different signatures, then the method name is said to be <i>overloaded</i>. <p>
+<a name="33252"></a>
+<hr><h2>2.14    Nested Classes and Interfaces</h2>
+<a name="33253"></a>
+JDK release 1.1 added <i>nested classes and interfaces</i> to the Java programming 
+language. Nested classes and interfaces are sometimes referred to as <i>inner 
+classes and interfaces</i>, which are one sort of nested classes and interfaces. 
+However, nested classes and interfaces also encompass nested top-level 
+classes and interfaces, which are not inner classes or interfaces.
+<p><a name="33254"></a>
+A full specification of nested classes and interfaces will be published in the second edition of <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i>. Until then, interested persons should refer to the Inner Classes Specification, which may be found at <code>http://java.sun.com/products/jdk/1.1/docs/guide/innerclasses/spec/innerclasses.doc.html</code>.<p>
+<a name="16446"></a>
+<hr><h2>2.15    Arrays</h2>
+<a name="16463"></a>
+<i>Arrays</i> are objects, are dynamically created, and may be assigned to variables of 
+type <code>Object</code> <a href="Concepts.doc.html#27433">(&#167;2.4.7)</a>. All methods on arrays are inherited from class <code>Object</code> except 
+the <code>clone</code> method, which arrays override. All arrays implement the interfaces 
+<code>Cloneable</code> and <code>java.io.Serializable</code>.
+<p><a name="16467"></a>
+An array object contains a number of variables. That number may be zero, in which case the array is said to be <i>empty</i>. The variables contained in an array have no names; instead they are referenced by array access expressions that use nonnegative integer index values. These variables are called the <i>components</i> of the array. If an array has <i>n</i> components, we say <i>n</i> is the <i>length</i> of the array.<p>
+<a name="23888"></a>
+An array of zero components is not the same as the null reference <a href="Concepts.doc.html#22930">(&#167;2.4)</a>.<p>
+<a name="38882"></a>
+An array component of type float is always an element of the float value set <a href="Concepts.doc.html#33377">(&#167;2.4.3)</a>; similarly, a component of type double is always an element of the double value set. A component of type float may not be an element of the float-extended-exponent value set unless it is also an element of the float value set. A component of type double may not be an element of the double-extended-exponent value set unless it is also an element of the double value set.<p>
+<a name="21035"></a>
+<h3>2.15.1    Array Types</h3>
+<a name="16468"></a>
+All the components of an array have the same type, called the <i>component type</i> of the 
+array. If the component type of an array is T, then the type of the array itself is written
+T<code>[]</code>.
+<p><a name="16469"></a>
+The component type of an array may itself be an array type. The components of such an array may contain references to subarrays. If, starting from any array type, one considers its component type, and then (if that is also an array type) the component type of that type, and so on, eventually one must reach a component type that is not an array type; this is called the <i>element type</i> of the original array, and the components at this level of the data structure are called the <i>elements</i> of the original array.<p>
+<a name="16433"></a>
+There are three situations in which an element of an array can be an array: if the element type is of type <code>Object</code> <a href="Concepts.doc.html#27433">(&#167;2.4.7)</a>, <code>Cloneable</code>, or <code>java.io.Serializable</code>, then some or all of the elements may be arrays, because every array object can be assigned to a variable of one of those types.<p>
+<a name="20782"></a>
+In the Java programming language, unlike in C, an array of <code>char</code> is not a <code>String</code> <a href="Concepts.doc.html#27433">(&#167;2.4.7)</a>, and neither a <code>String</code> nor an array of <code>char</code> is terminated by <code>'\u0000'</code> (the <code>NUL</code>-character). A <code>String</code> object is immutable (its value never changes), while an array of <code>char</code> has mutable elements.<p>
+<a name="20773"></a>
+The element type of an array may be any type, whether primitive or reference. In particular, arrays with an interface type as the component type are supported; the elements of such an array may have as their value a null reference or instances of any class type that implements the interface. Arrays with an <code>abstract</code> class type as the component type are supported; the elements of such an array may have as their value a null reference or instances of any subclass of this <code>abstract</code> class that is not itself <code>abstract</code>.<p>
+<a name="28011"></a>
+<h3>2.15.2    Array Variables</h3>
+<a name="28012"></a>
+A variable of array type holds a reference to an object. Declaring a variable of array 
+type does not create an array object or allocate any space for array components. It 
+creates only the variable itself, which can contain a reference to an array.
+<p><a name="16471"></a>
+Because an array's length is not part of its type, a single variable of array type may contain references to arrays of different lengths. Once an array object is created, its length never changes. To make an array variable refer to an array of different length, a reference to a different array must be assigned to the variable.<p>
+<a name="26732"></a>
+If an array variable v has type A<i></i><code>[]</code>, where A is a reference type, then v can hold a reference to any array type B<code>[]</code>, provided B can be assigned to A <a href="Concepts.doc.html#19674">(&#167;2.6.7)</a>.<p>
+<a name="20775"></a>
+<h3>2.15.3    Array Creation</h3>
+<a name="20776"></a>
+An array is created by an <i>array creation expression</i> or an <i>array initializer</i>. 
+<p><a name="22854"></a>
+<h3>2.15.4    Array Access</h3>
+<a name="22853"></a>
+A component of an array is accessed using an <i>array access expression</i>. Arrays may 
+be indexed by <code>int</code> values; <code>short</code>, <code>byte</code>, or <code>char</code> values may also be used as they 
+are subjected to unary numeric promotion <a href="Concepts.doc.html#16021">(&#167;2.6.10)</a> and become <code>int</code> values. 
+<p><a name="26745"></a>
+All arrays are 0-origin. An array with length <i>n</i> can be indexed by the integers 0 through <i>n</i> - 1. All array accesses are checked at run time; an attempt to use an index that is less than zero or greater than or equal to the length of the array causes an <code>ArrayIndexOutOfBoundsException</code> to be thrown.<p>
+<a name="22727"></a>
+<hr><h2>2.16    Exceptions</h2>
+<a name="24580"></a>
+When a program violates the semantic constraints of the Java programming language,
+the Java virtual machine signals this error to the program as an <i>exception</i>. An 
+example of such a violation is an attempt to index outside the bounds of an array. 
+The Java programming language specifies that an exception will be thrown when 
+semantic constraints are violated and will cause a nonlocal transfer of control from 
+the point where the exception occurred to a point that can be specified by the programmer.
+An exception is said to be <i>thrown</i> from the point where it occurred and is 
+said to be <i>caught</i> at the point to which control is transferred. A method invocation 
+that completes because an exception causes transfer of control to a point outside the 
+method is said to <i>complete abruptly.
+</i><p><a name="24581"></a>
+Programs can also throw exceptions explicitly, using <code>throw</code> statements. This provides an alternative to the old-fashioned style of handling error conditions by returning distinguished error values, such as the integer value <code>-1</code>, where a negative value would not normally be expected.<p>
+<a name="28948"></a>
+Every exception is represented by an instance of the class <code>Throwable</code> or one of its subclasses; such an object can be used to carry information from the point at which an exception occurs to the handler that catches it. Handlers are established by <code>catch</code> clauses of <code>try</code> statements. During the process of throwing an exception, the Java virtual machine abruptly completes, one by one, any expressions, statements, method and constructor invocations, static initializers, and field initialization expressions that have begun but not completed execution in the current thread. This process continues until a handler is found that indicates that it handles the thrown exception by naming the class of the exception or a superclass of the class of the exception. If no such handler is found, then the method <code>uncaughtException</code> is invoked for the <code>ThreadGroup</code> that is the parent of the current thread.<p>
+<a name="28949"></a>
+In the Java programming language the exception mechanism is integrated with the synchronization model <a href="Concepts.doc.html#33308">(&#167;2.19)</a> so that locks are properly released as <code>synchronized</code> statements and so that invocations of <code>synchronized</code> methods complete abruptly.<p>
+<a name="24689"></a>
+The specific exceptions covered in this section are that subset of the predefined exceptions that can be thrown directly by the operation of the Java virtual machine. Additional exceptions can be thrown by class library or user code; these exceptions are not covered here. See <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i> for information on all predefined exceptions.<p>
+<a name="24614"></a>
+<h3>2.16.1    The Causes of Exceptions</h3>
+<a name="24617"></a>
+An exception is thrown for one of three reasons:
+<p><ol>
+<a name="24656"></a>
+<li>An abnormal execution condition was synchronously detected by the Java virtual machine. These exceptions are not thrown at an arbitrary point in the program, but rather at a point where they are specified as a possible result of an expression evaluation or statement execution, such as:<p>
+<ul><li>When an operation violates the normal semantics of the Java programming language, for example indexing outside the bounds of an array.<p>
+<li>When an error occurs in loading or linking part of the program.<p>
+<li>When some limit on a resource is exceeded, for example when too much memory is used.<p>
+</ul>
+<a name="24638"></a>
+<li>A <code>throw</code> statement was executed.<p>
+<a name="24672"></a>
+<li>An asynchronous exception occurred because:<p>
+<ul><li>The <code>stop</code> method of class <code>Thread</code> or <code>ThreadGroup</code> was invoked, or<p>
+<li>An internal error occurred in the virtual machine implementation.
+</ul></ol><a name="24645"></a>
+Exceptions are represented by instances of the class <code>Throwable</code> and instances of its subclasses. These classes are, collectively, the <i>exception classes</i>.<p>
+<a name="22746"></a>
+<h3>2.16.2    Handling an Exception</h3>
+<a name="24698"></a>
+When an exception is thrown, control is transferred from the code that caused the 
+exception to the nearest dynamically enclosing <code>catch</code> clause of a <code>try</code> statement that 
+handles the exception.
+<p><a name="24702"></a>
+A statement or expression is <i>dynamically enclosed</i> by a <code>catch</code> clause if it appears within the <code>try</code> block of the <code>try</code> statement of which the <code>catch</code> clause is a part, or if the caller of the statement or expression is dynamically enclosed by the <code>catch</code> clause.<p>
+<a name="24703"></a>
+The <i>caller</i> of a statement or expression depends on where it occurs:<p>
+<ul><li>If within a method, then the caller is the method invocation expression  that was executed to cause the method to be invoked.<p>
+<li>If within a constructor or the initializer for an instance variable, then the  caller is the class instance creation expression or the method invocation of <code>newInstance</code> that was executed to cause an object to be created.<p>
+<li>If within a static initializer or an initializer for a <code>static</code> variable, then the caller is the expression that used the class or interface so as to cause it to be initialized.
+</ul><a name="24713"></a>
+Whether a particular <code>catch</code> clause <i>handles</i> an exception is determined by comparing the class of the object that was thrown to the declared type of the parameter of the <code>catch</code> clause. The <code>catch</code> clause handles the exception if the type of its parameter is the class of the exception or a superclass of the class of the exception. Equivalently, a <code>catch</code> clause will catch any exception object that is an <code>instanceof</code> the declared parameter type.<p>
+<a name="24717"></a>
+The control transfer that occurs when an exception is thrown causes abrupt completion of expressions and statements until a <code>catch</code> clause is encountered that can handle the exception; execution then continues by executing the block of that <code>catch</code> clause. The code that caused the exception is never resumed.<p>
+<a name="24724"></a>
+If no <code>catch</code> clause handling an exception can be found, then the current thread (the thread that encountered the exception) is terminated, but only after all <code>finally</code> clauses have been executed and the method <code>uncaughtException</code> has been invoked for the <code>ThreadGroup</code> that is the parent of the current thread.<p>
+<a name="24728"></a>
+In situations where it is desirable to ensure that one block of code is always executed after another, even if that other block of code completes abruptly, a <code>try</code> statement with a <code>finally</code> clause may be used. If a <code>try</code> or <code>catch</code> block in a <code>try-finally</code> or <code>try-catch-finally</code> statement completes abruptly, then the <code>finally</code> clause is executed during propagation of the exception, even if no matching <code>catch</code> clause is ultimately found. If a <code>finally</code> clause is executed because of abrupt completion of a <code>try</code> block and the <code>finally</code> clause itself completes abruptly, then the reason for the abrupt completion of the <code>try</code> block is discarded and the new reason for abrupt completion is propagated from there.<p>
+<a name="24825"></a>
+Most exceptions occur synchronously as a result of an action by the thread in which they occur and at a point in the program that is specified to possibly result in such an exception. An asynchronous exception is, by contrast, an exception that can potentially occur at any point in the execution of a program.<p>
+<a name="24826"></a>
+Asynchronous exceptions are rare. They occur only as a result of:<p>
+<ul><li>An invocation of the <code>stop</code> method of class <code>Thread</code> or <code>ThreadGroup</code>.<p>
+<li>An internal error in the Java virtual machine implementation.
+</ul><a name="24832"></a>
+A <code>stop</code> method may be invoked by one thread to affect another thread or all the 
+threads in a specified thread group. It is asynchronous because it may occur at any 
+point in the execution of the other thread or threads. An internal error is considered 
+asynchronous so that it may be handled using the same mechanism that handles the 
+<code>stop</code> method, as will now be described.
+<p><a name="24833"></a>
+The Java programming language permits a small but bounded amount of execution to occur before an asynchronous exception is thrown. This delay is permitted to allow optimized code to detect and throw these exceptions at points where it is practical to handle them while obeying the semantics of the language.<p>
+<a name="24834"></a>
+A simple implementation might poll for asynchronous exceptions at the point of each control transfer instruction. Since a program has a finite size, this provides a bound on the total delay in detecting an asynchronous exception. Since no asynchronous exception will occur between control transfers, the code generator has some flexibility to reorder computation between control transfers for greater performance.<p>
+<a name="24856"></a>
+All exceptions in the Java programming language are <i>precise</i>: when the transfer of control takes place, all effects of the statements executed and expressions evaluated before the point from which the exception is thrown must appear to have taken place. No expressions, statements, or parts thereof that occur after the point from which the exception is thrown may appear to have been evaluated. If optimized code has speculatively executed some of the expressions or statements which follow the point at which the exception occurs, such code must be prepared to hide this speculative execution from the user-visible state of the program.<p>
+<a name="24863"></a>
+<h3>2.16.3    The Exception Hierarchy</h3>
+<a name="24864"></a>
+The possible exceptions in a program are organized in a hierarchy of classes, rooted 
+at class <code>Throwable</code>, a direct subclass of <code>Object</code>. The classes <code>Exception</code> and 
+<code>Error</code> are direct subclasses of <code>Throwable</code>. The class <code>RuntimeException</code> is a 
+direct subclass of <code>Exception</code>.
+<p><a name="24868"></a>
+Programs can use the preexisting exception classes in <code>throw</code> statements, or define additional exception classes as subclasses of <code>Throwable</code> or of any of its subclasses, as appropriate. To take advantage of compile-time checking for exception handlers, it is typical to define most new exception classes as checked exception classes, specifically as subclasses of <code>Exception</code> that are not subclasses of <code>RuntimeException</code>.<p>
+<a name="24870"></a>
+<h3>2.16.4    The Classes <code>Exception</code> and <code>RuntimeException</code></h3>
+<a name="24871"></a>
+The class <code>Exception</code> is the superclass of all the standard exceptions that ordinary 
+programs may wish to recover from.
+<p><a name="24873"></a>
+The class <code>RuntimeException</code> is a subclass of class <code>Exception</code>. The subclasses of <code>RuntimeException</code> are unchecked exception classes. The package <code>java.lang</code> defines the following standard unchecked runtime exceptions:<p>
+<ul><li><code>ArithmeticException</code>: An exceptional arithmetic situation has arisen,  such as an integer division or integer remainder operation with a zero  divisor. <p>
+<li><code>ArrayStoreException</code>: An attempt has been made to store into an array  component a value whose class is not assignment compatible with the  component type of the array.<p>
+<li><code>ClassCastException</code>: An attempt has been made to cast a reference to an object to an inappropriate type.<p>
+<li><code>IllegalMonitorStateException</code>: A thread has attempted to wait on or notify other threads waiting on an object that it has not locked.<p>
+<li><code>IndexOutOfBoundsException</code>: Either an index of some sort (such as to  an array, a string, or a vector) or a subrange, specified either by two index  values or by an index and a length, was out of range.<p>
+<li><code>NegativeArraySizeException</code>: An attempt was made to create an array with a negative length.<p>
+<li><code>NullPointerException</code>: An attempt was made to use a null reference in  a case where an object reference was required.<p>
+<li><code>SecurityException</code>: A security violation was detected.
+</ul><a name="24953"></a>
+The class <code>Error</code> and its standard subclasses are exceptions from which ordinary programs are not ordinarily expected to recover. The class <code>Error</code> is a separate subclass of <code>Throwable</code>, distinct from <code>Exception</code> in the class hierarchy, in order to allow programs to use the idiom<p>
+<pre><a name="24954"></a><code>        } catch (Exception e) {
+</code></pre><a name="24955"></a>
+to catch all exceptions from which recovery may be possible without catching errors 
+from which recovery is typically not possible. Package <code>java.lang</code> defines all the 
+error classes described here.
+<p><a name="24958"></a>
+The Java virtual machine throws an object that is an instance of a subclass of <code>LinkageError</code> when a loading <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>, linking <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a>, or initialization <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a> error occurs. <p>
+<ul><li>The loading process is described in <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>. The errors <code>ClassFormatError</code>, <code>ClassCircularityError</code>, <code>NoClassDefFoundError</code>, and <code>UnsupportedClassVersionError</code> are described there.<p>
+<li>The linking process is described in <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a>. The linking errors <code>NoSuchFieldError</code>, <code>NoSuchMethodError</code>, <code>InstantiationError</code>, and <code>IllegalAccessError</code> are described there.<p>
+<li>The class verification process is described in <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a>. The verification failure error <code>VerifyError</code> is described there.<p>
+<li>The class initialization process is described in <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>. A virtual machine  will throw the error <code>ExceptionInInitializerError</code> if execution of a static initializer or of an initializer for a <code>static</code> field <a href="Concepts.doc.html#32316">(&#167;2.11)</a> results in an exception that is not an <code>Error</code> or a subclass of <code>Error</code>.<p>
+<a name="36993"></a>
+<p>A <code>LinkageError</code> may also be thrown at run time:<p>
+<li>An <code>AbstractMethodError</code> is thrown at run time if an <code>abstract</code> method is invoked.<p>
+<li>An <code>UnsatisfiedLinkError</code> is thrown at run time if the Java virtual machine cannot find an appropriate definition of a method declared to be <code>native</code>.
+</ul><a name="24981"></a>
+A Java virtual machine implementation throws an object that is an instance of a subclass of the class <code>VirtualMachineError</code> when an internal error or resource limitation prevents it from implementing the semantics of the Java programming language. This specification defines the following virtual machine errors:<p>
+<ul><li><code>InternalError</code>: An internal error has occurred in the Java virtual machine implementation because of a fault in the software implementing the virtual machine, a fault in the underlying host system software, or a fault in the hardware. This error is delivered asynchronously when it is detected and may occur at any point in a program.<p>
+<li><code>OutOfMemoryError</code>: The Java virtual machine implementation has run out  of either virtual or physical memory, and the automatic storage manager was unable to reclaim enough memory to satisfy an object creation request.<p>
+<li><code>StackOverflowError</code>: The Java virtual machine implementation has run out of stack space for a thread, typically because the thread is doing an unbounded number of recursive invocations as a result of a fault in the executing program.<p>
+<li><code>UnknownError</code>: An exception or error has occurred, but the Java virtual machine implementation is unable to report the actual exception or error.
+</ul><a name="16491"></a>
+<hr><h2>2.17    Execution</h2>
+<a name="19013"></a>
+This section specifies activities that occur during execution of a program. It is organized
+around the life cycle of the Java virtual machine and of the classes, interfaces, 
+and objects that form a program. It specifies the detailed procedures used in starting 
+up the virtual machine <a href="Concepts.doc.html#19042">(&#167;2.17.1)</a>, class and interface type loading <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>, linking 
+<a href="Concepts.doc.html#22574">(&#167;2.17.3)</a>, and initialization <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>. It then specifies the procedures for creation of 
+new class instances <a href="Concepts.doc.html#19124">(&#167;2.17.6)</a>. It concludes by describing the unloading of classes 
+<a href="Concepts.doc.html#32202">(&#167;2.17.8)</a> and the procedure followed when a virtual machine exits <a href="Concepts.doc.html#19152">(&#167;2.17.9)</a>.
+<p><a name="19042"></a>
+<h3>2.17.1    Virtual Machine Start-up</h3>
+<a name="29387"></a>
+The Java virtual machine starts execution by invoking the method <code>main</code> of some 
+specified class and passing it a single argument, which is an array of strings. This 
+causes the specified class to be loaded <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>, linked <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a> to other types that 
+it uses, and initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>. The method <code>main</code> must be declared <code>public</code>, 
+<code>static</code>, and <code>void</code>.
+<p><a name="29397"></a>
+The manner in which the initial class is specified to the Java virtual machine is beyond the scope of this specification, but it is typical, in host environments that use command lines, for the fully qualified name of the class to be specified as a command-line argument and for subsequent command-line arguments to be used as strings to be provided as the argument to the method <code>main</code>. For example, using Sun's Java 2 SDK for Solaris, the command line<p>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;<code>java Terminator Hasta la vista Baby!
+</code></pre><a name="24084"></a>
+will start a Java virtual machine by invoking the method <code>main</code> of class <code>Terminator</code> 
+(a class in an unnamed package) and passing it an array containing the four strings 
+<code>"Hasta"</code>, <code>"la"</code>, <code>"vista"</code>, and <code>"Baby!"</code>.
+<p><a name="27143"></a>
+We now outline the steps the virtual machine may take to execute <code>Terminator</code>, as an example of the loading, linking, and initialization processes that are described further in later sections.<p>
+<a name="27586"></a>
+The initial attempt to execute the method <code>main</code> of class <code>Terminator</code> discovers that the class <code>Terminator</code> is not loaded-that is, the virtual machine does not currently contain a binary representation for this class. The virtual machine then uses a <code>ClassLoader</code> <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a> to attempt to find such a binary representation. If this process fails, an error is thrown. This loading process is described further in <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>.<p>
+<a name="37041"></a>
+After <code>Terminator</code> is loaded, it must be initialized before <code>main</code> can be invoked, and a type (class or interface) must always be linked before it is initialized. Linking <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a> involves verification, preparation, and (optionally) resolution.<p>
+<a name="37047"></a>
+Verification <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a> checks that the loaded representation of <code>Terminator</code> is well formed, with a proper symbol table. Verification also checks that the code that implements <code>Terminator</code> obeys the semantic requirements of the Java virtual machine. If a problem is detected during verification, an error is thrown.<p>
+<a name="37018"></a>
+Preparation <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a> involves allocation of static storage and any data structures that are used internally by the virtual machine, such as method tables.<p>
+<a name="27164"></a>
+Resolution <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a> is the process of checking symbolic references from class <code>Terminator</code> to other classes and interfaces, by loading the other classes and interfaces that are mentioned and checking that the references are correct.<p>
+<a name="27165"></a>
+The resolution step is optional at the time of initial linkage. An implementation may resolve a symbolic reference from a class or interface that is being linked very early, even to the point of resolving all symbolic references from the classes and interfaces that are further referenced, recursively. (This resolution may result in errors from further loading and linking steps.) This implementation choice represents one extreme and is similar to the kind of static linkage that has been done for many years in simple implementations of the C language.<p>
+<a name="27166"></a>
+An implementation may instead choose to resolve a symbolic reference only when it is actually used; consistent use of this strategy for all symbolic references would represent the "laziest" form of resolution. In this case, if <code>Terminator</code> had several symbolic references to another class, the references might be resolved one at a time or perhaps not at all, if these references were never used during execution of the program.<p>
+<a name="37106"></a>
+The only requirement regarding when resolution is performed is that any errors detected during resolution must be thrown at a point in the program where some action is taken by the program that might, directly or indirectly, require linkage to the class or interface involved in the error. In the "static" example implementation choice described earlier, loading and linking errors could occur before the program is executed if they involved a class or interface mentioned in the class <code>Terminator</code> or any of the further, recursively referenced classes and interfaces. In a system that implemented the "laziest" resolution, these errors would be thrown only when a symbolic reference was used.<p>
+<a name="37108"></a>
+In our running example, the virtual machine is still trying to execute the method <code>main</code> of class <code>Terminator</code>. This is permitted only if the class has been initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>.<p>
+<a name="27210"></a>
+Initialization consists of execution of any class variable initializers and static initializers of the class <code>Terminator</code>, in textual order. But before <code>Terminator</code> can be initialized, its direct superclass must be initialized, as well as the direct superclass of its direct superclass, and so on, recursively. In the simplest case, <code>Terminator</code> has <code>Object</code> as its implicit direct superclass; if class <code>Object</code> has not yet been initialized, then it must be initialized before <code>Terminator</code> is initialized.<p>
+<a name="27211"></a>
+If class <code>Terminator</code> has another class <code>Super</code> as its superclass, then <code>Super</code> must be initialized before <code>Terminator</code>. This requires loading, verifying, and preparing <code>Super</code>, if this has not already been done, and, depending on the implementation, may also involve resolving the symbolic references from <code>Super</code> and so on, recursively.<p>
+<a name="27212"></a>
+Initialization may thus cause loading, linking, and initialization errors, including such errors involving other types.<p>
+<a name="27236"></a>
+Finally, after completion of the initialization for class <code>Terminator</code> (during which other consequential loading, linking, and initializing may have occurred), the method <code>main</code> of <code>Terminator</code> is invoked.<p>
+<a name="19175"></a>
+<h3>2.17.2    Loading </h3>
+<a name="28453"></a>
+<i>Loading</i> refers to the process of finding the binary form of a class or interface type 
+with a particular name, perhaps by computing it on the fly, but more typically by 
+retrieving a binary representation previously computed from source code by a compiler
+and constructing, from that binary form, a <code>Class</code> object to represent the class 
+or interface. The binary format of a class or interface is normally the <code>class</code> file format
+(see Chapter 4, <a href="ClassFile.doc.html#80961">"The class File Format"</a>).
+<p><a name="19063"></a>
+The loading process is implemented by the class <code>ClassLoader</code> and its subclasses. Different subclasses of <code>ClassLoader</code> may implement different loading policies. In particular, a class loader may cache binary representations of classes and interfaces, prefetch them based on expected usage, or load a group of related classes together. These activities may not be completely transparent to a running application if, for example, a newly compiled version of a class is not found because an older version is cached by a class loader. It is the responsibility of a class loader, however, to reflect loading errors only at points in the program where they could have arisen without prefetching or group loading.<p>
+<a name="24112"></a>
+If an error occurs during class loading, then an instance of one of the following subclasses of class <code>LinkageError</code> will be thrown at any point in the program that (directly or indirectly) uses the type:<p>
+<ul><li><code>ClassFormatError</code>: The binary data that purports to specify a requested compiled class or interface is malformed.<p>
+<li><code>UnsupportedClassVersionError</code>: A class or interface could not be loaded because it is represented using an unsupported version of the <code>class</code> file  format.<a href="#32746"><sup>3</sup></a><p>
+<li><code>ClassCircularityError</code>: A class or interface could not be loaded because  it would be its own superclass or superinterface <a href="Concepts.doc.html#20603">(&#167;2.13.2)</a>.<p>
+<li><code>NoClassDefFoundError</code>: No definition for a requested class or interface could be found by the relevant class loader.
+</ul><a name="22574"></a>
+<h3>2.17.3    Linking: Verification, Preparation, and Resolution</h3>
+<a name="24124"></a>
+<i>Linking</i> is the process of taking a binary form of a class or interface type and 
+combining it into the runtime state of the Java virtual machine, so that it can be 
+executed. A class or interface type is always loaded before it is linked. Three different
+activities are involved in linking: verification, preparation, and resolution 
+of symbolic references.
+<p><a name="27248"></a>
+The Java programming language allows an implementation flexibility as to when linking activities (and, because of recursion, loading) take place, provided that the semantics of the language are respected, that a class or interface is completely verified and prepared before it is initialized, and that errors detected during linkage are thrown at a point in the program where some action is taken by the program that might require linkage to the class or interface involved in the error.<p>
+<a name="24132"></a>
+For example, an implementation may choose to resolve each symbolic reference in a class or interface individually, only when it is used (lazy or late resolution), or to resolve them all at once, for example, while the class is being verified (static resolution). This means that the resolution process may continue, in some implementations, after a class or interface has been initialized.<p>
+<a name="27250"></a>
+<i>Verification</i> ensures that the binary representation of a class or interface is structurally correct. For example, it checks that every instruction has a valid operation code; that every branch instruction branches to the start of some other instruction, rather than into the middle of an instruction; that every method is provided with a structurally correct signature; and that every instruction obeys the type discipline of the Java programming language.<p>
+<a name="24134"></a>
+If an error occurs during verification, then an instance of the following subclass of class <code>LinkageError</code> will be thrown at the point in the program that caused the class to be verified:<p>
+<ul><li><code>VerifyError</code>: The binary definition for a class or interface failed to pass a set of required checks to verify that it cannot violate the integrity of the Java virtual machine.
+</ul><a name="29058"></a>
+<i>Preparation</i> involves creating the static fields for a class or interface and initializing such fields to the standard default values <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a>. This does not require the execution of any Java virtual machine code; explicit initializers for static fields are executed as part of initialization <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a>, not preparation.<p>
+<a name="24149"></a>
+Implementations of the Java virtual machine may precompute additional data structures at preparation time in order to make later operations on a class or interface more efficient. One particularly useful data structure is a "method table" or other data structure that allows any method to be invoked on instances of a class without requiring a search of superclasses at invocation time.<p>
+<a name="27937"></a>
+The binary representation of a class or interface references other classes and interfaces and their fields, methods, and constructors symbolically, using the fully qualified names <a href="Concepts.doc.html#20207">(&#167;2.7.5)</a> of the other classes and interfaces. For fields and methods these symbolic references include the name of the class or interface type that declares the field or method, as well as the name of the field or method itself, together with appropriate type information.<p>
+<a name="27941"></a>
+Before a symbolic reference can be used it must undergo <i>resolution</i>, wherein a symbolic reference is validated and, typically, replaced with a direct reference that can be more efficiently processed if the reference is used repeatedly.<p>
+<a name="24171"></a>
+If an error occurs during resolution, then an instance of one of the following subclasses of class <code>IncompatibleClassChangeError</code>, or of some other subclass, or of <code>IncompatibleClassChangeError</code> &#32;itself (which is a subclass of the class <code>LinkageError</code>) &#32;may be thrown at any point in the program that uses a symbolic reference to the type:<p>
+<ul><li><code>IllegalAccessError</code>: A symbolic reference has been encountered that specifies a use or assignment of a field, or invocation of a method, or creation of an instance of a class to which the code containing the reference does not have access because the field or method was declared <code>private</code>, <code>protected</code>, or default access (not <code>public</code>), or because the class was not declared <code>public</code>. This can occur, for example, if a field that is originally declared <code>public</code> is changed to be <code>private</code> after another class that refers to the field has been compiled.<p>
+<li><code>InstantiationError</code>: A symbolic reference has been encountered that is used in a class instance creation expression, but an instance cannot be created because the reference turns out to refer to an interface or to an <code>abstract</code> class. This can occur, for example, if a class that is originally not <code>abstract</code> is changed to be <code>abstract</code> after another class that refers to the class in question has been compiled.<p>
+<li><code>NoSuchFieldError</code>: A symbolic reference has been encountered that refers  to a specific field of a specific class or interface, but the class or interface does not declare a field of that name. This can occur, for example, if a field declaration was deleted from a class after another class that refers to the field was  compiled.<p>
+<li><code>NoSuchMethodError</code>: A symbolic reference has been encountered that refers to a specific method of a specific class or interface, but the class or interface does not declare a method of that name and signature. This can occur, for example, if a method declaration was deleted from a class after another class that refers to the method was compiled.
+</ul><a name="19075"></a>
+<h3>2.17.4    Initialization</h3>
+<a name="19011"></a>
+<i>Initialization</i> of a class consists of executing its static initializers <a href="Concepts.doc.html#32316">(&#167;2.11)</a> and the initializers
+for static fields <a href="Concepts.doc.html#16320">(&#167;2.9.2)</a> declared in the class. Initialization of an interface 
+consists of executing the initializers for fields declared in the interface <a href="Concepts.doc.html#18349">(&#167;2.13.3.1)</a>. 
+<p><a name="27267"></a>
+Before a class or interface is initialized, its direct superclass must be initialized, but interfaces implemented by the class need not be initialized. Similarly, the superinterfaces of an interface need not be initialized before the interface is initialized.<p>
+<a name="24219"></a>
+A class or interface type T will be <i>initialized</i> immediately before one of the following occurs:<p>
+<ul><li>T is a class and an instance of T is created.<p>
+<li>T is a class and a static method of T is invoked.<p>
+<li>A nonconstant static field of T is used or assigned. A constant field is one that is (explicitly or implicitly) both <code>final</code> and <code>static</code>, and that is initialized with the value of a compile-time constant expression. A reference to such a field must be resolved at compile time to a copy of the compile-time constant value, so uses of such a field never cause initialization.
+</ul><a name="28119"></a>
+Invocation of certain methods in library classes <a href="Overview.doc.html#15641">(&#167;3.12)</a> also causes class or interface initialization. See the Java 2 platform's class library specifications (for example, class <code>Class</code> and package <code>java.lang.reflect</code>) for details.<p>
+<a name="28294"></a>
+The intent here is that a type have a set of initializers that put it in a consistent state and that this state be the first state that is observed by other classes. The static initializers and class variable initializers are executed in textual order and may not refer to class variables declared in the class whose declarations appear textually after the use, even though these class variables are in scope. This restriction is designed to detect, at compile time, most circular or otherwise malformed initializations.<p>
+<a name="24227"></a>
+Before a class or interface is initialized its superclass is initialized, if it has not previously been initialized.<p>
+<a name="24237"></a>
+<h3>2.17.5    Detailed Initialization Procedure</h3>
+<a name="24240"></a>
+Initialization of a class or interface requires careful synchronization, since some 
+other thread may be trying to initialize the same class or interface at the same time. 
+There is also the possibility that initialization of a class or interface may be 
+requested recursively as part of the initialization of that class or interface; for example,
+a variable initializer in class A might invoke a method of an unrelated class B, 
+which might in turn invoke a method of class A. The implementation of the Java virtual
+machine is responsible for taking care of synchronization and recursive initialization
+by using the following procedure. It assumes that the <code>Class</code> object has 
+already been verified and prepared and that the <code>Class</code> object contains state that can 
+indicate one of four situations:
+<p><ul><li>This <code>Class</code> object is verified and prepared but not initialized.<p>
+<li>This <code>Class</code> object is being initialized by some particular thread T.<p>
+<li>This <code>Class</code> object is fully initialized and ready for use.<p>
+<li>This <code>Class</code> object is in an erroneous state, perhaps because the verification step failed or because initialization was attempted and failed.
+</ul><a name="37126"></a>
+The procedure for initializing a class or interface is then as follows:
+<p><ol>
+<a name="24249"></a>
+<li>Synchronize on the <code>Class</code> object that represents the class or interface to be initialized. This involves waiting until the current thread can obtain the lock for that object <a href="Threads.doc.html#22500">(&#167;8.13)</a>.<p>
+<a name="24253"></a>
+<li>If initialization by some other thread is in progress for the class or interface, then <code>wait</code> on this <code>Class</code> object (which temporarily releases the lock). When the current thread awakens from the <code>wait</code>, repeat this step.<p>
+<a name="24257"></a>
+<li>If initialization is in progress for the class or interface by the current thread, then this must be a recursive request for initialization. Release the lock on the <code>Class</code> object and complete normally.<p>
+<a name="24258"></a>
+<li>If the class or interface has already been initialized, then no further action is required. Release the lock on the <code>Class</code> object and complete normally.<p>
+<a name="24259"></a>
+<li>If the <code>Class</code> object is in an erroneous state, then initialization is not possible. Release the lock on the <code>Class</code> object and throw a <code>NoClassDefFoundError</code>.<p>
+<a name="24260"></a>
+<li>Otherwise, record the fact that initialization of the <code>Class</code> object is now in progress by the current thread and release the lock on the <code>Class</code> object.<p>
+<a name="24263"></a>
+<li>Next, if the <code>Class</code> object represents a class rather than an interface, and the direct superclass of this class has not yet been initialized, then recursively perform this entire procedure for the uninitialized superclass. If the initialization of the direct superclass completes abruptly because of a thrown exception, then lock this <code>Class</code> object, label it erroneous, notify all waiting threads, release the lock, and complete abruptly, throwing the same exception that resulted from the initializing the superclass.<p>
+<a name="24267"></a>
+<li>Next, execute either the class variable initializers and static initializers of the class or the field initializers of the interface, in textual order, as though they were a single block, except that <code>final</code> <code>static</code> variables and fields of interfaces whose values are compile-time constants are initialized first.<p>
+<a name="24268"></a>
+<li>If the execution of the initializers completes normally, then lock this <code>Class</code> object, &#32;label it fully initialized, notify all waiting threads, release the lock, and complete this procedure normally.<p>
+<a name="24272"></a>
+<li>Otherwise, the initializers must have completed abruptly by throwing some exception &#32;E. If the class of E is not <code>Error</code> or one of its subclasses, then create a new instance of the class <code>ExceptionInInitializerError</code>, with E as the argument, and use this object in place of E in the following step. But if a new instance of <code>ExceptionInInitializerError</code> cannot be created because an <code>OutOfMemoryError</code> occurs, then instead use an <code>OutOfMemoryError</code> object in place of E in the following step.<p>
+<a name="24276"></a>
+<li>Lock the <code>Class</code> object, label it erroneous, notify all waiting threads, release the lock, and complete this procedure abruptly with reason E or its replacement as determined in the previous step.
+</ol>
+<a name="24277"></a>
+In some early implementations of the Java virtual machine, an exception during
+class initialization was ignored rather than allowing it to cause an 
+<code>ExceptionInInitializerError</code> as described here. 
+<p><a name="19124"></a>
+<h3>2.17.6    Creation of New Class Instances</h3>
+<a name="24321"></a>
+A new class instance is explicitly created when one of the following situations 
+occurs:
+<p><ul><li>Evaluation of a class instance creation expression creates a new instance of the class whose name appears in the expression.<p>
+<li>Invocation of the <code>newInstance</code> method of class <code>Class</code> creates a new instance of the class represented by the <code>Class</code> object for which the method was invoked.
+</ul><a name="24330"></a>
+A new class instance may be implicitly created in the following situations:
+<p><ul><li>Loading of a class or interface that contains a <code>String</code> literal may create a new <code>String</code> object <a href="Concepts.doc.html#25486">(&#167;2.4.8)</a> to represent that literal. This may not occur if the a <code>String</code> object has already been created to represent a previous occurrence of that literal, or if the <code>String.intern</code> method has been invoked on a <code>String</code> object representing the same string as the literal.<p>
+<li>Execution of a string concatenation operator that is not part of a constant expression sometimes creates a new <code>String</code> object to represent the result. String concatenation operators may also create temporary wrapper objects for a value of a primitive type <a href="Concepts.doc.html#19511">(&#167;2.4.1)</a>.
+</ul><a name="24342"></a>
+Each of these situations identifies a particular constructor to be called with specified 
+arguments (possibly none) as part of the class instance creation process.
+<p><a name="24343"></a>
+Whenever a new class instance is created, memory space is allocated for it with room for all the instance variables declared in the class type and all the instance variables declared in each superclass of the class type, including all the instance variables that may be hidden. If there is not sufficient space available to allocate memory for the object, then creation of the class instance completes abruptly with an <code>OutOfMemoryError</code>. Otherwise, all the instance variables in the new object, including those declared in superclasses, are initialized to their default values <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a>.<p>
+<a name="39421"></a>
+Just before a reference to the newly created object is returned as the result, the indicated constructor is processed to initialize the new object using the following procedure:<p>
+<ol>
+<a name="24347"></a>
+<li>Assign the arguments for the constructor to newly created parameter variables for this constructor invocation.<p>
+<a name="24348"></a>
+<li>If this constructor begins with an explicit constructor invocation of another constructor in the same class (using <code>this</code>), then evaluate the arguments and process that constructor invocation recursively using these same five steps. If that constructor invocation completes abruptly, then this procedure completes abruptly for the same reason. Otherwise, continue with step 5.<p>
+<a name="24349"></a>
+<li>If this constructor does not begin with an explicit constructor invocation of another constructor in the same class (using <code>this</code>) and is in a class other than <code>Object</code>, then this constructor will begin with an explicit or implicit invocation of a superclass constructor (using <code>super</code>). Evaluate the arguments and process that superclass constructor invocation recursively using these same five steps. If that constructor invocation completes abruptly, then this procedure completes abruptly for the same reason. Otherwise, continue with step 4.<p>
+<a name="24350"></a>
+<li>Execute the instance variable initializers for this class, assigning their values to the corresponding instance variables, in the left-to-right order in which they appear textually in the source code for the class. If execution of any of these initializers results in an exception, then no further initializers are processed and this procedure completes abruptly with that same exception. Otherwise, continue with step 5. (In some early implementations, the compiler incorrectly omitted the code to initialize a field if the field initializer expression was a constant expression whose value was equal to the default initialization value for its type. This was a bug.)<p>
+<a name="24351"></a>
+<li>Execute the rest of the body of this constructor. If that execution completes abruptly, then this procedure completes abruptly for the same reason. Otherwise, this procedure completes normally.
+</ol>
+<a name="24374"></a>
+Unlike C++, the Java programming language does not specify altered rules for method dispatch during the creation of a new class instance. If methods are invoked that are overridden in subclasses in the object being initialized, then these overriding methods are used, even before the new object is completely created.<p>
+<a name="19147"></a>
+<h3>2.17.7    Finalization of Class Instances</h3>
+<a name="24383"></a>
+The class <code>Object</code> has a <code>protected</code> method called <code>finalize</code>; this method can be 
+overridden by other classes. The particular definition of <code>finalize</code> that can be 
+invoked for an object is called the <i>finalizer</i> of that object. Before the storage for an 
+object is reclaimed by the garbage collector, the Java virtual machine will invoke the 
+finalizer<i> </i>of that object.
+<p><a name="24384"></a>
+Finalizers provide a chance to free up resources (such as file descriptors or operating system graphics contexts) that cannot be freed automatically by an automatic storage manager. In such situations, simply reclaiming the memory used by an object would not guarantee that the resources it held would be reclaimed.<p>
+<a name="24385"></a>
+The Java programming language does not specify how soon a finalizer will be invoked, except to say that it will happen before the storage for the object is reused. Nor does the language specify which thread will invoke the finalizer for any given object. If an uncaught exception is thrown during the finalization, the exception is ignored and finalization of that object terminates.<p>
+<a name="24386"></a>
+The <code>finalize</code> method declared in class <code>Object</code> takes no action. However, the fact that class <code>Object</code> declares a <code>finalize</code> method means that the <code>finalize</code> method for any class can always invoke the <code>finalize</code> method for its superclass, which is usually good practice. (Unlike constructors, finalizers do not automatically invoke the finalizer for the superclass; such an invocation must be coded explicitly.)<p>
+<a name="24387"></a>
+For efficiency, an implementation may keep track of classes that do not override the <code>finalize</code> method of class <code>Object</code> or that override it in a trivial way, such as<p>
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;protected void finalize() { super.finalize(); }
+</pre><a name="24395"></a>
+We encourage implementations to treat such objects as having a finalizer that is not 
+overridden and to finalize them more efficiently.
+<p><a name="24390"></a>
+The <code>finalize</code> method may be invoked explicitly, just like any other method. However, doing so does not have any effect on the object's eventual automatic finalization.<p>
+<a name="24400"></a>
+The Java virtual machine imposes no ordering on <code>finalize</code> method calls. Finalizers may be called in any order or even concurrently.<p>
+<a name="24401"></a>
+As an example, if a circularly linked group of unfinalized objects becomes unreachable, then all the objects may become finalizable together. Eventually, the finalizers for these objects may be invoked in any order or even concurrently using multiple threads. If the automatic storage manager later finds that the objects are unreachable, then their storage can be reclaimed.<p>
+<a name="32202"></a>
+<h3>2.17.8    Unloading of Classes and Interfaces</h3>
+<a name="32203"></a>
+A class or interface may be unloaded if and only if its class loader is unreachable. 
+The bootstrap class loader is always reachable; as a result, system classes may never 
+be unloaded.
+<p><a name="19152"></a>
+<h3>2.17.9    Virtual Machine Exit</h3>
+<a name="24452"></a>
+The Java virtual machine terminates all its activity and exits when one of two things 
+happens:
+<p><ul><li>All the threads that are not daemon threads <a href="Concepts.doc.html#33308">(&#167;2.19)</a> terminate.<p>
+<li>Some thread invokes the <code>exit</code> method of class <code>Runtime</code> or class <code>System</code>, and the exit operation is permitted by the security manager.
+</ul><a name="39425"></a>
+A program can specify that all finalizers that have not been automatically invoked 
+are to be run before the virtual machine exits. This is done by invoking the method 
+<code>runFinalizersOnExit</code> of the class <code>System</code> with the argument <code>true</code>.<a href="#39430"><sup>4</sup></a> By default 
+finalizers are not run on exit. Once running finalizers on exit has been enabled it 
+may be disabled by invoking <code>runFinalizersOnExit</code> with the argument <code>false</code>. 
+An invocation of the <code>runFinalizersOnExit</code> method is permitted only if the caller 
+is allowed to <code>exit</code> and is otherwise rejected by the security manager.
+<p><a name="24465"></a>
+<hr><h2>2.18    FP-strict Expressions</h2>
+<a name="34482"></a>
+If the type of an expression is float or double, then there is a question as to what 
+value set <a href="Concepts.doc.html#33377">(&#167;2.4.3)</a> the value of the expression may be drawn from. This is governed 
+by the rules of value set conversion <a href="Concepts.doc.html#32922">(&#167;2.6.6)</a>; these rules in turn depend on whether or 
+not the expression is <i>FP-strict</i>.
+<p><a name="34483"></a>
+Every compile-time constant expression is FP-strict. If an expression is not a compile-time constant expression, then consider all the class declarations, interface declarations, and method declarations that contain the expression. If <em>any</em> such declaration bears the strictfp modifier, then the expression is FP-strict.<p>
+<a name="34484"></a>
+It follows that an expression is not FP-strict if and only if it is not a compile-time constant expression <em>and</em> it does not appear within any declaration that has the strictfp modifier.<p>
+<a name="34485"></a>
+Within an FP-strict expression, all intermediate values must be elements of the float value set or the double value set, implying that the results of all FP-strict expressions must be those predicted by IEEE 754 arithmetic on operands represented using single and double formats. Within an expression that is not FP-strict, some leeway is granted for an implementation to use an extended exponent range to represent intermediate results; the net effect, roughly speaking, is that a calculation might produce "the correct answer" in situations where exclusive use of the float value set or double value set might result in overflow or underflow.<p>
+<a name="33308"></a>
+<hr><h2>2.19    Threads</h2>
+<a name="19261"></a>
+While most of the preceding discussion is concerned only with the behavior of code 
+as executed by a single thread, the Java virtual machine can support many threads of 
+execution at once. These threads independently execute code that operates on values 
+and objects residing in a shared main memory. Threads may be supported by having 
+many hardware processors, by time-slicing a single hardware processor, or by 
+time-slicing many hardware processors. 
+<p><a name="24524"></a>
+Any thread may be marked as a <i>daemon thread</i>. When code running in some thread creates a new <code>Thread</code> object, that new thread is initially marked as a daemon thread if and only if the creating thread is a daemon thread. A program can change whether or not a particular thread is a daemon thread by calling the <code>setDaemon</code> method in class <code>Thread</code>. The Java virtual machine initially starts up with a single nondaemon thread, which typically calls the method <code>main</code> of some class. The virtual machine may also create other daemon threads for internal purposes. The Java virtual machine exits when all nondaemon threads have terminated <a href="Concepts.doc.html#19152">(&#167;2.17.9)</a>.<p>
+<a name="24501"></a>
+By providing mechanisms for <i>synchronizing</i> the concurrent activity of threads, the Java programming language supports the coding of programs that, though concurrent, still exhibit deterministic behavior. To synchronize threads the language uses <i>monitors</i>, a mechanism for allowing one thread at a time to execute a region of code. The behavior of monitors is explained in terms of <i>locks</i>. There is a lock associated with each object.<p>
+<a name="22134"></a>
+The <code>synchronized</code> statement performs two special actions relevant only to multithreaded operation:<p>
+<ol>
+<a name="23896"></a>
+<li>After computing a reference to an object but before executing its body, it locks a lock associated with the object.<p>
+<a name="23903"></a>
+<li>After execution of the body has completed, either normally or abruptly, it unlocks that same lock. As a convenience, a method may be declared <code>synchronized</code>; such a method behaves as if its body were contained in a <code>synchronized</code> statement.
+</ol>
+<a name="22135"></a>
+The methods <code>wait</code>, <code>notify</code>, and <code>notifyAll</code> of class <code>Object</code> support an efficient transfer of control from one thread to another. Rather than simply "spinning" (repeatedly locking and unlocking an object to see whether some internal state has changed), which consumes computational effort, a thread can suspend itself using <code>wait</code> until such time as another thread awakens it using <code>notify</code> or <code>notifyAll</code>. This is especially appropriate in situations where threads have a producer-consumer relationship (actively cooperating on a common goal) rather than a mutual exclusion relationship (trying to avoid conflicts while sharing a common resource).<p>
+<a name="22136"></a>
+As a thread executes code, it carries out a sequence of actions. A thread may <i>use</i> the value of a variable or <i>assign</i> it a new value. (Other actions include arithmetic operations, conditional tests, and method invocations, but these do not involve variables directly.) If two or more concurrent threads act on a shared variable, there is a possibility that the actions on the variable will produce timing-dependent results. This dependence on timing is inherent in concurrent programming and produces one of the few situations where the result of a program is not determined solely by <i>The Java</i><sup><font size=-2>TM</font></sup><i> Language Specification</i>.<p>
+<a name="22137"></a>
+Each thread has a working memory, in which it may keep copies of the values of variables from the main memory that are shared between all threads. To access a shared variable, a thread usually first obtains a lock and flushes its working memory. This guarantees that shared values will thereafter be loaded from the shared main memory to the working memory of the thread. By unlocking a lock, a thread guarantees that the values held by the thread in its working memory will be written back to the main memory.<p>
+<a name="22139"></a>
+The interaction of threads with the main memory, and thus with each other, may be explained in terms of certain low-level actions. There are rules about the order in which these actions may occur. These rules impose constraints on any implementation of the Java programming language. A programmer may rely on the rules to predict the possible behaviors of a concurrent program. The rules do, however, intentionally give the implementor certain freedoms. The intent is to permit certain standard hardware and software techniques that can greatly improve the speed and efficiency of concurrent code.<p>
+<a name="22140"></a>
+Briefly put, the important consequences of the rules are the following:<p>
+<ul><li>Proper use of synchronization constructs will allow reliable transmission of values or sets of values from one thread to another through shared variables.<p>
+<li>When a thread uses the value of a variable, the value it obtains is in fact a value stored into the variable by that thread or by some other thread. This is true even if the program does not contain code for proper synchronization. For example, if two threads store references to different objects into the same reference value, the variable will subsequently contain a reference to one object or the other, not a reference to some other object or a corrupted reference value. (There is a special exception for <code>long</code> and <code>double</code> values; see <a href="Threads.doc.html#22244">&#167;8.4</a>.)<p>
+<li>In the absence of explicit synchronization, an implementation is free to update the main memory in an order that may be surprising. Therefore, the programmer who prefers to avoid surprises should use explicit synchronization.
+</ul><a name="22138"></a>
+The details of the interaction of threads with the main memory, and thus with each other, are discussed in detail in Chapter <a href="Threads.doc.html#21293">8</a>, <a href="Threads.doc.html#21294">"Threads and Locks."</a><p>
+<a name="29315"></a>
+<p>
+
+
+<hr>
+<sup>1</sup><a name="33132"></a>
+ 	Including updates for JDK release 1.1 and the Java 2 platform, v1.2, published at <code>http://java.sun.com</code>.<p>
+<sup>2</sup><a name="27846"></a>
+ Note that a local variable is not initialized on its creation and is considered to hold a value only once it is assigned <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a>.<p>
+<sup>3</sup><a name="32746"></a>
+ <code>UnsupportedClassVersionError</code>, a subclass of <code>ClassFormatError</code>, was introduced in the Java 2 platform, v1.2, to enable easy identification of a <code>ClassFormatError</code> caused by an attempt to load a class represented using an unsupported version of the <code>class</code> file format.<p>
+<sup>4</sup><a name="39430"></a>
+ The method <code>runFinalizersOnExit</code> was first implemented in JDK release 1.1 but has been deprecated in the Java 2 platform, v1.2.<p>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Introduction.doc.html">Prev</a> | <a href="Overview.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

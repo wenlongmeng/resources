@@ -1,0 +1,1111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc7.html">Prev</a> | <a href="Instructions2.doc9.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="l2d"></a>
+<hr><h2>l2d</h2>
+<a name="l2d.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69207"></a>
+Convert <code>long</code> to <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69206"></a>
+ <i>l2d</i>
+<td><a name="457592"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="l2d.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69208"></a>
+<i>l2d</i> = 138 (0x8a)</blockquote><p>
+<a name="l2d.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69209"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="l2d.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69210"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>long</code>. It is popped from the operand stack and converted to a <code>double</code> <i>result</i> using IEEE 754 round to nearest mode. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="l2d.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="432867"></a>
+The <i>l2d</i> instruction performs a widening primitive conversion <a href="Concepts.doc.html#23435">(&#167;2.6.2)</a> that may lose precision because values of type <code>double</code> have only 53 significand bits.</blockquote><p>
+
+<a name="l2f"></a>
+<hr><h2>l2f</h2>
+<a name="l2f.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69224"></a>
+Convert <code>long</code> to <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69223"></a>
+ <i>l2f</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="l2f.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69225"></a>
+<i>l2f</i> = 137 (0x89)</blockquote><p>
+<a name="l2f.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69226"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="l2f.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69227"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>long</code>. It is popped from the operand stack and converted to a <code>float</code> <i>result</i> using IEEE 754 round to nearest mode. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="l2f.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69228"></a>
+The <i>l2f</i> instruction performs a widening primitive conversion <a href="Concepts.doc.html#23435">(&#167;2.6.2)</a> that may lose precision because values of type <code>float</code> have only 24 significand bits.</blockquote><p>
+<blockquote><a name="69232"></a>
+</blockquote><p>
+
+<a name="l2i"></a>
+<hr><h2>l2i</h2>
+<a name="l2i.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69239"></a>
+Convert <code>long</code> to <code>int</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69238"></a>
+ <i>l2i</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="l2i.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69240"></a>
+<i>l2i</i> = 136 (0x88)</blockquote><p>
+<a name="l2i.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69241"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="l2i.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69242"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>long</code>. It is popped from the operand stack and converted to an <code>int</code> <i>result</i> by taking the low-order 32 bits of the <code>long</code> value and discarding the high-order 32 bits. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="l2i.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69243"></a>
+The <i>l2i</i> instruction performs a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. It may lose information about the overall magnitude of <i>value</i>. The <i>result</i> may also not have the same sign as <i>value</i>.</blockquote><p>
+<blockquote><a name="69247"></a>
+</blockquote><p>
+
+<a name="ladd"></a>
+<hr><h2>ladd</h2>
+<a name="ladd.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69254"></a>
+Add <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69253"></a>
+ <i>ladd</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="ladd.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69255"></a>
+<i>ladd</i> = 97 (0x61)</blockquote><p>
+<a name="ladd.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69256"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="ladd.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69257"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. The values are popped from the operand stack. The <code>long</code> <i>result</i> is <i>value1</i> + <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="448592"></a>
+The result is the 64 low-order bits of the true mathematical result in a sufficiently wide two's-complement format, represented as a value of type <code>long</code>. If overflow occurs, the sign of the result may not be the same as the sign of the mathematical sum of the two values.</blockquote><p>
+<blockquote><a name="448572"></a>
+Despite the fact that overflow may occur, execution of an <i>ladd</i> instruction never throws a runtime exception.</blockquote><p>
+<blockquote><a name="69259"></a>
+</blockquote><p>
+
+<a name="laload"></a>
+<hr><h2>laload</h2>
+<a name="laload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69269"></a>
+Load <code>long</code> from array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69268"></a>
+ <i>laload</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="laload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69270"></a>
+<i>laload</i> = 47 (0x2f)</blockquote><p>
+<a name="laload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69271"></a>
+..., <i>arrayref</i>, <i>index</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="laload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69272"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>long</code>. The <i>index</i> must be of type <code>int</code>. Both <i>arrayref</i> and <i>index</i> are popped from the operand stack. The <code>long</code> <i>value</i> in the component of the array at <i>index</i> is retrieved and pushed onto the operand stack.</blockquote><p>
+<a name="laload.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="69274"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>laload</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="69275"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>laload</i> instruction throws an <code>ArrayIndexOutOfBoundsException</code>.</blockquote><p>
+
+<a name="land"></a>
+<hr><h2>land</h2>
+<a name="land.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69285"></a>
+Boolean AND <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69284"></a>
+ <i>land</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="land.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69286"></a>
+<i>land</i> = 127 (0x7f)</blockquote><p>
+<a name="land.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69287"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="land.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69288"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. They are popped from the operand stack. A <code>long</code> <i>result</i> is calculated by taking the bitwise AND of <i>value1</i> and <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+
+<a name="lastore"></a>
+<hr><h2>lastore</h2>
+<a name="lastore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69298"></a>
+Store into <code>long</code> array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69297"></a>
+ <i>lastore</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lastore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69299"></a>
+<i>lastore</i> = 80 (0x50)</blockquote><p>
+<a name="lastore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69300"></a>
+..., <i>arrayref</i>, <i>index</i>, <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="lastore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69301"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>long</code>. The <i>index</i> must be of type <code>int</code>, and <i>value</i> must be of type <code>long</code>. The <i>arrayref</i>, <i>index</i>, and <i>value</i> are popped from the operand stack. The <code>long</code> <i>value</i> is stored as the component of the array indexed by <i>index</i>. </blockquote><p>
+<a name="lastore.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="69303"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>lastore</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="69304"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>lastore</i> instruction throws an <code>ArrayIndexOutOfBoundsException</code>.</blockquote><p>
+
+<a name="lcmp"></a>
+<hr><h2>lcmp</h2>
+<a name="lcmp.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69311"></a>
+Compare <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69310"></a>
+ <i>lcmp</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lcmp.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69312"></a>
+<i>lcmp</i> = 148 (0x94)</blockquote><p>
+<a name="lcmp.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69313"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lcmp.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69314"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. They are both popped from the operand stack, and a signed integer comparison is performed. If <i>value1</i> is greater than <i>value2</i>, the <code>int</code> value 1 is pushed onto the operand stack. If <i>value1</i> is equal to <i>value2</i>, the <code>int</code> value 0 is pushed onto the operand stack. If <i>value1</i> is less than <i>value2</i>, the <code>int</code> value -1 is pushed onto the operand stack.</blockquote><p>
+
+<a name="lconst_l"></a>
+<hr><h2>lconst_&lt;l&gt;</h2>
+<a name="lconst_l.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69321"></a>
+Push <code>long</code> constant<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69320"></a>
+ <i>lconst_&lt;l&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lconst_l.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69322"></a>
+<i>lconst_0</i> = 9 (0x9) <i>lconst_1</i> = 10 (0xa)</blockquote><p>
+<a name="lconst_l.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69323"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>&lt;l&gt;</i></blockquote><p>
+<a name="lconst_l.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69324"></a>
+Push the <code>long</code> constant <i>&lt;l&gt;</i> (<i>0</i> or <i>1</i>) onto the operand stack. </blockquote><p>
+
+<a name="ldc"></a>
+<hr><h2>ldc</h2>
+<a name="ldc.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69333"></a>
+Push item from runtime constant pool<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69330"></a>
+ <i>ldc</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69332"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="ldc.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69334"></a>
+<i>ldc</i><em> </em>= 18 (0x12)</blockquote><p>
+<a name="ldc.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69335"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="ldc.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69336"></a>
+The <i>index</i> is an unsigned byte that must be a valid index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The runtime constant pool entry at <i>index</i> either must be a runtime constant of type <code>int</code> or <code>float</code>, or must be a symbolic reference to a string literal <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>.</blockquote><p>
+<blockquote><a name="297204"></a>
+If the runtime constant pool entry is a runtime constant of type <code>int</code> or <code>float</code>, the numeric <i>value</i> of that runtime constant is pushed onto the operand stack as an <code>int</code> or <code>float</code>, respectively.</blockquote><p>
+<blockquote><a name="415850"></a>
+Otherwise, the runtime constant pool entry must be a reference to an instance of class <code>String</code> representing a string literal <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>. A <code>reference</code> to that instance, <i>value</i>, is pushed onto the operand stack.</blockquote><p>
+<a name="ldc.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="415848"></a>
+The <i>ldc</i> instruction can only be used to push a value of type <code>float</code> taken from the float value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a> because a constant of type <code>float</code> in the constant pool <a href="ClassFile.doc.html#21942">(&#167;4.4.4)</a> must be taken from the float value set.</blockquote><p>
+
+<a name="ldc_w"></a>
+<hr><h2>ldc_w</h2>
+<a name="ldc_w.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69366"></a>
+Push item from runtime constant pool (wide index)<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69361"></a>
+ <i>ldc_w</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69363"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69365"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="ldc_w.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69367"></a>
+<i>ldc_w</i> = 19 (0x13)</blockquote><p>
+<a name="ldc_w.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69368"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="ldc_w.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="293060"></a>
+The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are assembled into an unsigned 16-bit index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is calculated as (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The index must be a valid index into the runtime constant pool of the current class. The runtime constant pool entry at the index either must be a runtime constant of type <code>int</code> or <code>float</code>, or must be a symbolic reference to a string literal <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>. </blockquote><p>
+<blockquote><a name="415908"></a>
+If the runtime constant pool entry is a runtime constant of type <code>int</code> or <code>float</code>, the numeric <i>value</i> of that runtime constant is pushed onto the operand stack as an <code>int</code> or <code>float</code>, respectively.</blockquote><p>
+<blockquote><a name="415909"></a>
+Otherwise, the runtime constant pool entry must be a reference to an instance of class <code>String</code> representing a string literal <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>. A <code>reference</code> to that instance, <i>value</i>, is pushed onto the operand stack.</blockquote><p>
+<a name="ldc_w.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="125478"></a>
+The <i>ldc_w</i> instruction is identical to the <i>ldc</i> instruction except for its wider runtime constant pool index.</blockquote><p>
+<blockquote><a name="430868"></a>
+The <i>ldc_w</i> instruction can only be used to push a value of type <code>float</code> taken from the float value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a> because a constant of type <code>float</code> in the constant pool <a href="ClassFile.doc.html#21942">(&#167;4.4.4)</a> must be taken from the float value set.</blockquote><p>
+
+<a name="ldc2_w"></a>
+<hr><h2>ldc2_w</h2>
+<a name="ldc2_w.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69403"></a>
+Push <code>long</code> or <code>double</code> from runtime constant pool (wide index)<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69398"></a>
+ <i>ldc2_w</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69400"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69402"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="ldc2_w.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69404"></a>
+<i>ldc2_w</i> = 20 (0x14)</blockquote><p>
+<a name="ldc2_w.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="349328"></a>
+... <img src="chars/arrwdbrt.gif"> ...,<em> </em><i>value</i></blockquote><p>
+<a name="ldc2_w.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69406"></a>
+The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are assembled into an unsigned 16-bit index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is calculated as (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The index must be a valid index into the runtime constant pool of the current class. The runtime constant pool entry at the index must be a runtime constant of type <code>long</code> or <code>double</code> <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>. The numeric <i>value</i> of that runtime constant is pushed onto the operand stack as a <code>long</code> or <code>double</code>, respectively.</blockquote><p>
+<a name="ldc2_w.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69419"></a>
+Only a wide-index version of the <i>ldc2_w</i> instruction exists; there is no <i>ldc2</i> instruction that pushes a <code>long</code> or <code>double</code> with a single-byte index.</blockquote><p>
+<blockquote><a name="432235"></a>
+The <i>ldc2_w</i> instruction can only be used to push a value of type <code>double</code> taken from the double value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a> because a constant of type <code>double</code> in the constant pool <a href="ClassFile.doc.html#1348">(&#167;4.4.5)</a> must be taken from the double value set.</blockquote><p>
+<blockquote><a name="432233"></a>
+</blockquote><p>
+
+<a name="ldiv"></a>
+<hr><h2>ldiv</h2>
+<a name="ldiv.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69429"></a>
+Divide <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69428"></a>
+ <i>ldiv</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="ldiv.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69430"></a>
+<i>ldiv</i> = 109 (0x6d)</blockquote><p>
+<a name="ldiv.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69431"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="ldiv.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69432"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. The values are popped from the operand stack. The <code>long</code> <i>result</i> is the value of the Java programming language expression <i>value1</i> / <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="69433"></a>
+A <code>long</code> division rounds towards 0; that is, the quotient produced for <code>long</code> values in <i>n </i>/ <i>d</i> is a <code>long</code> value <i>q</i> whose magnitude is as large as possible while satisfying <img src="Instructions2.doc.anc10.gif">. Moreover, <i>q </i>is positive when <img src="Instructions2.doc.anc11.gif"> and <i>n</i> and <i>d</i> have the same sign, but <i>q</i> is negative when <img src="Instructions2.doc.anc12.gif"> and <i>n</i> and <i>d </i>have opposite signs. </blockquote><p>
+<blockquote><a name="69443"></a>
+There is one special case that does not satisfy this rule: if the dividend is the negative integer of largest possible magnitude for the <code>long</code> type and the divisor is -<code>1</code>, then overflow occurs and the result is equal to the dividend; despite the overflow, no exception is thrown in this case. </blockquote><p>
+<a name="ldiv.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="69445"></a>
+If the value of the divisor in a <code>long</code> division is 0, <i>ldiv</i> throws an <code>ArithmeticException</code>.</blockquote><p>
+
+<a name="lload"></a>
+<hr><h2>lload</h2>
+<a name="lload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69454"></a>
+Load <code>long</code> from local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69451"></a>
+ <i>lload</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69453"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69455"></a>
+<i>lload</i> = 22 (0x16)</blockquote><p>
+<a name="lload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="349346"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="lload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69457"></a>
+The <i>index</i> is an unsigned byte. Both <i>index</i> and <i>index </i>+ 1 must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The local variable at <i>index</i> must contain a <code>long</code>. The <i>value</i> of the local variable at <i>index</i> is pushed onto the operand stack. </blockquote><p>
+<a name="lload.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69461"></a>
+The <i>lload</i> opcode can be used in conjunction with the <i>wide</i> instruction to access a local variable using a two-byte unsigned index.</blockquote><p>
+
+<a name="lload_n"></a>
+<hr><h2>lload_&lt;n&gt;</h2>
+<a name="lload_n.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69471"></a>
+Load <code>long</code> from local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69470"></a>
+ <i>lload_&lt;n&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lload_n.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69472"></a>
+<i>lload_0</i> = 30 (0x1e) <i>lload_1</i> = 31 (0x1f) <i>lload_2</i> = 32 (0x20) <i>lload_3</i> = 33 (0x21)</blockquote><p>
+<a name="lload_n.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69473"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="lload_n.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69474"></a>
+Both <i>&lt;n&gt;</i> and <i>&lt;n&gt; </i>+ <i>1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The local variable at <i>&lt;n&gt;</i> must contain a <code>long</code>. The <i>value</i> of the local variable at <i>&lt;n&gt;</i> is pushed onto the operand stack. </blockquote><p>
+<a name="lload_n.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69478"></a>
+Each of the <i>lload_&lt;n&gt;</i> instructions is the same as <i>lload</i> with an <i>index</i> of <i>&lt;n&gt;</i>, except that the operand <i>&lt;n&gt;</i> is implicit.</blockquote><p>
+
+<a name="lmul"></a>
+<hr><h2>lmul</h2>
+<a name="lmul.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69488"></a>
+Multiply <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69487"></a>
+ <i>lmul</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lmul.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69489"></a>
+<i>lmul</i> = 105 (0x69)</blockquote><p>
+<a name="lmul.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69490"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lmul.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69491"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. The values are popped from the operand stack. The <code>long</code> <i>result</i> is <i>value1</i> * <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="448607"></a>
+The result is the 64 low-order bits of the true mathematical result in a sufficiently wide two's-complement format, represented as a value of type <code>long</code>. If overflow occurs, the sign of the result may not be the same as the sign of the mathematical sum of the two values.</blockquote><p>
+<blockquote><a name="448616"></a>
+Despite the fact that overflow may occur, execution of an <i>lmul</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="lneg"></a>
+<hr><h2>lneg</h2>
+<a name="lneg.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69508"></a>
+Negate <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69507"></a>
+ <i>lneg</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lneg.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69509"></a>
+<i>lneg</i><em> </em>= 117 (0x75)</blockquote><p>
+<a name="lneg.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69510"></a>
+..., <i>value</i><em> </em><img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lneg.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69511"></a>
+The <i>value</i> must be of type <code>long</code>. It is popped from the operand stack. The <code>long</code> <i>result</i> is the arithmetic negation of <i>value</i>, -<i>value</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="69512"></a>
+For <code>long</code> values, negation is the same as subtraction from zero. Because the Java virtual machine uses two's-complement representation for integers and the range of two's-complement values is not symmetric, the negation of the maximum negative <code>long</code> results in that same maximum negative number. Despite the fact that overflow has occurred, no exception is thrown. </blockquote><p>
+<blockquote><a name="69513"></a>
+For all <code>long</code> values <code>x</code>, -<code>x</code> equals (~<code>x</code>) + <code>1</code>.</blockquote><p>
+
+<a name="lookupswitch"></a>
+<hr><h2>lookupswitch</h2>
+<a name="lookupswitch.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69543"></a>
+Access jump table by key match and jump<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69522"></a>
+ <i>lookupswitch</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69524"></a>
+ <<i>0-3 byte pad</i>\>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69526"></a>
+ <i>defaultbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69528"></a>
+ <i>defaultbyte2</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69530"></a>
+ <i>defaultbyte3</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69532"></a>
+ <i>defaultbyte4</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69534"></a>
+ <i>npairs1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69536"></a>
+ <i>npairs2</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69538"></a>
+ <i>npairs3</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69540"></a>
+ <i>npairs4</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69542"></a>
+ <i>match-offset pairs</i>...
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lookupswitch.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69544"></a>
+<i>lookupswitch</i> = 171 (0xab)</blockquote><p>
+<a name="lookupswitch.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69545"></a>
+..., <i>key</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="lookupswitch.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="334376"></a>
+A <i>lookupswitch</i> is a variable-length instruction. Immediately after the <i>lookupswitch</i> opcode, between zero and three null bytes (zeroed bytes, not the null object) are inserted as padding. The number of null bytes is chosen so that the <i>defaultbyte1</i> begins at an address that is a multiple of four bytes from the start of the current method (the opcode of its first instruction). Immediately after the padding follow a series of signed 32-bit values: <i>default</i>, <i>npairs</i>, and then <i>npairs</i> pairs of signed 32-bit values. The <i>npairs</i> must be greater than or equal to 0. Each of the <i>npairs</i> pairs consists of an <code>int</code> <i>match</i> and a signed 32-bit <i>offset</i>. Each of these signed 32-bit values is constructed from four unsigned bytes as (<i>byte1</i> << 24) | (<i>byte2</i> << 16) | (<i>byte3</i> << 8) | <i>byte4</i>.</blockquote><p>
+
+<blockquote><a name="334378"></a>
+The table <i>match</i>-<i>offset</i> pairs of the <i>lookupswitch</i> instruction must be sorted in increasing numerical order by <i>match</i>.</blockquote><p>
+<blockquote><a name="69548"></a>
+The <i>key</i> must be of type <code>int</code> and is popped from the operand stack. The <i>key</i> is compared against the <i>match</i> values. If it is equal to one of them, then a target address is calculated by adding the corresponding <i>offset</i> to the address of the opcode of this <i>lookupswitch</i> instruction. If the <i>key</i> does not match any of the <i>match</i> values, the target address is calculated by adding <i>default</i> to the address of the opcode of this <i>lookupswitch</i> instruction. Execution then continues at the target address.</blockquote><p>
+<blockquote><a name="69549"></a>
+The target address that can be calculated from the offset of each <i>match-offset</i> pair, as well as the one calculated from <i>default</i>, must be the address of an opcode of an instruction within the method that contains this <i>lookupswitch</i> instruction.</blockquote><p>
+<a name="lookupswitch.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69550"></a>
+The alignment required of the 4-byte operands of the <i>lookupswitch</i> instruction guarantees 4-byte alignment of those operands if and only if the method that contains the <i>lookupswitch</i> is positioned on a 4-byte boundary.</blockquote><p>
+<blockquote><a name="69551"></a>
+The <i>match-offset</i> pairs are sorted to support lookup routines that are quicker than linear search.</blockquote><p>
+
+<a name="lor"></a>
+<hr><h2>lor</h2>
+<a name="lor.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69558"></a>
+Boolean OR <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69557"></a>
+ <i>lor</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lor.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69559"></a>
+<i>lor</i> = 129 (0x81)</blockquote><p>
+<a name="lor.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69560"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lor.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69561"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. They are popped from the operand stack. A <code>long</code> <i>result</i> is calculated by taking the bitwise inclusive OR of <i>value1</i> and <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+
+<a name="lrem"></a>
+<hr><h2>lrem</h2>
+<a name="lrem.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69568"></a>
+Remainder <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69567"></a>
+ <i>lrem</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lrem.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69569"></a>
+<i>lrem</i> = 113 (0x71)</blockquote><p>
+<a name="lrem.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69570"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lrem.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69571"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. The values are popped from the operand stack. The <code>long</code> <i>result</i> is <i>value1</i> - (<i>value1</i> / <i>value2</i>) * <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="69572"></a>
+The result of the <i>lrem</i> instruction is such that (<code>a</code>/<code>b</code>)*<code>b</code> + (<code>a%b</code>) is equal to <code>a</code>. This identity holds even in the special case in which the dividend is the negative <code>long</code> of largest possible magnitude for its type and the divisor is -<code>1</code> (the remainder is <code>0</code>). It follows from this rule that the result of the remainder operation can be negative only if the dividend is negative and can be positive only if the dividend is positive; moreover, the magnitude of the result is always less than the magnitude of the divisor. </blockquote><p>
+<a name="lrem.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="69574"></a>
+If the value of the divisor for a <code>long</code> remainder operator is <code>0</code>, <i>lrem</i> throws an <code>ArithmeticException</code>.</blockquote><p>
+
+<a name="lreturn"></a>
+<hr><h2>lreturn</h2>
+<a name="lreturn.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69581"></a>
+Return <code>long</code> from method<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69580"></a>
+ <i>lreturn</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lreturn.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69582"></a>
+<i>lreturn</i> = 173 (0xad)</blockquote><p>
+<a name="lreturn.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69583"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif">  [empty]</blockquote><p>
+<a name="lreturn.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69584"></a>
+The current method must have return type <code>long</code>. The <i>value</i> must be of type <code>long</code>. If the current method is a <code>synchronized</code> method, the monitor acquired or reentered on invocation of the method is released or exited (respectively) as if by execution of a <i>monitorexit</i> instruction. If no exception is thrown, <i>value</i> is popped from the operand stack of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> and pushed onto the operand stack of the frame of the invoker. Any other values on the operand stack of the current method are discarded.</blockquote><p>
+<blockquote><a name="69588"></a>
+The interpreter then returns control to the invoker of the method, reinstating the frame of the invoker.</blockquote><p>
+<a name="lreturn.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="250753"></a>
+If the current method is a <code>synchronized</code> method and the current thread is not the owner of the monitor acquired or reentered on invocation of the method, <i>lreturn</i> throws an <code>IllegalMonitorStateException</code>. This can happen, for example, if a <code>synchronized</code> method contains a <i>monitorexit</i> instruction, but no <i>monitorenter</i> instruction, on the object on which the method is synchronized.</blockquote><p>
+<blockquote><a name="250754"></a>
+Otherwise, if the virtual machine implementation enforces the rules on structured use of locks described in <a href="Threads.doc.html#22500">Section 8.13</a> and if the first of those rules is violated during invocation of the current method, then <i>lreturn</i> throws an <code>IllegalMonitorStateException</code>.</blockquote><p>
+<blockquote><a name="250632"></a>
+</blockquote><p>
+
+<a name="lshl"></a>
+<hr><h2>lshl</h2>
+<a name="lshl.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69598"></a>
+Shift left<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69597"></a>
+ <i>lshl</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br> <code>long</code></blockquote><p>
+<a name="lshl.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69599"></a>
+<i>lshl</i> = 121 (0x79)</blockquote><p>
+<a name="lshl.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69600"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lshl.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69601"></a>
+The <i>value1</i> must be of type <code>long</code>, and <i>value2</i> must be of type <code>int</code>. The values are popped from the operand stack. A <code>long</code> <i>result</i> is calculated by shifting <i>value1</i> left by <em>s</em> bit positions, where <em>s</em> is the low 6 bits of <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="lshl.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69602"></a>
+This is equivalent (even if overflow occurs) to multiplication by 2 to the power<em> </em><em>s</em>. The shift distance actually used is therefore always in the range 0 to 63, inclusive, as if <i>value2</i> were subjected to a bitwise logical AND with the mask value 0x3f. </blockquote><p>
+
+<a name="lshr"></a>
+<hr><h2>lshr</h2>
+<a name="lshr.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69612"></a>
+Arithmetic shift right <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69611"></a>
+ <i>lshr</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lshr.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69613"></a>
+<i>lshr</i> = 123 (0x7b)</blockquote><p>
+<a name="lshr.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69614"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lshr.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69615"></a>
+The <i>value1</i> must be of type <code>long</code>, and <i>value2</i> must be of type <code>int</code>. The values are popped from the operand stack. A <code>long</code> <i>result</i> is calculated by shifting <i>value1</i> right by <em>s</em> bit positions, with sign extension, where <em>s</em> is the value of the low 6 bits of <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="lshr.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69619"></a>
+The resulting value is <img src="Instructions2.doc.anc13.gif">
+, where <i>s</i> is <i>value2</i> &amp; 0x3f. For nonnegative <i>value1</i>, this is equivalent to truncating <code>long</code> division by 2 to the power <code>s</code>. The shift distance actually used is therefore always in the range 0 to 63, inclusive, as if <i>value2</i> were subjected to a bitwise logical AND with the mask value 0x3f. </blockquote><p>
+
+<a name="lstore"></a>
+<hr><h2>lstore</h2>
+<a name="lstore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69628"></a>
+Store <code>long</code> into local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69625"></a>
+ <i>lstore</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69627"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lstore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69629"></a>
+<i>lstore</i> = 55 (0x37)</blockquote><p>
+<a name="lstore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69630"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="lstore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69631"></a>
+The <i>index</i> is an unsigned byte. Both <i>index</i> and <i>index </i>+ <i>1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The <i>value</i> on the top of the operand stack must be of type <code>long</code>. It is popped from the operand stack, and the local variables at <i>index</i> and <i>index</i> &#32;+ &#32;<i>1</i> are set to <i>value</i>. </blockquote><p>
+<a name="lstore.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69635"></a>
+The <i>lstore</i> opcode can be used in conjunction with the <i>wide</i> instruction to access a local variable using a two-byte unsigned index.</blockquote><p>
+
+<a name="lstore_n"></a>
+<hr><h2>lstore_&lt;n&gt;</h2>
+<a name="lstore_n.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69645"></a>
+Store <code>long</code> into local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69644"></a>
+ <i>lstore_&lt;n&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lstore_n.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69646"></a>
+<i>lstore_0</i> = 63 (0x3f) <i>lstore_1</i> = 64 (0x40) <i>lstore_2</i> = 65 (0x41) <i>lstore_3</i> = 66 (0x42)</blockquote><p>
+<a name="lstore_n.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="88095"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="lstore_n.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69648"></a>
+Both <i>&lt;n&gt;</i> and <i>&lt;n&gt; </i>+ <i>1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The <i>value</i> on the top of the operand stack must be of type <code>long</code>. It is popped from the operand stack, and the local variables at <i>&lt;n&gt;</i> and <i>&lt;n&gt;</i> &#32;+ &#32;<i>1</i> are set to <i>value</i>.</blockquote><p>
+<a name="lstore_n.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="69652"></a>
+Each of the <i>lstore_&lt;n&gt;</i> instructions is the same as <i>lstore</i> with an <i>index</i> of <i>&lt;n&gt;</i>, except that the operand <i>&lt;n&gt;</i> is implicit.</blockquote><p>
+
+<a name="lsub"></a>
+<hr><h2>lsub</h2>
+<a name="lsub.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69662"></a>
+Subtract <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69661"></a>
+ <i>lsub</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lsub.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69663"></a>
+<i>lsub</i> = 101 (0x65)</blockquote><p>
+<a name="lsub.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69664"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lsub.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69665"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. The values are popped from the operand stack. The <code>long</code> <i>result</i> is <i>value1</i> - <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="69666"></a>
+For <code>long</code> subtraction, <code>a</code>-<code>b</code> produces the same result as <code>a</code>+<code>(</code>-<code>b)</code>. For <code>long</code> values, subtraction from zero is the same as negation.</blockquote><p>
+<blockquote><a name="448562"></a>
+The result is the 64 low-order bits of the true mathematical result in a sufficiently wide two's-complement format, represented as a value of type <code>long</code>. If overflow occurs, then the sign of the result may not be the same as the sign of the mathematical sum of the two values.</blockquote><p>
+<blockquote><a name="448629"></a>
+Despite the fact that overflow may occur, execution of an <i>lsub</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="lushr"></a>
+<hr><h2>lushr</h2>
+<a name="lushr.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69677"></a>
+Logical shift right <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69676"></a>
+ <i>lushr</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lushr.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69678"></a>
+<i>lushr</i> = 125 (0x7d)</blockquote><p>
+<a name="lushr.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69679"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lushr.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69680"></a>
+The <i>value1</i> must be of type <code>long</code>, and <i>value2</i> must be of type <code>int</code>. The values are popped from the operand stack. A <code>long</code> <i>result</i> is calculated by shifting <i>value1</i> right logically (with zero extension) by the amount indicated by the low 6 bits of <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="lushr.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="459086"></a>
+If <em>value1</em> is positive and s is <i>value2</i> &amp; 0x3f, the result is the same as that of <i>value1</i> >> s; if <i>value1</i> is negative, the result is equal to the value of the expression (<i>value1</i> >> s) + (2L << ~s). The addition of the (2L << ~s) term cancels out the propagated sign bit. The shift distance actually used is always in the range 0 to 63, inclusive.</blockquote><p>
+<blockquote><a name="125524"></a>
+</blockquote><p>
+
+<a name="lxor"></a>
+<hr><h2>lxor</h2>
+<a name="lxor.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69692"></a>
+Boolean XOR <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69691"></a>
+ <i>lxor</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="lxor.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69693"></a>
+<i>lxor</i> = 131 (0x83)</blockquote><p>
+<a name="lxor.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69694"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="lxor.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69695"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>long</code>. They are popped from the operand stack. A <code>long</code> <i>result</i> is calculated by taking the bitwise exclusive OR of <i>value1</i> and <i>value2</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc7.html">Prev</a> | <a href="Instructions2.doc9.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

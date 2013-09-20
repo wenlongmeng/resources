@@ -1,0 +1,653 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm10.html">Prev</a> | <a href="VMSpecIX.fm12.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6959115"></a>
+<center><h1> L</h1></center>
+<dl><dt><b><strong>L character
+</strong></b><dl>
+<a name="6959119"></a>
+<dt><a href="ClassFile.doc.html#84697">meaning in field or method descriptor,&#32;101</a>
+</dl>
+<dt><b><strong>L&lt;classname&gt;;
+</strong></b><dl>
+<a name="6959122"></a>
+<dt><a href="ClassFile.doc.html#84697">meaning in field or method descriptor,&#32;101</a>
+</dl>
+<dt><b>l2d <strong>instruction
+</strong></b><dl>
+<a name="6959125"></a>
+<dt><a href="Instructions2.doc8.html#l2d">definition,&#32;306</a>
+</dl>
+<dt><b>l2f <strong>instruction
+</strong></b><dl>
+<a name="6959128"></a>
+<dt><a href="Instructions2.doc8.html#l2f">definition,&#32;307</a>
+</dl>
+<dt><b>ladd <strong>instruction
+</strong></b><dl>
+<a name="6962294"></a>
+<dt><a href="Compiling.doc.html#9570">compilation examples, operand stack operations,&#32;386 </a>
+<a name="6962297"></a>
+<dt><a href="Instructions2.doc8.html#land">definition,&#32;309</a>
+</dl>
+<dt><b>laload <strong>instruction
+</strong></b><dl>
+<a name="6959136"></a>
+<dt><a href="Instructions2.doc8.html#laload">definition,&#32;310</a>
+</dl>
+<dt><b>land <strong>instruction
+</strong></b><dl>
+<a name="6959139"></a>
+<dt><a href="Instructions2.doc8.html#land">definition,&#32;311</a>
+</dl>
+<dt><b>lastore <strong>instruction
+</strong></b><dl>
+<a name="6959142"></a>
+<dt><a href="Instructions2.doc8.html#lastore">definition,&#32;312</a>
+</dl>
+<dt><b>lcmp <strong>instruction
+</strong></b><dl>
+<a name="6959145"></a>
+<dt><a href="Instructions2.doc8.html#lcmp">definition,&#32;313</a>
+</dl>
+<dt><b>lconst_&lt;l&gt; <strong>instructions
+</strong></b><dl>
+<a name="6959148"></a>
+<dt>compilation examples
+<dl>
+<a name="6959149"></a>
+<dt><a href="Compiling.doc.html#6126">accessing the runtime constant pool,&#32;371</a>
+<a name="6959151"></a>
+<dt><a href="Compiling.doc.html#9569">operand stack operations,&#32;386</a>
+</dl>
+<a name="6959153"></a>
+<dt><a href="Instructions2.doc8.html#lconst_l">definition,&#32;314</a>
+</dl>
+<dt><b>ldc <strong>instruction
+</strong></b><dl>
+<a name="6959156"></a>
+<dt><a href="Compiling.doc.html#6072">compilation examples, accessing the  runtime constant pool,&#32;371</a>
+<a name="6959158"></a>
+<dt><a href="ClassFile.doc.html#9163">constraints, static,&#32;135</a>
+<a name="6959160"></a>
+<dt><a href="Instructions2.doc8.html#ldc">definition,&#32;315</a>
+</dl>
+<dt><b>ldc_w <strong>instruction
+</strong></b><dl>
+<a name="6959163"></a>
+<dt><a href="ClassFile.doc.html#9163">constraints, static,&#32;135</a>
+<a name="6959165"></a>
+<dt><a href="Instructions2.doc8.html#ldc_w">definition,&#32;316</a>
+</dl>
+<dt><b>ldc2_w <strong>instruction
+</strong></b><dl>
+<a name="6959168"></a>
+<dt>compilation examples
+<dl>
+<a name="6959169"></a>
+<dt><a href="Compiling.doc.html#6128">accessing the runtime constant pool,&#32;371</a>
+<a name="6959171"></a>
+<dt>constants and local variables in  a for<a href="Compiling.doc.html#6890"> loop,&#32;367</a>
+<a name="6959173"></a>
+<dt>while<a href="Compiling.doc.html#8526"> loop,&#32;373</a>, <a href="Compiling.doc.html#8573">374</a>
+</dl>
+<a name="6959176"></a>
+<dt><a href="ClassFile.doc.html#43235">constraints, static,&#32;135</a>
+<a name="6959178"></a>
+<dt><a href="Instructions2.doc8.html#ldc_w">definition,&#32;317</a>
+</dl>
+<dt><b>ldiv <strong>instruction
+</strong></b><dl>
+<a name="6959181"></a>
+<dt><a href="Instructions2.doc8.html#ldiv">definition,&#32;318</a>
+</dl>
+<dt><b><strong>left angle bracket &lt;
+</strong></b><dl>
+<a name="6959184"></a>
+<dt>in CONSTANT_Methodref_info and CONSTANT_InterfaceMethodref_info<a href="ClassFile.doc.html#29292"> names, significance of,&#32;106</a>
+</dl>
+<dt><b><strong>left parentheses (
+</strong></b><dl>
+<a name="6959187"></a>
+<dt><a href="ClassFile.doc.html#81106">meaning in method descriptor,&#32;102</a>
+</dl>
+<dt><b><strong>left square bracket [
+</strong></b><dl>
+<a name="6959190"></a>
+<dt><a href="ClassFile.doc.html#14019">meaning in field or method descriptor,&#32;101</a>
+</dl>
+<dt><b>length <strong>item
+</strong></b><dl>
+<a name="6959193"></a>
+<dt>(CONSTANT_Utf8_info<a href="ClassFile.doc.html#9402"> structure),&#32;111</a>
+<a name="6959195"></a>
+<dt>(LocalVariableTable_attribute<a href="ClassFile.doc.html#9442"> structure),&#32;131</a>
+</dl>
+<dt><b><strong>limitations
+</strong></b><dl>
+<a name="6959198"></a>
+<dt><a href="ClassFile.doc.html#88659">Java virtual machine,&#32;152</a>
+</dl>
+<dt><b>line_number <strong>item
+</strong></b><dl>
+<a name="6959201"></a>
+<dt>(line_number_table array of LineNumberTable_attribute<a href="ClassFile.doc.html#9437"> structure),&#32;129</a>
+</dl>
+<dt><b>line_number_table <strong>array
+</strong></b><dl>
+<a name="6959204"></a>
+<dt>(LineNumberTable_attribute<a href="ClassFile.doc.html#1608"> structure),&#32;130</a>
+</dl>
+<dt><b>line_number_table_length <strong>item
+</strong></b><dl>
+<a name="6959207"></a>
+<dt>(LineNumberTable_attribute<a href="ClassFile.doc.html#1608"> structure),&#32;130</a>
+</dl>
+<dt><b>LineNumberTable_attribute <strong>structure
+</strong></b><dl>
+<a name="6959210"></a>
+<dt>(attributes table of Code_attribute<a href="ClassFile.doc.html#9437"> structure),&#32;129</a>
+</dl>
+<dt><b>LinkageError
+</b><dl>
+<a name="6959213"></a>
+<dt><a href="Concepts.doc.html#24112">definition,&#32;49</a>, <a href="Concepts.doc.html#24134">50</a>
+<a name="6959216"></a>
+<dt><a href="Concepts.doc.html#24958">as unrecoverable runtime exception class,&#32;44</a>
+<a name="6959218"></a>
+<dt><a href="ClassFile.doc.html#11934">verification pass 4 occurrence of,&#32;143</a>
+</dl>
+<dt><b><strong>linking
+</strong></b><dl>
+<a name="6959221"></a>
+<dt><em>See also</em> binding; preparation; resolution; verification
+<a name="6959223"></a>
+<dt><a href="ConstantPool.doc.html#67962">(chapter),&#32;155</a>
+<a name="6959225"></a>
+<dt>class<a href="ClassFile.doc.html#9757"> files verification issues,&#32;140</a>
+<a name="6959227"></a>
+<dt><a href="Concepts.doc.html#24124">definition,&#32;49</a>, <a href="ConstantPool.doc.html#71814">164</a>
+<a name="6959230"></a>
+<dt><a href="Overview.doc.html#1962">dynamic, frame use for,&#32;71</a>
+<a name="6959232"></a>
+<dt>errors
+<dl>
+<a name="6959233"></a>
+<dt>IllegalAccessError<a href="Concepts.doc.html#28428">,&#32;45</a>
+<a name="6959235"></a>
+<dt>InstantiationError<a href="Concepts.doc.html#28428">,&#32;45</a>
+<a name="6959237"></a>
+<dt>LinkageError<a href="Concepts.doc.html#36993">, as unrecoverable  runtime exception class,&#32;45</a>
+<a name="6959239"></a>
+<dt>LinkageError<a href="Concepts.doc.html#24112">, loading errors thrown by,&#32;49</a>
+<a name="6959241"></a>
+<dt>LinkageError<a href="Concepts.doc.html#24134">, verification errors thrown by,&#32;50</a>
+<a name="6959243"></a>
+<dt>LinkageError<a href="ClassFile.doc.html#11934">, verification pass  4 occurrence,&#32;143</a>
+<a name="6959245"></a>
+<dt>NoSuchFieldError<a href="Concepts.doc.html#28428">,&#32;45</a>
+<a name="6959247"></a>
+<dt>NoSuchMethodError<a href="Concepts.doc.html#28428">,&#32;45</a>
+</dl>
+<a name="6959249"></a>
+<dt><a href="Concepts.doc.html#37041">overview,&#32;47</a>
+<a name="6959251"></a>
+<dt><a href="Concepts.doc.html#24955">unrecoverable runtime exceptions  associated with,&#32;44</a>
+</dl>
+<dt><b><strong>literals
+</strong></b><dl>
+<a name="6959254"></a>
+<dt><em>See also</em> constants; strings; variables
+<a name="6959256"></a>
+<dt><a href="Concepts.doc.html#29971">definition,&#32;6</a>
+<a name="6959258"></a>
+<dt>false<a href="Concepts.doc.html#27355">,&#32;6</a>
+<a name="6959260"></a>
+<dt>null<a href="Concepts.doc.html#27355">,&#32;6</a>
+<a name="6962310"></a>
+<dt><a href="ConstantPool.doc.html#80056">strings, resolution of,&#32;157 </a>
+<a name="6962312"></a>
+<dt>true<a href="Concepts.doc.html#27355">,&#32;6</a>
+</dl>
+<dt><b>lload <strong>instruction
+</strong></b><dl>
+<a name="6959267"></a>
+<dt><a href="Instructions2.doc8.html#lload">definition,&#32;319</a>
+</dl>
+<dt><b>lload_&lt;n&gt; <strong>instructions
+</strong></b><dl>
+<a name="6959270"></a>
+<dt><a href="Instructions2.doc8.html#lload_n">definition,&#32;320</a>
+</dl>
+<dt><b>lmul <strong>instruction
+</strong></b><dl>
+<a name="6959273"></a>
+<dt><a href="Instructions2.doc8.html#lmul">definition,&#32;321</a>
+</dl>
+<dt><b>lneg <strong>instruction
+</strong></b><dl>
+<a name="6959276"></a>
+<dt><a href="Instructions2.doc8.html#lneg">definition,&#32;322</a>
+</dl>
+<dt><b>loadClass <strong>method
+</strong></b><dl>
+<a name="6959279"></a>
+<dt>ClassLoader<a href="ConstantPool.doc.html#79453"> class, loading of classes  and interfaces by,&#32;161</a>
+</dl>
+<dt><b><strong>loading
+</strong></b><dl>
+<a name="6959282"></a>
+<dt><em>See also</em> class loader; linking; verification
+<a name="6959284"></a>
+<dt><a href="ConstantPool.doc.html#86731">(chapter),&#32;155</a>
+<a name="6959286"></a>
+<dt><a href="ConstantPool.doc.html#75047">class or interface,&#32;158</a>
+<a name="6959288"></a>
+<dt>class or interface, errors
+<dl>
+<a name="6959289"></a>
+<dt>ClassCircularityError<a href="ConstantPool.doc.html#79418">,&#32;164</a>
+<a name="6959291"></a>
+<dt>IncompatibleClassChange- Error<a href="ConstantPool.doc.html#79415">,&#32;164</a>
+<a name="6959293"></a>
+<dt>NoClassDefFoundError<a href="ConstantPool.doc.html#71466">,&#32;160</a>, <a href="ConstantPool.doc.html#79406">163</a>
+</dl>
+<a name="6959296"></a>
+<dt><a href="ConstantPool.doc.html#78364">constraints,&#32;162</a>
+<a name="6959298"></a>
+<dt><a href="Concepts.doc.html#28453">definition,&#32;48</a>
+<a name="6959300"></a>
+<dt><a href="ConstantPool.doc.html#77474">delegation,&#32;159</a>
+<a name="6959302"></a>
+<dt>from arrays of type
+<dl>
+<a name="6959303"></a>
+<dt>byte or boolean, baload<a href="Instructions2.doc1.html#baload">,&#32;188</a>
+<a name="6959305"></a>
+<dt>char, caload<a href="Instructions2.doc2.html#caload">,&#32;191</a>
+<a name="6959307"></a>
+<dt>double, daload<a href="Instructions2.doc3.html#daload">,&#32;200</a>
+<a name="6959309"></a>
+<dt>float, faload<a href="Instructions2.doc4.html#faload">,&#32;230</a>
+<a name="6959311"></a>
+<dt>int, iaload<a href="Instructions2.doc6.html#iaload">,&#32;261</a>
+<a name="6959313"></a>
+<dt>long, laload<a href="Instructions2.doc8.html#l2i">,&#32;308</a>
+<a name="6959315"></a>
+<dt>reference, aaload<a href="Instructions2.doc.html#aaload">,&#32;175</a>
+<a name="6959317"></a>
+<dt>short, saload<a href="Instructions2.doc13.html#saload">,&#32;354</a>
+</dl>
+<a name="6959319"></a>
+<dt>from local variables of type
+<dl>
+<a name="6959320"></a>
+<dt>double, dload<a href="Instructions2.doc3.html#dload">,&#32;207</a>
+<a name="6959322"></a>
+<dt>double, dload_&lt;n&gt;<a href="Instructions2.doc3.html#dload_n">,&#32;208</a>
+<a name="6959324"></a>
+<dt>float, fload<a href="Instructions2.doc4.html#fload">,&#32;237</a>
+<a name="6959326"></a>
+<dt>float, fload_&lt;n&gt;<a href="Instructions2.doc4.html#fload_n">,&#32;238</a>
+<a name="6959328"></a>
+<dt>int, iload<a href="Instructions2.doc6.html#iload">,&#32;274</a>
+<a name="6959330"></a>
+<dt>int, iload_&lt;n&gt;<a href="Instructions2.doc6.html#iload_n">,&#32;275</a>
+<a name="6959332"></a>
+<dt>long, lload<a href="Instructions2.doc8.html#lload">,&#32;319</a>
+<a name="6959334"></a>
+<dt>long, lload_&lt;n&gt;<a href="Instructions2.doc8.html#lload_n">,&#32;320</a>
+<a name="6959336"></a>
+<dt>reference, aload<a href="Instructions2.doc.html#aload">,&#32;179</a>
+<a name="6959338"></a>
+<dt>reference, aload_&lt;n&gt;<a href="Instructions2.doc.html#aload_n">,&#32;180</a>
+</dl>
+<a name="6959340"></a>
+<dt><a href="Concepts.doc.html#27586">overview,&#32;46</a>
+<a name="6959342"></a>
+<dt><a href="Concepts.doc.html#24958">unrecoverable runtime exceptions  associated with,&#32;44</a>
+</dl>
+<dt><b>local_variable_table <strong>array
+</strong></b><dl>
+<a name="6959345"></a>
+<dt>(LocalVariableTable_attribute<a href="ClassFile.doc.html#9442"> structure),&#32;131</a>
+</dl>
+<dt><b>local_variable_table_length <strong>item
+</strong></b><dl>
+<a name="6959348"></a>
+<dt>(LocalVariableTable_attribute<a href="ClassFile.doc.html#9442"> structure),&#32;131</a>
+</dl>
+<dt><b><strong>local variables
+</strong></b><dl>
+<a name="6959351"></a>
+<dt><em>See also</em> parameters; variables
+<a name="6959353"></a>
+<dt><a href="ClassFile.doc.html#11124">accessing, structural constraints on instructions,&#32;138</a>
+<a name="6959355"></a>
+<dt><a href="ClassFile.doc.html#9802">code verification, Pass 3 - bytecode verifier,&#32;143</a>
+<a name="6959357"></a>
+<dt><a href="Compiling.doc.html#7213">compilation examples,&#32;365</a>
+<a name="6959359"></a>
+<dt><a href="ClassFile.doc.html#9778">data-flow analysis,&#32;142</a>
+<a name="6959361"></a>
+<dt><a href="Concepts.doc.html#18000">definition,&#32;14</a>, <a href="Overview.doc.html#31542">72</a>
+<a name="6959364"></a>
+<dt><a href="Overview.doc.html#25058">exception handling impact on,&#32;79</a>
+<a name="6959366"></a>
+<dt>instructions
+<dl>
+<a name="6959367"></a>
+<dt><a href="Overview.doc.html#6518">for accessing more, summary,&#32;83</a>
+<a name="6959369"></a>
+<dt><a href="Overview.doc.html#31927">load and store, summary,&#32;83</a>
+<a name="6959371"></a>
+<dt><a href="Compiling.doc.html#15090">specialized to handle, advantages of,&#32;366</a>
+</dl>
+<a name="6959373"></a>
+<dt>loading from
+<dl>
+<a name="6959374"></a>
+<dt>double, dload<a href="Instructions2.doc3.html#dload">,&#32;207</a>
+<a name="6959376"></a>
+<dt>double, dload_&lt;n&gt;<a href="Instructions2.doc3.html#dload_n">,&#32;208</a>
+<a name="6959378"></a>
+<dt>float, fload<a href="Instructions2.doc4.html#fload">,&#32;237</a>
+<a name="6959380"></a>
+<dt>float, fload_&lt;n&gt;<a href="Instructions2.doc4.html#fload_n">,&#32;238</a>
+<a name="6959382"></a>
+<dt>int, iload<a href="Instructions2.doc6.html#iload">,&#32;274</a>
+<a name="6959384"></a>
+<dt>int, iload_&lt;n&gt;<a href="Instructions2.doc6.html#iload_n">,&#32;275</a>
+<a name="6959386"></a>
+<dt>long, lload<a href="Instructions2.doc8.html#lload">,&#32;319</a>
+<a name="6959388"></a>
+<dt>long, lload_&lt;n&gt;<a href="Instructions2.doc8.html#lload_n">,&#32;320</a>
+<a name="6959390"></a>
+<dt>reference, aload<a href="Instructions2.doc.html#aload">,&#32;179</a>
+<a name="6959392"></a>
+<dt>reference, aload_&lt;n&gt;<a href="Instructions2.doc.html#aload_n">,&#32;180</a>
+</dl>
+<a name="6959394"></a>
+<dt><a href="ClassFile.doc.html#1635">location of,&#32;131</a>
+<a name="6959396"></a>
+<dt><a href="ClassFile.doc.html#6514">maximum number,&#32;121</a>
+<a name="6959398"></a>
+<dt><a href="Compiling.doc.html#4941">reuse, advantages of,&#32;366</a>
+<a name="6959400"></a>
+<dt><a href="ClassFile.doc.html#9825">states, merging, during data-flow analysis,&#32;145</a>
+<a name="6959402"></a>
+<dt>storing into
+<dl>
+<a name="6959403"></a>
+<dt>double, dstore<a href="Instructions2.doc3.html#dstore">,&#32;215</a>
+<a name="6959405"></a>
+<dt>double, dstore_&lt;n&gt;<a href="Instructions2.doc3.html#dstore_n">,&#32;216</a>
+<a name="6959407"></a>
+<dt>float, fstore<a href="Instructions2.doc4.html#fstore">,&#32;245</a>
+<a name="6959409"></a>
+<dt>float, fstore_&lt;n&gt;<a href="Instructions2.doc4.html#fstore_n">,&#32;246</a>
+<a name="6959411"></a>
+<dt>int, istore<a href="Instructions2.doc6.html#istore">,&#32;299</a>
+<a name="6959413"></a>
+<dt>int, istore_&lt;n&gt;<a href="Instructions2.doc6.html#istore_n">,&#32;300</a>
+<a name="6959415"></a>
+<dt>long, lstore<a href="Instructions2.doc8.html#lstore">,&#32;330</a>
+<a name="6959417"></a>
+<dt>long, lstore_&lt;n&gt;<a href="Instructions2.doc8.html#lstore_n">,&#32;331</a>
+<a name="6959419"></a>
+<dt>reference, astore<a href="Instructions2.doc.html#astore">,&#32;184</a>
+<a name="6959421"></a>
+<dt>reference, astore_&lt;n&gt;<a href="Instructions2.doc.html#astore_n">,&#32;185</a>
+</dl>
+</dl>
+<dt><b>LocalVariableTable_attribute <strong>structure
+
+</strong></b><dl>
+<a name="6959424"></a>
+<dt>(Code_attribute<a href="ClassFile.doc.html#5957"> structure),&#32;130</a>
+</dl>
+<dt><b><strong>locks
+</strong></b><dl>
+<a name="6959427"></a>
+<dt><em>See also</em> IllegalMonitorStateException; monitors; threads
+<a name="6959429"></a>
+<dt><a href="Threads.doc.html#21294">(chapter),&#32;397</a>
+<a name="6959431"></a>
+<dt>ACC_SYNCHONIZED flag, field_info<a href="ClassFile.doc.html#"> structure,&#32;114</a>
+<a name="6959433"></a>
+<dt><a href="Concepts.doc.html#25393">definition,&#32;12</a>, <a href="Concepts.doc.html#24501">59</a>
+<a name="6959436"></a>
+<dt>errors, IllegalMonitorStateException<a href="Concepts.doc.html#24896"> thrown,&#32;44</a>
+<a name="6959438"></a>
+<dt><a href="Threads.doc.html#22253">interaction with variables, rules about,&#32;403</a>
+<a name="6959440"></a>
+<dt><a href="Concepts.doc.html#18279">managing shared variables with,&#32;31</a>
+<a name="6959442"></a>
+<dt><a href="Concepts.doc.html#22145">multithreaded synchronization with,&#32;60</a>
+<a name="6959444"></a>
+<dt><a href="Threads.doc.html#25549">rules about,&#32;402</a>
+<a name="6959446"></a>
+<dt><a href="Threads.doc.html#24717">structured use of,&#32;413</a>
+<a name="6959448"></a>
+<dt><a href="Threads.doc.html#22500">synchronization and,&#32;412</a>
+<a name="6959450"></a>
+<dt>synchronized<a href="Concepts.doc.html#16386"> method use of,&#32;33</a>
+</dl>
+<dt><b>long <strong>type
+</strong></b><dl>
+<a name="6959453"></a>
+<dt>adding, ladd<a href="Instructions2.doc8.html#land">,&#32;309</a>
+<a name="6959455"></a>
+<dt>ANDing, bitwise, land<a href="Instructions2.doc8.html#land">,&#32;311</a>
+<a name="6959457"></a>
+<dt>comparing, lcmp<a href="Instructions2.doc8.html#lcmp">,&#32;313</a>
+<a name="6959459"></a>
+<dt>constant, CONSTANT_Long_info<a href="ClassFile.doc.html#1348"> structure representation, syntax and item descriptions,&#32;108</a>
+<a name="6959461"></a>
+<dt>converting
+<dl>
+<a name="6959462"></a>
+<dt>double to, d2l<a href="Instructions2.doc3.html#d2l">,&#32;197</a>
+<a name="6959464"></a>
+<dt>float to, f2l<a href="Instructions2.doc4.html#f2l">,&#32;227</a>
+<a name="6959466"></a>
+<dt>int to, i2l<a href="Instructions2.doc6.html#i2l">,&#32;258</a>
+<a name="6959468"></a>
+<dt>to double, l2d<a href="Instructions2.doc8.html#l2d">,&#32;306</a>
+<a name="6959470"></a>
+<dt>to float, l2f<a href="Instructions2.doc8.html#l2f">,&#32;307</a>
+<a name="6959472"></a>
+<dt>to int, l2i<a href="Instructions2.doc8.html#l2i">,&#32;308</a>
+</dl>
+<a name="6959474"></a>
+<dt><a href="Overview.doc.html#11457">definition,&#32;62</a>
+<a name="6959476"></a>
+<dt>dividing, ldiv<a href="Instructions2.doc8.html#ldiv">,&#32;318</a>
+<a name="6959478"></a>
+<dt>loading
+<dl>
+<a name="6959479"></a>
+<dt>from arrays, laload<a href="Instructions2.doc8.html#laload">,&#32;310</a>
+<a name="6959481"></a>
+<dt>from local variables, lload<a href="Instructions2.doc8.html#lload">,&#32;319</a>
+<a name="6959483"></a>
+<dt>from local variables, lload_&lt;n&gt;<a href="Instructions2.doc8.html#lload_n">,&#32;320</a>
+</dl>
+<a name="6959485"></a>
+<dt>multiplying, lmul<a href="Instructions2.doc8.html#lmul">,&#32;321</a>
+<a name="6959487"></a>
+<dt>negating, lneg<a href="Instructions2.doc8.html#lneg">,&#32;322</a>
+<a name="6959489"></a>
+<dt>ORing
+<dl>
+<a name="6959490"></a>
+<dt>bitwise, exclusive, lxor<a href="Instructions2.doc8.html#lxor">,&#32;334</a>
+<a name="6959492"></a>
+<dt>bitwise, inclusive, lor<a href="Instructions2.doc8.html#lor">,&#32;325</a>
+</dl>
+<a name="6959494"></a>
+<dt>pushing
+<dl>
+<a name="6959495"></a>
+<dt>constants, lconst_&lt;l&gt;<a href="Instructions2.doc8.html#lconst_l">,&#32;314</a>
+<a name="6959497"></a>
+<dt>wide index, ldc2_w<a href="Instructions2.doc8.html#ldc_w">,&#32;317</a>
+</dl>
+<a name="6959499"></a>
+<dt>remainder, lrem<a href="Instructions2.doc8.html#lrem">,&#32;326</a>
+<a name="6959501"></a>
+<dt>returning from method invocation, lreturn<a href="Instructions2.doc8.html#lreturn">,&#32;327</a>
+<a name="6959503"></a>
+<dt>shift left, lshl<a href="Instructions2.doc8.html#lshl">,&#32;328</a>
+<a name="6959505"></a>
+<dt>shift right
+<dl>
+<a name="6959506"></a>
+<dt>arithmetic, lshr<a href="Instructions2.doc8.html#lshr">,&#32;329</a>
+<a name="6959508"></a>
+<dt>logical, lushr<a href="Instructions2.doc8.html#lushr">,&#32;333</a>
+</dl>
+<a name="6959510"></a>
+<dt>storing into
+<dl>
+<a name="6959511"></a>
+<dt>arrays, lastore<a href="Instructions2.doc8.html#lastore">,&#32;312</a>
+<a name="6959513"></a>
+<dt>local variables, lstore<a href="Instructions2.doc8.html#lstore">,&#32;330</a>
+<a name="6959515"></a>
+<dt>local variables, lstore_&lt;n&gt;<a href="Instructions2.doc8.html#lstore_n">,&#32;331</a>
+</dl>
+<a name="6959517"></a>
+<dt>subtracting, lsub<a href="Instructions2.doc8.html#lsub">,&#32;332</a>
+<a name="6959519"></a>
+<dt><a href="Overview.doc.html#16142">value range,&#32;63</a>
+</dl>
+<dt><b>lookupswitch <strong>instruction
+</strong></b><dl>
+<a name="6959522"></a>
+<dt><em>See also </em>tableswitch instruction
+<a name="6959524"></a>
+<dt><a href="ClassFile.doc.html#11572">code array alignment effect,&#32;121</a>
+<a name="6959526"></a>
+<dt><a href="Compiling.doc.html#7490">compilation examples, compiling switches,&#32;385</a>
+<a name="6959528"></a>
+<dt><a href="ClassFile.doc.html#9161">constraints, static,&#32;134</a>
+<a name="6959530"></a>
+<dt><a href="Instructions2.doc8.html#lookupswitch">definition,&#32;323</a>
+</dl>
+<dt><b>lor <strong>instruction
+</strong></b><dl>
+<a name="6959533"></a>
+<dt><a href="Instructions2.doc8.html#lor">definition,&#32;325</a>
+</dl>
+<dt><b>low_bytes <strong>item
+</strong></b><dl>
+<a name="6959536"></a>
+<dt>(CONSTANT_Double_info<a href="ClassFile.doc.html#16625"> structure),&#32;108</a>
+<a name="6959538"></a>
+<dt>(CONSTANT_Long_info<a href="ClassFile.doc.html#16625"> structure),&#32;108</a>
+</dl>
+<dt><b>lrem <strong>instruction
+</strong></b><dl>
+<a name="6959541"></a>
+<dt><a href="Instructions2.doc8.html#lrem">definition,&#32;326</a>
+</dl>
+<dt><b>lreturn <strong>instruction
+</strong></b><dl>
+<a name="6959544"></a>
+<dt><a href="Compiling.doc.html#9358">compilation examples, operand stack operations,&#32;386</a>
+<a name="6959546"></a>
+<dt><a href="ClassFile.doc.html#28538">constraints, structural,&#32;138</a>
+<a name="6959548"></a>
+<dt><a href="Instructions2.doc8.html#lreturn">definition,&#32;327</a>
+</dl>
+<dt><b>lshl <strong>instruction
+</strong></b><dl>
+<a name="6959551"></a>
+<dt><a href="Instructions2.doc8.html#lshl">definition,&#32;328</a>
+</dl>
+<dt><b>lshr <strong>instruction
+</strong></b><dl>
+<a name="6959554"></a>
+<dt><a href="Instructions2.doc8.html#lshr">definition,&#32;329</a>
+</dl>
+<dt><b>lstore <strong>instruction
+</strong></b><dl>
+<a name="6959557"></a>
+<dt><a href="ClassFile.doc.html#42879">constraints, static,&#32;136</a>
+<a name="6959559"></a>
+<dt><a href="Instructions2.doc8.html#lstore">definition,&#32;330</a>
+</dl>
+<dt><b>lstore_&lt;n&gt; <strong>instructions
+</strong></b><dl>
+<a name="6959562"></a>
+<dt><a href="Compiling.doc.html#6123">compilation examples, accessing the  runtime constant pool,&#32;371</a>
+<a name="6959564"></a>
+<dt><a href="ClassFile.doc.html#42882">constraints, static,&#32;136</a>
+<a name="6959566"></a>
+<dt><a href="Instructions2.doc8.html#lstore_n">definition,&#32;331</a>
+</dl>
+<dt><b>lsub <strong>instruction
+</strong></b><dl>
+<a name="6959569"></a>
+<dt><a href="Instructions2.doc8.html#lsub">definition,&#32;332</a>
+</dl>
+<dt><b>lushr <strong>instruction
+</strong></b><dl>
+<a name="6959572"></a>
+<dt><a href="Instructions2.doc8.html#lushr">definition,&#32;333</a>
+</dl>
+<dt><b>lxor <strong>instruction
+</strong></b><dl>
+<a name="6959575"></a>
+<dt><a href="Instructions2.doc8.html#lxor">definition,&#32;334</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm10.html">Prev</a> | <a href="VMSpecIX.fm12.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

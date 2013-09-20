@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc.html">Prev</a> | <a href="Instructions2.doc2.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="baload"></a>
+<hr><h2>baload</h2>
+<a name="baload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67301"></a>
+Load <code>byte</code> or <code>boolean</code> from array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67300"></a>
+ <i>baload</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="baload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67302"></a>
+<i>baload</i> = 51 (0x33)</blockquote><p>
+<a name="baload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67303"></a>
+..., <i>arrayref</i>, <i>index</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="baload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67304"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>byte</code> or of type <code>boolean</code>. The <i>index</i> must be of type <code>int</code>. Both <i>arrayref</i> and <i>index</i> are popped from the operand stack. If the components of the array are of type <code>byte</code>, the component of the array at <i>index</i> is retrieved and sign-extended to an <code>int</code> <i>value</i>. If the components of the array are of type <code>boolean</code>, the component of the array at <i>index</i> is retrieved and zero-extended to an <code>int</code> <i>value</i>. In either case the resulting <i>value</i> is pushed onto the operand stack.</blockquote><p>
+<a name="baload.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="67306"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>baload</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="67307"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>baload</i> instruction throws an <code>ArrayIndex</code><code>OutOfBoundsException</code>.</blockquote><p>
+<a name="baload.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="101054"></a>
+The <i>baload</i> instruction is used to load values from both <code>byte</code> and <code>boolean</code> arrays. In Sun's implementation of the Java virtual machine, <code>boolean</code> arrays (arrays of type <code>T_BOOLEAN</code>; see <a href="Overview.doc.html#12237">&#167;3.2</a> and the description of the <i>newarray</i> instruction in this chapter) are implemented as arrays of 8-bit values. Other implementations may implement packed <code>boolean</code> arrays; the <i>baload</i> instruction of such implementations must be used to access those arrays.</blockquote><p>
+
+<a name="bastore"></a>
+<hr><h2>bastore</h2>
+<a name="bastore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67321"></a>
+Store into <code>byte</code> or <code>boolean</code> array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67320"></a>
+ <i>bastore</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="bastore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67322"></a>
+<i>bastore</i> = 84 (0x54)</blockquote><p>
+<a name="bastore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67323"></a>
+..., <i>arrayref</i>, <i>index</i>, <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="bastore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67324"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>byte</code> or of type <code>boolean</code>. The <i>index</i> and the <i>value</i> must both be of type <code>int</code>. The <i>arrayref</i>, <i>index</i>, and <i>value</i> are popped from the operand stack. If the components of the array are of type <code>byte</code>, the <code>int</code> <i>value</i> is truncated to a <code>byte</code> and stored as the component of the array indexed by <i>index</i>. If the components of the array are of type <code>boolean</code>, the <code>int</code> <i>value</i> is truncated to its low order bit then zero-extended to the storage size for components of <code>boolean</code> arrays used by the implementation. The result is stored as the component of the array indexed by <i>index</i>.</blockquote><p>
+<a name="bastore.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="67326"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>bastore</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="67327"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>bastore</i> instruction throws an <code>ArrayIndexOutOfBoundsException</code>.</blockquote><p>
+<a name="bastore.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="101065"></a>
+The <i>bastore</i> instruction is used to store values into both <code>byte</code> and <code>boolean</code> arrays. In Sun's implementation of the Java virtual machine, <code>boolean</code> arrays (arrays of type <code>T_BOOLEAN</code>; see <a href="Overview.doc.html#12237">&#167;3.2</a> and the description of the <i>newarray</i> instruction in this chapter) are implemented as arrays of 8-bit values. Other implementations may implement packed <code>boolean</code> arrays; in such implementations the <i>bastore</i> instruction must be able to store <code>boolean</code> values into packed <code>boolean</code> arrays as well as <code>byte</code> values into <code>byte</code> arrays.</blockquote><p>
+
+<a name="bipush"></a>
+<hr><h2>bipush</h2>
+<a name="bipush.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67336"></a>
+Push <code>byte</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67333"></a>
+ <i>bipush</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="67335"></a>
+ <i>byte</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="bipush.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67337"></a>
+<i>bipush</i><em> </em>= 16 (0x10)</blockquote><p>
+<a name="bipush.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67338"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="bipush.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67339"></a>
+The immediate <i>byte</i> is sign-extended to an <code>int</code> <i>value</i>. That <i>value</i> is pushed onto the operand stack.</blockquote><p>
+
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc.html">Prev</a> | <a href="Instructions2.doc2.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

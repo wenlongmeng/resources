@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm6.html">Prev</a> | <a href="VMSpecIX.fm8.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6958140"></a>
+<center><h1> G</h1></center>
+<dl><dt><b><strong>garbage collection
+</strong></b><dl>
+<a name="6958143"></a>
+<dt><a href="Overview.doc.html#25427">algorithm, not specified by Java virtual machine specification,&#32;61</a>
+<a name="6958145"></a>
+<dt><a href="Overview.doc.html#21949">as implementation of automatic storage management system,&#32;68</a>
+<a name="6958147"></a>
+<dt><a href="Overview.doc.html#31002">method area relationship to,&#32;69</a>
+</dl>
+<dt><b>getfield<strong> instruction
+</strong></b><dl>
+<a name="6958150"></a>
+<dt>compilation examples
+<dl>
+<a name="6958151"></a>
+<dt><a href="Compiling.doc.html#14892">operand stack operations,&#32;386</a>
+<a name="6958153"></a>
+<dt><a href="Compiling.doc.html#4716">working with class instances,&#32;380</a>
+</dl>
+<a name="6958155"></a>
+<dt>constraints
+<dl>
+<a name="6958156"></a>
+<dt><a href="ClassFile.doc.html#43243">static,&#32;135</a>
+<a name="6958158"></a>
+<dt><a href="ClassFile.doc.html#10737">structural,&#32;138</a>
+</dl>
+<a name="6958160"></a>
+<dt><a href="Instructions2.doc5.html#getfield">definition,&#32;248</a>
+</dl>
+<dt><b>getstatic <strong>instruction
+</strong></b><dl>
+<a name="6958163"></a>
+<dt><a href="ClassFile.doc.html#43243">constraints, static,&#32;135</a>
+<a name="6958165"></a>
+<dt><a href="Instructions2.doc5.html#getstatic">definition,&#32;250</a>
+</dl>
+<dt><b>goto <strong>instruction
+</strong></b><dl>
+<a name="6958168"></a>
+<dt>compilation examples
+<dl>
+<a name="6958169"></a>
+<dt>compiling finally<a href="Compiling.doc.html#9089">,&#32;393</a>
+<a name="6958171"></a>
+<dt>constants and local variables in  a for<a href="Compiling.doc.html#15070"> loop,&#32;365</a>, <a href="Compiling.doc.html#14880">367</a>, <a href="Compiling.doc.html#14781">369</a>
+<a name="6958175"></a>
+<dt>while<a href="Compiling.doc.html#14987"> loop,&#32;372</a>, <a href="Compiling.doc.html#14863">373</a>
+</dl>
+<a name="6958178"></a>
+<dt><a href="ClassFile.doc.html#42840">constraints, static,&#32;134</a>
+<a name="6958180"></a>
+<dt><a href="Instructions2.doc5.html#goto">definition,&#32;252</a>, <a href="Instructions2.doc5.html#goto_w">253</a>
+</dl>
+<dt><b>goto_w <strong>instruction
+</strong></b><dl>
+<a name="6958184"></a>
+<dt><a href="ClassFile.doc.html#42840">constraints, static,&#32;134</a>
+<a name="6958186"></a>
+<dt><a href="Instructions2.doc5.html#goto_w">definition,&#32;253</a>
+</dl>
+<dt><b><strong>gradual underflow
+</strong></b><dl>
+<a name="6958189"></a>
+<dt>conformance
+<dl>
+<a name="6958190"></a>
+<dt>add double, dadd<a href="Instructions2.doc3.html#dadd">,&#32;198</a>
+<a name="6958192"></a>
+<dt>add float, fadd<a href="Instructions2.doc4.html#fadd">,&#32;228</a>
+</dl>
+<a name="6958194"></a>
+<dt><a href="Concepts.doc.html#23051">definition,&#32;11</a>
+<a name="6958196"></a>
+<dt>dividing
+<dl>
+<a name="6958197"></a>
+<dt>double conformance, ddiv<a href="Instructions2.doc3.html#ddiv">,&#32;205</a>
+<a name="6958199"></a>
+<dt>float conformance, fdiv<a href="Instructions2.doc4.html#fdiv">,&#32;235</a>
+</dl>
+<a name="6958201"></a>
+<dt>multiplying
+<dl>
+<a name="6958202"></a>
+<dt>double conformance, dmul<a href="Instructions2.doc3.html#dmul">,&#32;209</a>
+<a name="6958204"></a>
+<dt>float conformance, fmul<a href="Instructions2.doc4.html#fmul">,&#32;239</a>
+</dl>
+<a name="6958206"></a>
+<dt>subtracting
+<dl>
+<a name="6958207"></a>
+<dt>double conformance, dsub<a href="Instructions2.doc3.html#dsub">,&#32;217</a>
+<a name="6958209"></a>
+<dt>float conformance, fsub<a href="Instructions2.doc4.html#fsub">,&#32;247</a>
+</dl>
+</dl>
+<dt><b><strong>grammar
+</strong></b><dl>
+<a name="6958212"></a>
+<dt><a href="ClassFile.doc.html#14150">descriptor specification,&#32;99</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm6.html">Prev</a> | <a href="VMSpecIX.fm8.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

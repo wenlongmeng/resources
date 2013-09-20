@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  Introduction </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Preface.doc.html">Prev</a> | <a href="Concepts.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="4558"></a>
+<p><strong>CHAPTER 1 </strong></p>
+<a name="4559"></a>
+<h1>Introduction </h1>
+<p>
+<a name="4560"></a>
+<hr><h2>1.1    A Bit of History</h2>
+<a name="4561"></a>
+The Java programming language is a general-purpose object-oriented concurrent
+language. Its syntax is similar to C and C++, but it omits many of the features 
+that make C and C++ complex, confusing, and unsafe. The Java platform was initially
+developed to address the problems of building software for networked consumer
+devices. It was designed to support multiple host architectures and to allow 
+secure delivery of software components. To meet these requirements, compiled code 
+had to survive transport across networks, operate on any client, and assure the client 
+that it was safe to run.
+<p><a name="3439"></a>
+The popularization of the World Wide Web made these attributes much more interesting. The Internet demonstrated how media-rich content could be made accessible in simple ways. Web browsers such as Mosaic enabled millions of people to roam the Net and made Web surfing part of popular culture. At last there was a medium where what you saw and heard was essentially the same whether you were using a Mac, PC, or UNIX machine, and whether you were connected to a high-speed network or a slow modem.<p>
+<a name="3440"></a>
+Web enthusiasts soon discovered that the content supported by the Web's HTML document format was too limited. HTML extensions, such as forms, only highlighted those limitations, while making it clear that no browser could include all the features users wanted. Extensibility was the answer.<p>
+<a name="3441"></a>
+Sun's HotJava browser showcases the interesting properties of the Java programming language and platform by making it possible to embed programs inside HTML pages. These programs are transparently downloaded into the HotJava browser along with the HTML pages in which they appear. Before being accepted by the browser, the programs are carefully checked to make sure they are safe. Like HTML pages, compiled programs are network- and host-independent. The programs behave the same way regardless of where they come from or what kind of machine they are being loaded into and run on. <p>
+<a name="3442"></a>
+A Web browser incorporating the Java or Java 2 platform is no longer limited to a predetermined set of capabilities. Visitors to Web pages incorporating dynamic content can be assured that their machines cannot be damaged by that content. Programmers can write a program once, and it will run on any machine supplying a Java or Java 2 runtime environment. <p>
+<a name="3057"></a>
+<hr><h2>1.2    The Java Virtual Machine</h2>
+<a name="2825"></a>
+The Java virtual machine is the cornerstone of the Java and Java 2 platforms. It is the 
+component of the technology responsible for its hardware- and operating system-
+independence, the small size of its compiled code, and its ability to protect users 
+from malicious programs.
+<p><a name="3021"></a>
+The Java virtual machine is an abstract computing machine. Like a real computing machine, it has an instruction set and manipulates various memory areas at run time. It is reasonably common to implement a programming language using a virtual machine; the best-known virtual machine may be the P-Code machine of UCSD Pascal.<p>
+<a name="3032"></a>
+The first prototype implementation of the Java virtual machine, done at Sun Microsystems, Inc., emulated the Java virtual machine instruction set in software hosted by a handheld device that resembled a contemporary Personal Digital Assistant (PDA). Sun's current Java virtual machine implementations, components of its Java<sup><font size=-2>TM</font></sup> 2 SDK and Java<sup><font size=-2>TM</font></sup> 2 Runtime Environment products, emulate the Java virtual machine on Win32 and Solaris hosts in much more sophisticated ways. However, the Java virtual machine does not assume any particular implementation technology, host hardware, or host operating system. It is not inherently interpreted, but can just as well be implemented by compiling its instruction set to that of a silicon CPU. It may also be implemented in microcode or directly in silicon.<p>
+<a name="3087"></a>
+The Java virtual machine knows nothing of the Java programming language, only of a particular binary format, the <code>class</code> file format. A <code>class</code> file contains Java virtual machine instructions (or <i>bytecodes</i>) and a symbol table, as well as other ancillary information. <p>
+<a name="3659"></a>
+For the sake of security, the Java virtual machine imposes strong format and structural constraints on the code in a <code>class</code> file. However, any language with functionality that can be expressed in terms of a valid <code>class</code> file can be hosted by the Java virtual machine. Attracted by a generally available, machine-independent platform, implementors of other languages are turning to the Java virtual machine as a delivery vehicle for their languages.<p>
+<a name="4478"></a>
+<hr><h2>1.3    Summary of Chapters</h2>
+<a name="4479"></a>
+The rest of this book is structured as follows:
+<p><ul><li>Chapter 2 gives an overview of Java programming language concepts and  terminology necessary for the rest of the book.<p>
+<li>Chapter 3 gives an overview of the Java virtual machine architecture.<p>
+<li>Chapter 4 specifies the <code>class</code> file format, the hardware- and operating  system-independent binary format used to represent compiled classes and interfaces.<p>
+<li>Chapter 5 specifies the start-up of the Java virtual machine and the loading, linking, and initialization of classes and interfaces.<p>
+<li>Chapter 6 specifies the instruction set of the Java virtual machine, presenting the instructions in alphabetical order of opcode mnemonics.<p>
+<li>Chapter 7 introduces compilation of code written in the Java programming  language into the instruction set of the Java virtual machine.<p>
+<li>Chapter 8 describes Java virtual machine threads and their interaction with memory.<p>
+<li>Chapter 9 gives a table of Java virtual machine opcode mnemonics indexed by opcode value.
+</ul><a name="4948"></a>
+<hr><h2>1.4    Notation</h2>
+<a name="4476"></a>
+Throughout this book we refer to classes and interfaces drawn from the Java and 
+Java 2 platforms. Whenever we refer to a class or interface using a single identifier 
+N, the intended reference is to the class or interface <code>java.lang.</code>N. We use the fully 
+qualified name for classes from packages other than <code>java.lang</code>.
+<p><a name="4965"></a>
+Whenever we refer to a class or interface that is declared in the package <code>java</code> or any of its subpackages, the intended reference is to that class or interface as loaded by the bootstrap class loader <a href="ConstantPool.doc.html#79383">(&#167;5.3.1)</a>. Whenever we refer to a subpackage of a package named <code>java</code>, the intended reference is to that subpackage as determined by the bootstrap class loader.<p>
+<a name="4981"></a>
+The use of fonts in this book is as follows:<p>
+<ul><li>A <code>fixed</code> <code>width</code> font is used for code examples written in the Java programming language, Java virtual machine data types, exceptions, and errors.<p>
+<li><em>Italic </em>is used for Java virtual machine "assembly language," its opcodes and operands, as well as items in the Java virtual machine's runtime data areas. It is also used to introduce new terms and simply for emphasis.
+</ul><a name="4979"></a>
+<p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Preface.doc.html">Prev</a> | <a href="Concepts.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

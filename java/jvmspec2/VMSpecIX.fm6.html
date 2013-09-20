@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm5.html">Prev</a> | <a href="VMSpecIX.fm7.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6957877"></a>
+<center><h1> F</h1></center>
+<dl><dt><b><strong>F character
+</strong></b><dl>
+<a name="6957880"></a>
+<dt><a href="ClassFile.doc.html#84673">meaning in field or method descriptor,&#32;101</a>
+</dl>
+<dt><b>f2d <strong>instruction
+</strong></b><dl>
+<a name="6957883"></a>
+<dt><a href="Instructions2.doc4.html#f2d">definition,&#32;225</a>
+</dl>
+<dt><b>f2i <strong>instruction
+</strong></b><dl>
+<a name="6957886"></a>
+<dt><a href="Instructions2.doc4.html#f2i">definition,&#32;226</a>
+</dl>
+<dt><b>f2l <strong>instruction
+</strong></b><dl>
+<a name="6957889"></a>
+<dt><a href="Instructions2.doc4.html#f2l">definition,&#32;227</a>
+</dl>
+<dt><b>fadd <strong>instruction
+</strong></b><dl>
+<a name="6957892"></a>
+<dt><a href="Instructions2.doc4.html#fadd">definition,&#32;228</a>
+</dl>
+<dt><b>faload <strong>instruction
+</strong></b><dl>
+<a name="6957895"></a>
+<dt><a href="Instructions2.doc4.html#faload">definition,&#32;230</a>
+</dl>
+<dt><b>fastore <strong>instruction
+</strong></b><dl>
+<a name="6957898"></a>
+<dt><a href="Instructions2.doc4.html#fastore">definition,&#32;231</a>
+</dl>
+<dt><b>fcmp&lt;op&gt; <strong>instructions
+</strong></b><dl>
+<a name="6957901"></a>
+<dt><a href="Instructions2.doc4.html#fcmpop">definition,&#32;232</a>
+</dl>
+<dt><b>fconst_&lt;f&gt; <strong>instructions
+</strong></b><dl>
+<a name="6957904"></a>
+<dt><a href="Instructions2.doc4.html#fconst_f">definition,&#32;234</a>
+</dl>
+<dt><b>fdiv <strong>instruction
+</strong></b><dl>
+<a name="6957907"></a>
+<dt><a href="Instructions2.doc4.html#fdiv">definition,&#32;235</a>
+</dl>
+<dt><b><strong>fields
+</strong></b><dl>
+<a name="6957910"></a>
+<dt><em>See also</em> constants; data types; fields table; methods; variables
+<a name="6957912"></a>
+<dt><a href="Concepts.doc.html#28883">access expressions, access control and,&#32;26</a>
+<a name="6957914"></a>
+<dt>class, field_info<a href="ClassFile.doc.html#87652"> structure access flags,&#32;112</a>
+<a name="6957916"></a>
+<dt><a href="Concepts.doc.html#24222">constant,&#32;52</a>
+<a name="6957918"></a>
+<dt><a href="ClassFile.doc.html#9766">constant pool references, verification process,&#32;141</a>
+<a name="6957920"></a>
+<dt><a href="Concepts.doc.html#16436">constants, as interface members,&#32;35</a>
+<a name="6957922"></a>
+<dt><a href="Overview.doc.html#16535">creation and manipulation, instruction summary,&#32;88</a>
+<a name="6957924"></a>
+<dt><a href="Concepts.doc.html#26290">definition,&#32;29</a>
+<a name="6957926"></a>
+<dt><a href="ConstantPool.doc.html#73300">derivation of symbolic references to  at run time,&#32;156</a>
+<a name="6957928"></a>
+<dt>descriptor
+<dl>
+<a name="6957929"></a>
+<dt><a href="ClassFile.doc.html#7028">syntax and meaning,&#32;100</a>
+<a name="6957931"></a>
+<dt>as value of CONSTANT_Utf8_info  structure referred by descriptor_index item, CONSTANT_NameAndType_info<a href="ClassFile.doc.html#9390"> structure,&#32;110</a>
+</dl>
+<a name="6957933"></a>
+<dt>get from class instances, getfield<a href="Instructions2.doc5.html#getfield">,&#32;248</a>
+<a name="6957935"></a>
+<dt><a href="Concepts.doc.html#16320">initialization of,&#32;31</a>
+<a name="6957937"></a>
+<dt>interface, field_info<a href="ClassFile.doc.html#87652"> structure access flags,&#32;112</a>
+<a name="6957939"></a>
+<dt>length<a href="Concepts.doc.html#26079"> as array type member,&#32;26</a>
+<a name="6957941"></a>
+<dt><a href="ConstantPool.doc.html#71685">lookup,&#32;167</a>
+<a name="6957943"></a>
+<dt><a href="Concepts.doc.html#29882">modifiers,&#32;30</a>
+<a name="6957945"></a>
+<dt><a href="ClassFile.doc.html#16521">number limitation,&#32;152</a>
+<a name="6957947"></a>
+<dt>protected<a href="ClassFile.doc.html#10737"> structural constraints,&#32;138</a>
+<a name="6957949"></a>
+<dt>put into class instances, putfield<a href="Instructions2.doc11.html#putfield">,&#32;348</a>
+<a name="6957951"></a>
+<dt><a href="ConstantPool.doc.html#71685">references, resolution,&#32;167</a>
+<a name="6957953"></a>
+<dt><a href="ConstantPool.doc.html#71685">resolution,&#32;167</a>
+<a name="6957955"></a>
+<dt>static
+<dl>
+<a name="6957956"></a>
+<dt>get from classes, getstatic<a href="Instructions2.doc5.html#getstatic">,&#32;250</a>
+<a name="6957958"></a>
+<dt>put into classes, putstatic<a href="Instructions2.doc11.html#putstatic">,&#32;350</a>
+</dl>
+<a name="6957960"></a>
+<dt><a href="ClassFile.doc.html#16252">types,&#32;101</a>
+</dl>
+<dt><b>fields <strong>table
+</strong></b><dl>
+<a name="6957963"></a>
+<dt>(ClassFile<a href="ClassFile.doc.html#19655"> structure),&#32;98</a>
+</dl>
+<dt><b>fields_count <strong>item
+</strong></b><dl>
+<a name="6957966"></a>
+<dt>(ClassFile<a href="ClassFile.doc.html#23377"> structure),&#32;97</a>
+</dl>
+<dt><b>final <strong>modifier
+</strong></b><dl>
+<a name="6957969"></a>
+<dt><em>See also</em> ACC_FINAL flag
+<a name="6957971"></a>
+<dt>class
+<dl>
+<a name="6957972"></a>
+<dt><a href="Concepts.doc.html#20342">definition,&#32;28</a>
+<a name="6957974"></a>
+<dt><a href="ClassFile.doc.html#9772">enforcement,&#32;141</a>, <a href="Instructions2.doc6.html#invokevirtual">291</a>
+</dl>
+<a name="6957977"></a>
+<dt>field
+<dl>
+<a name="6957978"></a>
+<dt><a href="Concepts.doc.html#29863">definition,&#32;30</a>
+<a name="6957980"></a>
+<dt>enforcement, putfield<a href="Instructions2.doc11.html#putfield">,&#32;348</a>
+<a name="6957982"></a>
+<dt>enforcement, putstatic<a href="Instructions2.doc11.html#putstatic">,&#32;350</a>
+</dl>
+<a name="6957984"></a>
+<dt>method
+<dl>
+<a name="6957985"></a>
+<dt><a href="Concepts.doc.html#16359">definition,&#32;33</a>
+<a name="6957987"></a>
+<dt><a href="ClassFile.doc.html#9772">enforcement,&#32;141</a>
+</dl>
+</dl>
+<dt><b><strong>finalization
+</strong></b><dl>
+<a name="6957990"></a>
+<dt>of class instances, finalize<a href="Concepts.doc.html#19147"> method,&#32;56</a>
+</dl>
+<dt><b>finally <strong>clause
+</strong></b><dl>
+<a name="6957993"></a>
+<dt>data-flow analysis during class<a href="ClassFile.doc.html#9886"> file verification,&#32;151</a>
+<a name="6957995"></a>
+<dt><a href="Concepts.doc.html#24724">exception handling role,&#32;42</a>
+<a name="6957997"></a>
+<dt>implementation of
+<dl>
+<a name="6957998"></a>
+<dt>in catch_type item (Code_attribute<a href="ClassFile.doc.html#1586"> structure),&#32;122</a>
+<a name="6958000"></a>
+<dt><a href="Overview.doc.html#16207">instruction summary,&#32;90</a>
+</dl>
+<a name="6958002"></a>
+<dt>try-finally<a href="ClassFile.doc.html#9867"> clause, Sun's Java compiler output characteristics,&#32;149</a>
+<a name="6958004"></a>
+<dt><a href="ClassFile.doc.html#22722">uninitialized object restrictions, Pass 3 - bytecode verifier,&#32;148</a>
+</dl>
+<dt><b>findSystemClass <strong>method
+</strong></b><dl>
+<a name="6958007"></a>
+<dt>ClassLoader<a href="ConstantPool.doc.html#79453"> class, loading of classes and interfaces by,&#32;161</a>
+</dl>
+<dt><b>fload <strong>instruction
+</strong></b><dl>
+<a name="6958010"></a>
+<dt><em>See also </em>wide instruction
+<a name="6958012"></a>
+<dt><a href="ClassFile.doc.html#42871">constraints, static,&#32;136</a>
+<a name="6958014"></a>
+<dt><a href="Instructions2.doc4.html#fload">definition,&#32;237</a>
+</dl>
+<dt><b>fload_&lt;n&gt; <strong>instructions
+</strong></b><dl>
+<a name="6958017"></a>
+<dt><a href="ClassFile.doc.html#42756">constraints, static,&#32;136</a>
+<a name="6958019"></a>
+<dt><a href="Instructions2.doc4.html#fload_n">definition,&#32;238</a>
+</dl>
+<dt><b>float <strong>type
+</strong></b><dl>
+<a name="6958022"></a>
+<dt><em>See also</em> floating-point
+<a name="6958024"></a>
+<dt>adding, fadd<a href="Instructions2.doc4.html#fadd">,&#32;228</a>
+<a name="6958026"></a>
+<dt>comparing, fcmp&lt;op&gt;<a href="Instructions2.doc4.html#fcmpop">,&#32;233</a>
+<a name="6958028"></a>
+<dt>converting
+<dl>
+<a name="6958029"></a>
+<dt>double to, d2f<a href="Instructions2.doc3.html#d2f">,&#32;195</a>
+<a name="6958031"></a>
+<dt>int to, i2f<a href="Instructions2.doc6.html#i2f">,&#32;257</a>
+<a name="6958033"></a>
+<dt>long to, l2f<a href="Instructions2.doc8.html#l2f">,&#32;307</a>
+<a name="6958035"></a>
+<dt>to double, f2d<a href="Instructions2.doc4.html#f2d">,&#32;225</a>
+<a name="6958037"></a>
+<dt>to int, f2i<a href="Instructions2.doc4.html#f2i">,&#32;226</a>
+<a name="6962177"></a>
+<a name="6958039"></a>
+<dt>to long, f2l<a href="Instructions2.doc4.html#f2l">,&#32;227</a>
+</dl>
+<a name="6958041"></a>
+<dt>dividing, fdiv<a href="Instructions2.doc4.html#fdiv">,&#32;235</a>
+<a name="6958043"></a>
+<dt><a href="Overview.doc.html#33963">float value set,&#32;63</a>
+<a name="6958045"></a>
+<dt><a href="Overview.doc.html#33963">float-extended-exponent value set,&#32;64</a>
+<a name="6958047"></a>
+<dt>loading from
+<dl>
+<a name="6958048"></a>
+<dt>arrays, faload<a href="Instructions2.doc4.html#faload">,&#32;230</a>
+<a name="6958050"></a>
+<dt>local variables, fload<a href="Instructions2.doc4.html#fload">,&#32;237</a>
+<a name="6958052"></a>
+<dt>local variables, fload_&lt;n&gt;<a href="Instructions2.doc4.html#fload_n">,&#32;238</a>
+</dl>
+<a name="6958054"></a>
+<dt>multiplying, fmul<a href="Instructions2.doc4.html#fmul">,&#32;239</a>
+<a name="6958056"></a>
+<dt>negating, fneg<a href="Instructions2.doc4.html#fneg">,&#32;241</a>
+<a name="6958058"></a>
+<dt>pushing constants, fconst_&lt;f&gt;<a href="Instructions2.doc4.html#fconst_f">,&#32;234</a>
+<a name="6958060"></a>
+<dt>remainder, frem<a href="Instructions2.doc4.html#frem">,&#32;242</a>
+<a name="6958062"></a>
+<dt><a href="ClassFile.doc.html#22609">representation in constant pool,&#32;107</a>
+<a name="6958064"></a>
+<dt>returning from method invocation, freturn<a href="Instructions2.doc4.html#freturn">,&#32;244</a>
+<a name="6958066"></a>
+<dt>storing into
+<dl>
+<a name="6958067"></a>
+<dt>arrays, fastore<a href="Instructions2.doc4.html#fastore">,&#32;231</a>
+<a name="6958069"></a>
+<dt>local variables, fstore<a href="Instructions2.doc4.html#fstore">,&#32;245</a>
+<a name="6958071"></a>
+<dt>local variables, fstore_&lt;n&gt;<a href="Instructions2.doc4.html#fstore_n">,&#32;246</a>
+</dl>
+<a name="6958073"></a>
+<dt>subtracting, fsub<a href="Instructions2.doc4.html#fsub">,&#32;247</a>
+</dl>
+<dt><b><strong>float value set
+</strong></b><dl>
+<a name="6958076"></a>
+<dt><a href="Overview.doc.html#33963">definition,&#32;63</a>
+<a name="6958078"></a>
+<dt><a href="Overview.doc.html#34123">parameters (table),&#32;64</a>
+</dl>
+<dt><b><strong>float-extended-exponent value set
+</strong></b><dl>
+<a name="6958081"></a>
+<dt><a href="Overview.doc.html#33963">definition,&#32;64</a>
+<a name="6958083"></a>
+<dt><a href="Overview.doc.html#34123">parameters (table),&#32;64</a>
+</dl>
+<dt><b><strong>floating-point
+</strong></b><dl>
+<a name="6958086"></a>
+<dt><a href="Overview.doc.html#32045">comparison, IEEE 754 conformance,&#32;85</a>, <a href="Overview.doc.html#31288">89</a>
+<a name="6958089"></a>
+<dt>types
+<dl>
+<a name="6958090"></a>
+<dt><a href="Concepts.doc.html#19367">components, and values,&#32;7</a>, <a href="Overview.doc.html#11786">63</a>
+<a name="6958093"></a>
+<dt><a href="Overview.doc.html#16827">underflow and overflow, Java virtual  machine handling,&#32;85</a>
+</dl>
+</dl>
+<dt><b>fmul <strong>instruction
+</strong></b><dl>
+<a name="6958096"></a>
+<dt><a href="Instructions2.doc4.html#fmul">definition,&#32;239</a>
+</dl>
+<dt><b>fneg <strong>instruction
+</strong></b><dl>
+<a name="6958099"></a>
+<dt><a href="Instructions2.doc4.html#fneg">definition,&#32;241</a>
+</dl>
+<dt><b>for <strong>keyword
+</strong></b><dl>
+<a name="6958102"></a>
+<dt><a href="Compiling.doc.html#15070">compilation examples,&#32;365</a>
+</dl>
+<dt><b><strong>forward slashes (/)
+</strong></b><dl>
+<a name="6958105"></a>
+<dt><a href="ClassFile.doc.html#14922">in class and interface names in  internal form,&#32;99</a>
+</dl>
+<dt><b><strong>FP-strict floating point mode
+</strong></b><dl>
+<a name="6958108"></a>
+<dt><a href="Overview.doc.html#31078">definition,&#32;76</a>
+</dl>
+<dt><b><strong>frames
+</strong></b><dl>
+<a name="6958111"></a>
+<dt><em>See also</em> stacks
+<a name="6958113"></a>
+<dt><a href="Overview.doc.html#1962">definition,&#32;71</a>
+<a name="6958115"></a>
+<dt><a href="Overview.doc.html#25058">exception handling impact on,&#32;79</a>
+<a name="6958117"></a>
+<dt><a href="Overview.doc.html#15722">local variables,&#32;72</a>
+</dl>
+<dt><b>frem <strong>instruction
+</strong></b><dl>
+<a name="6958120"></a>
+<dt><a href="Instructions2.doc4.html#frem">definition,&#32;242</a>
+</dl>
+<dt><b>freturn <strong>instruction
+</strong></b><dl>
+<a name="6958123"></a>
+<dt><a href="ClassFile.doc.html#28538">constraints, structural,&#32;138</a>
+<a name="6958125"></a>
+<dt><a href="Instructions2.doc4.html#freturn">definition,&#32;244</a>
+</dl>
+<dt><b>fstore <strong>instruction
+</strong></b><dl>
+<a name="6958128"></a>
+<dt><a href="ClassFile.doc.html#42871">constraints, static,&#32;136</a>
+<a name="6958130"></a>
+<dt><a href="Instructions2.doc4.html#fstore">definition,&#32;245</a>
+</dl>
+<dt><b>fstore_&lt;n&gt; <strong>instructions
+</strong></b><dl>
+<a name="6958133"></a>
+<dt><a href="ClassFile.doc.html#42756">constraints, static,&#32;136</a>
+<a name="6958135"></a>
+<dt><a href="Instructions2.doc4.html#fstore_n">definition,&#32;246</a>
+</dl>
+<dt><b>fsub <strong>instruction
+</strong></b><dl>
+<a name="6958138"></a>
+<dt><a href="Instructions2.doc4.html#fsub">definition,&#32;247</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm5.html">Prev</a> | <a href="VMSpecIX.fm7.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

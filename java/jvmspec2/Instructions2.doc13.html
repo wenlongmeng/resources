@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc12.html">Prev</a> | <a href="Instructions2.doc14.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="saload"></a>
+<hr><h2>saload</h2>
+<a name="saload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="70033"></a>
+Load <code>short</code> from array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="70032"></a>
+ <i>saload</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="saload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="70034"></a>
+<i>saload</i> = 53 (0x35)</blockquote><p>
+<a name="saload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="70035"></a>
+..., <i>arrayref</i>, <i>index</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="saload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="70036"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>short</code>. The <i>index</i> must be of type <code>int</code>. Both <i>arrayref</i> and <i>index</i> are popped from the operand stack. The component of the array at <i>index</i> is retrieved and sign-extended to an <code>int</code> <i>value</i>. That <i>value</i> is pushed onto the operand stack.</blockquote><p>
+<a name="saload.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="70038"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>saload</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="70039"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>saload</i> instruction throws an <code>ArrayIndexOutOf</code><code>BoundsException</code>.</blockquote><p>
+
+<a name="sastore"></a>
+<hr><h2>sastore</h2>
+<a name="sastore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote>Store into <code>short</code> array<a name="70049"></a>
+<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="70048"></a>
+ <i>sastore</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="sastore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="70050"></a>
+<i>sastore</i> = 86 (0x56)</blockquote><p>
+<a name="sastore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="70051"></a>
+..., <i>array</i>, <i>index</i>, <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="sastore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="70052"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>short</code>. Both <i>index</i> and <i>value</i> must be of type <code>int</code>. The <i>arrayref</i>, <i>index</i>, and <i>value</i> are popped from the operand stack. The <code>int</code> <i>value</i> is truncated to a <code>short</code> and stored as the component of the array indexed by <i>index</i>. </blockquote><p>
+<a name="sastore.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="70054"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>sastore</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="70055"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>sastore</i> instruction throws an <code>ArrayIndexOutOf</code><code>BoundsException</code>.</blockquote><p>
+
+<a name="sipush"></a>
+<hr><h2>sipush</h2>
+<a name="sipush.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="70066"></a>
+Push <code>short</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="70061"></a>
+ <i>sipush</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70063"></a>
+ <i>byte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="70065"></a>
+ <i>byte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="sipush.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="70067"></a>
+<i>sipush</i> = 17 (0x11)</blockquote><p>
+<a name="sipush.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="70068"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="sipush.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="70069"></a>
+The immediate unsigned <i>byte1</i> and <i>byte2</i> values are assembled into an intermediate <code>short</code> where the value of the short is (<i>byte1</i> << 8) | <i>byte2</i>. The intermediate value is then sign-extended to an <code>int</code> <i>value</i>. That <i>value</i> is pushed onto the operand stack.</blockquote><p>
+
+<a name="swap"></a>
+<hr><h2>swap</h2>
+<a name="swap.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="70084"></a>
+Swap the top two operand stack values<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="70083"></a>
+ <i>swap</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="swap.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="70085"></a>
+<i>swap</i> = 95 (0x5f)</blockquote><p>
+<a name="swap.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="70086"></a>
+...,<em> </em><i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value1</i>, <i>value2</i></blockquote><p>
+<a name="swap.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="70087"></a>
+Swap the top two values on the operand stack.</blockquote><p>
+<blockquote><a name="70088"></a>
+The <i>swap</i> instruction must not be used unless <i>value1</i> and <i>value2</i> are both values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<a name="swap.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="70089"></a>
+The Java virtual machine does not provide an instruction implementing a swap on operands of category 2 computational types.</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc12.html">Prev</a> | <a href="Instructions2.doc14.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

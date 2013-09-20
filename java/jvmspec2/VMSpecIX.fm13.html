@@ -1,0 +1,378 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm12.html">Prev</a> | <a href="VMSpecIX.fm14.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6959862"></a>
+<center><h1> N</h1></center>
+<dl><dt><b>name_and_type <strong>item
+</strong></b><dl>
+<a name="6959865"></a>
+<dt>(CONSTANT_Fieldref_info<a href="ClassFile.doc.html#6690"> structure),&#32;105</a>
+<a name="6959867"></a>
+<dt>(CONSTANT_Interface_Methodref_info<a href="ClassFile.doc.html#6701"> structure),&#32;105</a>
+<a name="6959869"></a>
+<dt>(CONSTANT_Methodref_info<a href="ClassFile.doc.html#6698"> structure),&#32;105</a>
+</dl>
+<dt><b>name_index <strong>item
+</strong></b><dl>
+<a name="6959872"></a>
+<dt>(CONSTANT_Class_info<a href="ClassFile.doc.html#1232"> structure),&#32;104</a>
+<a name="6959874"></a>
+<dt>(CONSTANT_NameAndType_info<a href="ClassFile.doc.html#5970"> structure),&#32;110</a>
+<a name="6959876"></a>
+<dt>(field_info<a href="ClassFile.doc.html#"> structure),&#32;114</a>
+<a name="6959878"></a>
+<dt>(LocalVariableTable_attribute<a href="ClassFile.doc.html#1639"> structure),&#32;132</a>
+<a name="6959880"></a>
+<dt>(method_info<a href="ClassFile.doc.html#1530"> structure),&#32;116</a>
+</dl>
+<dt><b><strong>names
+</strong></b><dl>
+<a name="6959883"></a>
+<dt><em>See also</em> identifiers
+<a name="6959885"></a>
+<dt><a href="ClassFile.doc.html#18289">attributes, avoiding conflicts in,&#32;118</a>
+<a name="6959887"></a>
+<dt><a href="Concepts.doc.html#23195">class,&#32;28</a>
+<a name="6959889"></a>
+<dt><a href="ClassFile.doc.html#14922">classes, internal representation,&#32;99</a>
+<a name="6959891"></a>
+<dt><a href="Concepts.doc.html#26129">fully qualified,&#32;26</a>
+<a name="6959893"></a>
+<dt><a href="ClassFile.doc.html#42211">new attributes,&#32;117</a>
+<a name="6959895"></a>
+<dt>qualified
+<dl>
+<a name="6959896"></a>
+<dt><a href="Concepts.doc.html#28883">access control and,&#32;26</a>
+<a name="6959898"></a>
+<dt><a href="Concepts.doc.html#29689">definition,&#32;24</a>
+</dl>
+<a name="6959900"></a>
+<dt><a href="Concepts.doc.html#29689">simple,&#32;24</a>
+</dl>
+<dt><b><strong>NaN (Not-a-Number)
+</strong></b><dl>
+<a name="6959903"></a>
+<dt>conversion of
+<dl>
+<a name="6959904"></a>
+<dt>bytes item, CONSTANT_Float_info<a href="ClassFile.doc.html#22609"> structure into,&#32;107</a>
+<a name="6959906"></a>
+<dt>high_bytes and low_bytes items, CONSTANT_Double_info<a href="ClassFile.doc.html#23957"> structure,&#32;109</a>
+</dl>
+<a name="6959908"></a>
+<dt><a href="Overview.doc.html#14553">operations that produce,&#32;85</a>
+</dl>
+<dt><b><strong>narrowing primitive conversions
+</strong></b><dl>
+<a name="6959911"></a>
+<dt>See conversions, narrowing primitive
+</dl>
+<dt><b><strong>native method stack
+</strong></b><dl>
+<a name="6959914"></a>
+<dt><a href="Overview.doc.html#15637">definition,&#32;70</a>
+</dl>
+<dt><b>native <strong>methods
+</strong></b><dl>
+<a name="6959917"></a>
+<dt><a href="ConstantPool.doc.html#74730">binding,&#32;170</a>
+<a name="6959919"></a>
+<dt>invoking
+<dl>
+<a name="6959920"></a>
+<dt>class, invokeinterface<a href="Instructions2.doc6.html#invokeinterface7">,&#32;280</a>
+<a name="6959922"></a>
+<dt>class, invokevirtual<a href="Instructions2.doc6.html#invokevirtual">,&#32;291</a>
+<a name="6959924"></a>
+<dt>instance, invokespecial<a href="Instructions2.doc6.html#invokespecial">,&#32;284</a>
+<a name="6959926"></a>
+<dt>instance, invokestatic<a href="Instructions2.doc6.html#invokestatic">,&#32;288</a>
+</dl>
+<a name="6959928"></a>
+<dt>pc<a href="Overview.doc.html#25816"> register state during invocation,&#32;67</a>
+</dl>
+<dt><b>native <strong>modifier
+</strong></b><dl>
+<a name="6959931"></a>
+<dt><em>See also</em> ACC_NATIVE flag; binding; native method
+<a name="6959933"></a>
+<dt><a href="Concepts.doc.html#32312">definition,&#32;33</a>
+</dl>
+<dt><b><strong>negating
+</strong></b><dl>
+<a name="6959936"></a>
+<dt>double, dneg<a href="Instructions2.doc3.html#dneg">,&#32;211</a>
+<a name="6959938"></a>
+<dt>float, fneg<a href="Instructions2.doc4.html#fneg">,&#32;241</a>
+<a name="6959940"></a>
+<dt>int, ineg<a href="Instructions2.doc6.html#ineg">,&#32;277</a>
+<a name="6959942"></a>
+<dt>long, lneg<a href="Instructions2.doc8.html#lneg">,&#32;322</a>
+</dl>
+<dt><b>NegativeArraySizeException
+</b><dl>
+<a name="6959945"></a>
+<dt><a href="Concepts.doc.html#24901">definition,&#32;44</a>
+<a name="6959947"></a>
+<dt>thrown by
+<dl>
+<a name="6959948"></a>
+<dt>anewarray<a href="Instructions2.doc.html#anewarray">,&#32;181</a>
+<a name="6959950"></a>
+<dt>multianewarray<a href="Instructions2.doc9.html#multianewarray">,&#32;340</a>
+<a name="6959952"></a>
+<dt>newarray<a href="Instructions2.doc10.html#newarray">,&#32;344</a>
+</dl>
+</dl>
+<dt><b>new <strong>instruction
+</strong></b><dl>
+<a name="6959955"></a>
+<dt>compilation examples
+<dl>
+<a name="6959956"></a>
+<dt><a href="Compiling.doc.html#10528">arrays,&#32;382</a>
+<a name="6959958"></a>
+<dt><a href="Compiling.doc.html#9247">throwing exceptions,&#32;387</a>
+<a name="6959960"></a>
+<dt><a href="Compiling.doc.html#7014">working with class instances,&#32;379</a>
+</dl>
+<a name="6959962"></a>
+<dt><a href="ClassFile.doc.html#10794">constraints, static,&#32;136</a>
+<a name="6959964"></a>
+<dt>data-flow analysis during class<a href="ClassFile.doc.html#9848"> file verification,&#32;147</a>
+<a name="6959966"></a>
+<dt><a href="Instructions2.doc10.html#new">definition,&#32;341</a>
+</dl>
+<dt><b>newarray <strong>instruction
+</strong></b><dl>
+<a name="6959969"></a>
+<dt><a href="Compiling.doc.html#4860">compilation examples, arrays,&#32;382</a>
+<a name="6959971"></a>
+<dt><a href="ClassFile.doc.html#43178">constraints, static,&#32;136</a>
+<a name="6959973"></a>
+<dt><a href="Instructions2.doc10.html#newarray">definition,&#32;343</a>
+</dl>
+<dt><b>NoClassDefFoundError
+</b><dl>
+<a name="6959976"></a>
+<dt><a href="Concepts.doc.html#24118">definition,&#32;49</a>
+<a name="6959978"></a>
+<dt><a href="Concepts.doc.html#28424">as loading process error,&#32;45</a>
+<a name="6959980"></a>
+<dt><a href="ConstantPool.doc.html#71466">thrown during class or interface loading,&#32;160</a>, <a href="ConstantPool.doc.html#79406">163</a>
+<a name="6959983"></a>
+<dt><a href="Concepts.doc.html#24259">when thrown during initialization,&#32;53</a>
+</dl>
+<dt><b><strong>nonterminal symbols
+</strong></b><dl>
+<a name="6959986"></a>
+<dt><a href="ClassFile.doc.html#14150">descriptor grammar notation,&#32;99</a>
+</dl>
+<dt><b>nop <strong>instruction
+</strong></b><dl>
+<a name="6959989"></a>
+<dt><a href="Instructions2.doc10.html#nop">definition,&#32;345</a>
+</dl>
+<dt><b><strong>normal completion
+</strong></b><dl>
+<a name="6959992"></a>
+<dt><a href="Overview.doc.html#1973">method invocation,&#32;74</a>
+</dl>
+<dt><b>NoSuchFieldError
+</b><dl>
+<a name="6959995"></a>
+<dt><a href="Concepts.doc.html#24180">definition,&#32;51</a>
+<a name="6959997"></a>
+<dt><a href="Concepts.doc.html#28428">as linking error,&#32;45</a>
+<a name="6959999"></a>
+<dt><a href="ConstantPool.doc.html#80871">thrown during field resolution,&#32;167</a>
+</dl>
+<dt><b>NoSuchMethodError
+</b><dl>
+<a name="6960002"></a>
+<dt><a href="Concepts.doc.html#28461">definition,&#32;51</a>
+<a name="6960004"></a>
+<dt><a href="Concepts.doc.html#28428">as linking error,&#32;45</a>
+<a name="6960006"></a>
+<dt><a href="ConstantPool.doc.html#74273">thrown during method resolution,&#32;169</a>
+</dl>
+<dt><b><strong>notation
+</strong></b><dl>
+<a name="6960009"></a>
+<dt>class<a href="ClassFile.doc.html#41600"> file format descriptions,&#32;93</a>
+<a name="6960011"></a>
+<dt><a href="ClassFile.doc.html#14150">field and method descriptor grammar,&#32;99</a>
+<a name="6960013"></a>
+<dt><a href="Overview.doc.html#22321">instruction families,&#32;84</a>
+</dl>
+<dt><b><strong>notification
+</strong></b><dl>
+<a name="6960016"></a>
+<dt>notify<a href="Concepts.doc.html#22135"> method, multithreaded actions,&#32;59</a>
+<a name="6960018"></a>
+<dt>notifyAll<a href="Concepts.doc.html#22135"> method, multithreaded actions,&#32;59</a>
+<a name="6960020"></a>
+<dt><a href="Threads.doc.html#24566">wait sets and,&#32;413</a>
+</dl>
+<dt><b><strong>null reference
+</strong></b><dl>
+<a name="6960023"></a>
+<dt>null<a href="Concepts.doc.html#27355"> literal,&#32;6</a>
+<a name="6960025"></a>
+<dt><a href="Concepts.doc.html#29971">null type,&#32;6</a>
+</dl>
+<dt><b>null <strong>reference
+</strong></b><dl>
+<a name="6960028"></a>
+<dt><a href="Overview.doc.html#15127">definition,&#32;66</a>
+<a name="6960030"></a>
+<dt>pushing null reference, aconst_null<a href="Instructions2.doc.html#aconst_null">,&#32;178</a>
+<a name="6960032"></a>
+<dt><a href="Overview.doc.html#32018">testing for,&#32;89</a>
+</dl>
+<dt><b>NullPointerException
+</b><dl>
+<a name="6960035"></a>
+<dt><a href="Concepts.doc.html#24905">definition,&#32;44</a>
+<a name="6960037"></a>
+<dt>thrown by
+<dl>
+<a name="6960038"></a>
+<dt>aaload<a href="Instructions2.doc.html#aaload7">,&#32;175</a>
+<a name="6960040"></a>
+<dt>aastore<a href="Instructions2.doc.html#aastore">,&#32;177</a>
+<a name="6960042"></a>
+<dt>arraylength<a href="Instructions2.doc.html#arraylength">,&#32;183</a>
+<a name="6960044"></a>
+<dt>athrow<a href="Instructions2.doc.html#athrow">,&#32;186</a>
+<a name="6960046"></a>
+<dt>baload<a href="Instructions2.doc1.html#baload">,&#32;188</a>
+<a name="6960048"></a>
+<dt>bastore<a href="Instructions2.doc1.html#bastore">,&#32;189</a>
+<a name="6960050"></a>
+<dt>caload<a href="Instructions2.doc2.html#caload">,&#32;191</a>
+<a name="6960052"></a>
+<dt>castore<a href="Instructions2.doc2.html#castore">,&#32;192</a>
+<a name="6960054"></a>
+<dt>daload<a href="Instructions2.doc3.html#daload">,&#32;200</a>
+<a name="6960056"></a>
+<dt>dastore<a href="Instructions2.doc3.html#dastore">,&#32;201</a>
+<a name="6960058"></a>
+<dt>faload<a href="Instructions2.doc4.html#faload">,&#32;230</a>
+<a name="6960060"></a>
+<dt>fastore<a href="Instructions2.doc4.html#fastore">,&#32;231</a>
+<a name="6960062"></a>
+<dt>getfield<a href="Instructions2.doc5.html#getfield">,&#32;249</a>
+<a name="6960064"></a>
+<dt>iaload<a href="Instructions2.doc6.html#iaload">,&#32;261</a>
+<a name="6960066"></a>
+<dt>iastore<a href="Instructions2.doc6.html#iastore">,&#32;263</a>
+<a name="6960068"></a>
+<dt>invokeinterface<a href="Instructions2.doc6.html#invokeinterface">,&#32;282</a>
+<a name="6960070"></a>
+<dt>invokespecial<a href="Instructions2.doc6.html#invokespecial">,&#32;287</a>, <a href="Instructions2.doc11.html#putfield">293</a>
+<a name="6960073"></a>
+<dt>laload<a href="Instructions2.doc8.html#laload">,&#32;310</a>
+<a name="6960075"></a>
+<dt>lastore<a href="Instructions2.doc8.html#lastore">,&#32;312</a>
+<a name="6960077"></a>
+<dt>monitorenter<a href="Instructions2.doc9.html#monitorenter">,&#32;335</a>
+<a name="6960079"></a>
+<dt>monitorexit<a href="Instructions2.doc9.html#monitorenter">,&#32;337</a>
+<a name="6960081"></a>
+<dt>putfield<a href="Instructions2.doc11.html#putfield">,&#32;349</a>
+<a name="6960083"></a>
+<dt>saload<a href="Instructions2.doc13.html#saload">,&#32;354</a>
+<a name="6960085"></a>
+<dt>sastore<a href="Instructions2.doc13.html#sastore">,&#32;355</a>
+</dl>
+</dl>
+<dt><b>number_of_classes <strong>item
+</strong></b><dl>
+<a name="6960088"></a>
+<dt>(InnerClasses_attribute<a href="ClassFile.doc.html#80030"> structure),&#32;125</a>
+</dl>
+<dt><b>number_of_exceptions <strong>item
+</strong></b><dl>
+<a name="6960091"></a>
+<dt>(Exceptions_attribute<a href="ClassFile.doc.html#3144"> structure),&#32;124</a>
+</dl>
+<dt><b><strong>numeric
+</strong></b><dl>
+<a name="6960094"></a>
+<dt><a href="Overview.doc.html#34565">comparisons, implications of unordered NaN values,&#32;65</a>
+<a name="6960096"></a>
+<dt>conversions
+<dl>
+<a name="6960097"></a>
+<dt><a href="Concepts.doc.html#28838">binary promotion,&#32;23</a>
+<a name="6960099"></a>
+<dt><a href="Overview.doc.html#14592">narrowing impact on precision,&#32;87</a>
+<a name="6960101"></a>
+<dt><a href="Overview.doc.html#16095">narrowing, support for,&#32;86</a>
+<a name="6960103"></a>
+<dt><a href="Concepts.doc.html#28838">unary promotion,&#32;23</a>
+<a name="6960105"></a>
+<dt><a href="Overview.doc.html#35319">widening, impact on precision,&#32;86</a>
+</dl>
+<a name="6960107"></a>
+<dt><a href="Concepts.doc.html#25645">promotions,&#32;16</a>
+<a name="6960109"></a>
+<dt>types
+<dl>
+<a name="6960110"></a>
+<dt><a href="Concepts.doc.html#23025">components,&#32;7</a>, <a href="Overview.doc.html#3560">62</a>
+<a name="6960113"></a>
+<dt><a href="Concepts.doc.html#15975">promotion conversion, context,&#32;17</a>
+</dl>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm12.html">Prev</a> | <a href="VMSpecIX.fm14.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

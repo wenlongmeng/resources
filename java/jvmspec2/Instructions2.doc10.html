@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc9.html">Prev</a> | <a href="Instructions2.doc11.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="new"></a>
+<hr><h2>new</h2>
+<a name="new.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69784"></a>
+Create new object<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69779"></a>
+ <i>new</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69781"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69783"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="new.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69785"></a>
+<i>new</i> = 187 (0xbb)</blockquote><p>
+<a name="new.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69786"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>objectref</i></blockquote><p>
+<a name="new.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69787"></a>
+The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are used to construct an index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The runtime constant pool item at the index must be a symbolic reference to a class, array, or interface type. The named class, array, or interface type is resolved <a href="ConstantPool.doc.html#71636">(&#167;5.4.3.1)</a> and should result in a class type (it should not result in an array or interface type). Memory for a new instance of that class is allocated from the garbage-collected heap, and the instance variables of the new object are initialized to their default initial values (<a href="Concepts.doc.html#15858">&#167;2.5.1</a>). The <i>objectref</i>, a <code>reference</code> to <em>the instance, </em>is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="283097"></a>
+On successful resolution of the class, it is initialized <a href="ConstantPool.doc.html#77976">(&#167;5.5)</a> if it has not already been initialized.</blockquote><p>
+<a name="new.Linking"></a>
+<p><b>Linking Exceptions</b><br>
+<blockquote><a name="119223"></a>
+During resolution of the symbolic reference to the class, array, or interface type, any of the exceptions documented in <a href="ConstantPool.doc.html#71636">Section 5.4.3.1</a> can be thrown.</blockquote><p>
+<blockquote><a name="69801"></a>
+Otherwise, if the symbolic reference to the class, array, or interface type resolves to an interface or is an <code>abstract</code> class, <i>new</i> throws an <code>InstantiationError</code>. </blockquote><p>
+<blockquote><a name="292328"></a>
+</blockquote><p>
+
+<a name="new.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="333061"></a>
+Otherwise, if execution of this <i>new</i> instruction causes initialization of the referenced class, <i>new</i> may throw an <code>Error</code> as detailed in <a href="Concepts.doc.html#24237">Section 2.17.5</a>.</blockquote><p>
+<a name="new.Note"></a>
+<p><b>Note</b><br>
+<blockquote><a name="333057"></a>
+The <i>new</i> instruction does not completely create a new instance; instance creation is not completed until an instance initialization method has been invoked on the uninitialized instance.</blockquote><p>
+
+<a name="newarray"></a>
+<hr><h2>newarray</h2>
+<a name="newarray.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69816"></a>
+Create new array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69813"></a>
+ <i>newarray</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="69815"></a>
+ <i>atype</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="newarray.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69817"></a>
+<i>newarray</i> = 188 (0xbc)</blockquote><p>
+<a name="newarray.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69818"></a>
+..., <i>count</i><em> </em><img src="chars/arrwdbrt.gif"> ..., <i>arrayref</i></blockquote><p>
+<a name="newarray.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69819"></a>
+The <i>count</i> must be of type <code>int</code>. It is popped off the operand stack. The <i>count</i> represents the number of elements in the array to be created. </blockquote><p>
+<blockquote><a name="69820"></a>
+The <i>atype</i> is a code that indicates the type of array to create. It must take one of the following values:<p><Table Border="1">
+<tr><td><b>Array Type</b>
+<td><a name="69825"></a>
+<i>atype</i>
+
+<tr><td><code>T_BOOLEAN
+</code>
+<td><a name="69829"></a>
+<code>4</code>
+
+<tr><td><code>T_CHAR
+</code>
+<td><a name="69833"></a>
+<code>5</code>
+
+<tr><td><code>T_FLOAT
+</code>
+<td><a name="69837"></a>
+<code>6</code>
+
+<tr><td><code>T_DOUBLE
+</code>
+<td><a name="69841"></a>
+<code>7</code>
+
+<tr><td><code>T_BYTE
+</code>
+<td><a name="69845"></a>
+<code>8</code>
+
+<tr><td><code>T_SHORT
+</code>
+<td><a name="69849"></a>
+<code>9</code>
+
+<tr><td><code>T_INT
+</code>
+<td><a name="69853"></a>
+<code>10</code>
+
+<tr><td><code>T_LONG
+</code>
+<td><a name="69857"></a>
+<code>11</code>
+
+</Table><br></blockquote><p>
+<blockquote><a name="69858"></a>
+A new array whose components are of type <i>atype</i> and of length <i>count</i> is allocated from the garbage-collected heap. A <code>reference</code> <i>arrayref</i> to this new array object is pushed into the operand stack. Each of the elements of the new array is initialized to the default initial value for the type of the array (<a href="Concepts.doc.html#15858">&#167;2.5.1</a>).</blockquote><p>
+
+<a name="newarray.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="69863"></a>
+If <i>count</i><em> </em>is less than zero, <i>newarray</i> throws a <code>NegativeArray</code><code>SizeException</code>. </blockquote><p>
+<a name="newarray.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="210575"></a>
+In Sun's implementation of the Java virtual machine, arrays of type <code>boolean</code> (<i>atype</i> is <code>T_BOOLEAN</code>) are stored as arrays of 8-bit values and are manipulated using the <i>baload</i> and <i>bastore</i> instructions, instructions that also access arrays of type <code>byte</code>. Other implementations may implement packed <code>boolean</code> arrays; the <i>baload</i> and <i>bastore</i> instructions must still be used to access those arrays.</blockquote><p>
+
+<a name="nop"></a>
+<hr><h2>nop</h2>
+<a name="nop.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="69872"></a>
+Do nothing<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="69871"></a>
+ <i>nop</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="nop.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="69873"></a>
+<i>nop</i> = 0 (0x0)</blockquote><p>
+<a name="nop.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="69874"></a>
+No change</blockquote><p>
+<a name="nop.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="69875"></a>
+Do nothing.</blockquote><p>
+<blockquote><a name="69876"></a>
+</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc9.html">Prev</a> | <a href="Instructions2.doc11.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

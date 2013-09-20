@@ -1,0 +1,361 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm16.html">Prev</a> | <a href="VMSpecIX.fm18.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6960400"></a>
+<center><h1> R</h1></center>
+<dl><dt><b><strong>recursion
+</strong></b><dl>
+<a name="6960403"></a>
+<dt>controlling runaway
+<dl>
+<a name="6962427"></a>
+<dt><a href="Overview.doc.html#36275">Java virtual machine stack size  limit use for,&#32;68</a>
+<a name="6962430"></a>
+<dt><a href="Overview.doc.html#36289">native method stack size limit use for,&#32;71</a>
+</dl>
+</dl>
+<dt><b>reference <strong>type
+</strong></b><dl>
+<a name="6960409"></a>
+<dt>branch if reference
+<dl>
+<a name="6960410"></a>
+<dt>comparison succeeds, if_acmp&lt;cond&gt;<a href="Instructions2.doc6.html#if_acmpcond">,&#32;266</a>
+<a name="6960412"></a>
+<dt>is null, ifnull<a href="Instructions2.doc6.html#ifnull">,&#32;272</a>
+<a name="6960414"></a>
+<dt>not null, ifnonnull<a href="Instructions2.doc6.html#ifnonnull">,&#32;271</a>
+</dl>
+<a name="6960416"></a>
+<dt>determining if an object is a particular
+<dl>
+<a name="6960417"></a>
+<dt>instanceof<a href="Instructions2.doc6.html#instanceof">,&#32;278</a>
+</dl>
+<a name="6960419"></a>
+<dt>Java virtual machine
+<dl>
+<a name="6960420"></a>
+<dt><a href="Overview.doc.html#15118">handling of,&#32;62</a>
+<a name="6960422"></a>
+<dt><a href="Overview.doc.html#15063">data type,&#32;61</a>
+</dl>
+<a name="6960424"></a>
+<dt><a href="Overview.doc.html#32018">null, testing for,&#32;89</a>
+<a name="6960426"></a>
+<dt><a href="Concepts.doc.html#29375">values,&#32;11</a>
+<dl>
+<a name="6960428"></a>
+<dt><a href="Overview.doc.html#15079">components and,&#32;66</a>
+</dl>
+</dl>
+<dt><b><strong>reference(s)
+</strong></b><dl>
+<a name="6960431"></a>
+<dt><a href="ConstantPool.doc.html#71685">field, resolution of,&#32;167</a>
+<a name="6960433"></a>
+<dt>final<a href="Concepts.doc.html#29863"> fields,&#32;30</a>
+<a name="6960435"></a>
+<dt><a href="ConstantPool.doc.html#74024">symbolic, mapping to concrete values as part of resolution,&#32;165</a>
+</dl>
+<dt><b><strong>reflection
+</strong></b><dl>
+<a name="6960438"></a>
+<dt><a href="ConstantPool.doc.html#74711">as reason for initialization,&#32;170</a>
+<a name="6960440"></a>
+<dt><a href="Overview.doc.html#28365">Java virtual machine support for,&#32;91</a>
+</dl>
+<dt><b><strong>register
+</strong></b><dl>
+<a name="6960443"></a>
+<dt>program counter (pc<a href="Overview.doc.html#25816">),&#32;67</a>
+</dl>
+<dt><b><strong>remainder
+</strong></b><dl>
+<a name="6960446"></a>
+<dt>double, drem<a href="Instructions2.doc3.html#drem">,&#32;212</a>
+<a name="6960448"></a>
+<dt>float, frem<a href="Instructions2.doc4.html#frem">,&#32;242</a>
+<a name="6960450"></a>
+<dt>int, irem<a href="Instructions2.doc6.html#irem">,&#32;295</a>
+<a name="6960452"></a>
+<dt>long, lrem<a href="Instructions2.doc8.html#lrem">,&#32;326</a>
+</dl>
+<dt><b><strong>representation
+</strong></b><dl>
+<a name="6960455"></a>
+<dt><a href="ClassFile.doc.html#14922">internal, class names,&#32;99</a>
+</dl>
+<dt><b><strong>reserved opcodes
+</strong></b><dl>
+<a name="6960458"></a>
+<dt>breakpoint<a href="Instructions.doc.html#63970">,&#32;172</a>
+<a name="6960460"></a>
+<dt>impdep1<a href="Instructions.doc.html#63970">,&#32;172</a>
+<a name="6960462"></a>
+<dt>impdep2<a href="Instructions.doc.html#63970">,&#32;172</a>
+</dl>
+<dt><b><strong>resolution
+</strong></b><dl>
+<a name="6960465"></a>
+<dt><a href="ConstantPool.doc.html#73906">as part of linking,&#32;166</a>
+<a name="6960467"></a>
+<dt><a href="ConstantPool.doc.html#71636">class and interface,&#32;166</a>
+<a name="6960469"></a>
+<dt><a href="Concepts.doc.html#27941">definition,&#32;50</a>
+<a name="6960471"></a>
+<dt>errors
+<dl>
+<a name="6960472"></a>
+<dt>AbstractMethodError<a href="ConstantPool.doc.html#75187">, thrown  during method resolution,&#32;168</a>
+<a name="6960474"></a>
+<dt>ClassCircularityError<a href="ConstantPool.doc.html#79428">, thrown  during class or interface resolution,&#32;164</a>
+<a name="6960476"></a>
+<dt>IllegalAccessError<a href="ConstantPool.doc.html#77674">, thrown during class or interface resolution,&#32;167</a>
+<a name="6960478"></a>
+<dt>IllegalAccessError<a href="ConstantPool.doc.html#80871">, thrown  during field resolution,&#32;167</a>
+<a name="6960480"></a>
+<dt>IllegalAccessError<a href="ConstantPool.doc.html#75187">, thrown during method resolution,&#32;168</a>
+<a name="6960482"></a>
+<dt>IncompatibleClassChangeError<a href="ConstantPool.doc.html#79426">, thrown during class or interface resolution,&#32;164</a>
+<a name="6960484"></a>
+<dt>IncompatibleClassChangeError<a href="ConstantPool.doc.html#72842">, thrown during interface method resolution,&#32;169</a>
+<a name="6960486"></a>
+<dt>IncompatibleClassChangeError<a href="ConstantPool.doc.html#74266">, thrown during method resolution,&#32;168</a>
+<a name="6960488"></a>
+<dt>NoSuchFieldError<a href="ConstantPool.doc.html#80871">, thrown during  field resolution,&#32;167</a>
+<a name="6960490"></a>
+<dt>NoSuchFieldError<a href="ConstantPool.doc.html#74273">, thrown during  interface method resolution,&#32;169</a>
+<a name="6960492"></a>
+<dt>NoSuchFieldError<a href="ConstantPool.doc.html#75187">, thrown during method resolution,&#32;168</a>
+</dl>
+<a name="6960494"></a>
+<dt><a href="ConstantPool.doc.html#73232">field,&#32;167</a>
+<a name="6960496"></a>
+<dt>instructions causing
+<dl>
+<a name="6960497"></a>
+<dt>anewarray<a href="Instructions2.doc.html#anewarray6">,&#32;181</a>
+<a name="6960499"></a>
+<dt>checkcast<a href="Instructions2.doc2.html#checkcast1">,&#32;193</a>
+<a name="6960501"></a>
+<dt>getfield<a href="Instructions2.doc5.html#getfield">,&#32;248</a>
+<a name="6960503"></a>
+<dt>getstatic<a href="Instructions2.doc5.html#getstatic">,&#32;250</a>
+<a name="6960505"></a>
+<dt>instanceof<a href="Instructions2.doc6.html#instanceof">,&#32;278</a>
+<a name="6962419"></a>
+<a name="6960507"></a>
+<dt>invokeinterface<a href="Instructions2.doc6.html#invokeinterface7">,&#32;280</a>
+<a name="6960509"></a>
+<dt>invokespecial<a href="Instructions2.doc6.html#invokespecial">,&#32;284</a>
+<a name="6960511"></a>
+<dt>invokestatic<a href="Instructions2.doc6.html#invokestatic">,&#32;288</a>
+<a name="6960513"></a>
+<dt>invokevirtual<a href="Instructions2.doc6.html#invokevirtual">,&#32;291</a>
+<a name="6960515"></a>
+<dt>multianewarray<a href="Instructions2.doc9.html#multianewarray">,&#32;339</a>
+<a name="6960517"></a>
+<dt>new<a href="Instructions2.doc10.html#new">,&#32;341</a>
+<a name="6960519"></a>
+<dt>putfield<a href="Instructions2.doc11.html#putfield">,&#32;348</a>
+<a name="6960521"></a>
+<dt>putstatic<a href="Instructions2.doc11.html#putstatic">,&#32;350</a>
+</dl>
+<a name="6960523"></a>
+<dt><a href="Concepts.doc.html#24132">lazy,&#32;49</a>
+<a name="6960525"></a>
+<dt><a href="ConstantPool.doc.html#73131">method, instance or class,&#32;167</a>
+<a name="6960527"></a>
+<dt><a href="ConstantPool.doc.html#72841">method, interface,&#32;168</a>
+<a name="6960529"></a>
+<dt><a href="Concepts.doc.html#27164">overview,&#32;47</a>
+<a name="6960531"></a>
+<dt><a href="Concepts.doc.html#24132">static,&#32;49</a>
+<a name="6960533"></a>
+<dt><a href="Concepts.doc.html#37106">types of,&#32;47</a>
+</dl>
+<dt><b>ret <strong>instruction
+</strong></b><dl>
+<a name="6960536"></a>
+<dt><em>See also </em>jsr instruction; jsr_w instruction
+<a name="6960538"></a>
+<dt>compilation examples, compiling finally<a href="Compiling.doc.html#8359">,&#32;392</a>, <a href="Compiling.doc.html#9135">394</a>
+<a name="6960541"></a>
+<dt>constraints
+<dl>
+<a name="6960542"></a>
+<dt><a href="ClassFile.doc.html#42871">static,&#32;136</a>
+<a name="6960544"></a>
+<dt><a href="ClassFile.doc.html#88589">structural,&#32;139</a>
+</dl>
+<a name="6960546"></a>
+<dt><a href="Instructions2.doc12.html#ret">definition,&#32;352</a>
+<a name="6960548"></a>
+<dt>returnAddress<a href="Overview.doc.html#34568"> type used by,&#32;66</a>
+<a name="6960550"></a>
+<dt>try-finally<a href="ClassFile.doc.html#17627"> clause implementation  use, Sun's Java compiler output characteristics,&#32;150</a>
+</dl>
+<dt><b><strong>return
+</strong></b><dl>
+<a name="6960553"></a>
+<dt><a href="ClassFile.doc.html#42504">descriptor, syntax and meaning,&#32;102</a>
+<a name="6960555"></a>
+<dt>from method
+<dl>
+<a name="6960556"></a>
+<dt>double value, dreturn<a href="Instructions2.doc3.html#dreturn">,&#32;214</a>
+<a name="6960558"></a>
+<dt>float value, freturn<a href="Instructions2.doc4.html#freturn">,&#32;244</a>
+<a name="6960560"></a>
+<dt>int value, ireturn<a href="Instructions2.doc6.html#ireturn">,&#32;296</a>
+<a name="6960562"></a>
+<dt>long value, lreturn<a href="Instructions2.doc8.html#lreturn">,&#32;327</a>
+<a name="6960564"></a>
+<dt>void, return<a href="Instructions2.doc12.html#return">,&#32;353</a>
+</dl>
+<a name="6960566"></a>
+<dt>from subroutine, ret<a href="Instructions2.doc12.html#ret">,&#32;352</a>
+<a name="6960568"></a>
+<dt>reference value, areturn<a href="Instructions2.doc.html#areturn">,&#32;182</a>
+<a name="6960570"></a>
+<dt><a href="ClassFile.doc.html#28538">type, method, structural constraints  on instructions,&#32;138</a>
+</dl>
+<dt><b>return <strong>instruction
+</strong></b><dl>
+<a name="6960573"></a>
+<dt>compilation examples
+<dl>
+<a name="6960574"></a>
+<dt><a href="Compiling.doc.html#7077">arrays,&#32;382</a>, <a href="Compiling.doc.html#6170">383</a>
+<a name="6960577"></a>
+<dt><a href="Compiling.doc.html#8918">catching exceptions,&#32;388</a>, <a href="Compiling.doc.html#9961">389</a>, <a href="Compiling.doc.html#9174">390</a>, <a href="Compiling.doc.html#10781">391</a>
+<a name="6960582"></a>
+<dt>compiling finally<a href="Compiling.doc.html#8351">,&#32;392</a>, <a href="Compiling.doc.html#9127">393</a>
+<a name="6960585"></a>
+<dt>constants and local variables in  a for<a href="Compiling.doc.html#4143"> loop,&#32;365</a>, <a href="Compiling.doc.html#6893">367</a>, <a href="Compiling.doc.html#4289">369</a>
+<a name="6960589"></a>
+<dt>while<a href="Compiling.doc.html#8506"> loop,&#32;372</a>, <a href="Compiling.doc.html#8529">373</a>
+<a name="6962443"></a>
+<a name="6960592"></a>
+<dt><a href="Compiling.doc.html#4446">working with class instances,&#32;379</a>, <a href="Compiling.doc.html#4751">381</a>
+<a name="6960595"></a>
+<dt><a href="Compiling.doc.html#9252">throwing exceptions,&#32;387</a>, <a href="Compiling.doc.html#8026">388</a>
+</dl>
+<a name="6960598"></a>
+<dt><a href="ClassFile.doc.html#28538">constraints, structural,&#32;138</a>
+<a name="6960600"></a>
+<dt><a href="Instructions2.doc12.html#return">definition,&#32;353</a>
+</dl>
+<dt><b>returnAddress <strong>type
+</strong></b><dl>
+<a name="6960603"></a>
+<dt><a href="Overview.doc.html#34571">characteristics and values,&#32;66</a>
+<a name="6960605"></a>
+<dt><a href="Overview.doc.html#3560">definition,&#32;62</a>
+<a name="6960607"></a>
+<dt><a href="ClassFile.doc.html#88589">instance constraints,&#32;139</a>
+<a name="6960609"></a>
+<dt><a href="ClassFile.doc.html#11160">local variable constraints,&#32;139</a>
+</dl>
+<dt><b><strong>right parentheses )
+</strong></b><dl>
+<a name="6960612"></a>
+<dt><a href="ClassFile.doc.html#81106">meaning in method descriptor,&#32;102</a>
+</dl>
+<dt><b><strong>round to nearest
+</strong></b><dl>
+<a name="6960615"></a>
+<dt><em><a href="Overview.doc.html#14548"></a>See also</em> numeric
+<a name="6960618"></a>
+<dt><a href="Concepts.doc.html#17932">definition,&#32;11</a>, <a href="Overview.doc.html#14548">85</a>
+</dl>
+<dt><b><strong>round towards zero
+</strong></b><dl>
+<a name="6960622"></a>
+<dt><a href="Concepts.doc.html#17933">definition,&#32;11</a>, <a href="Overview.doc.html#24715">85</a>
+</dl>
+<dt><b>runFinalizersOnExit <strong>method
+</strong></b><dl>
+<a name="6960626"></a>
+<dt><a href="Concepts.doc.html#39425">Java virtual machine exit role,&#32;57</a>
+</dl>
+<dt><b><strong>runtime
+</strong></b><dl>
+<a name="6960629"></a>
+<dt>class<a href="ClassFile.doc.html#9757"> files verification issues,&#32;140</a>
+<a name="6960631"></a>
+<dt>data areas
+<dl>
+<a name="6960632"></a>
+<dt><a href="Overview.doc.html#6655">heap,&#32;68</a>
+<a name="6960634"></a>
+<dt><a href="Overview.doc.html#30934">Java virtual machine stack,&#32;67</a>
+<a name="6960636"></a>
+<dt><a href="Overview.doc.html#6657">method area,&#32;69</a>
+<a name="6960638"></a>
+<dt><a href="Overview.doc.html#36284">native method stacks,&#32;70</a>
+<a name="6960640"></a>
+<dt>pc<a href="Overview.doc.html#6648"> register,&#32;67</a>
+<a name="6962458"></a>
+<dt><a href="Overview.doc.html#23189">runtime constant pool,&#32;70</a>
+</dl>
+<a name="6962459"></a>
+<dt>RuntimeException as Exception<a href="Concepts.doc.html#24864"> class direct subclass,&#32;43</a>
+<a name="6960647"></a>
+<dt><a href="Concepts.doc.html#15939">type, as incorrect terminology,&#32;15</a>
+</dl>
+<dt><b>RuntimeException
+</b><dl>
+<a name="6960650"></a>
+<dt>as Throwable<a href="Concepts.doc.html#24864"> class direct subclass,&#32;43</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm16.html">Prev</a> | <a href="VMSpecIX.fm18.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

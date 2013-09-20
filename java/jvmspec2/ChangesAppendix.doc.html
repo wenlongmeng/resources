@@ -1,0 +1,391 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>Summary of Clarifications and Amendments </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Mnemonics.doc.html">Prev</a> | <a href="VMSpecIX.fm.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="449154"></a>
+<h1>Summary of Clarifications and Amendments </h1>
+<hr><p>
+This appendix discusses the differences between the original version of <i>The 
+Java</i><sup><font size=-2>TM</font></sup>
+<i> Virtual Machine Specification</i> and the present revision. Its purpose is twofold:
+to summarize what changes have been made and to explain why they were 
+made.
+<p><a name="447893"></a>
+Throughout this appendix, we refer to the original version of <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Virtual Machine Specification</i> (that is, the first published version of this book) as the <em>original specification</em> or <em>the original specification of the Java virtual machine</em>. We refer to the current book as the <em>revised specification</em>. We denote the first edition of <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> as simply <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>.<p>
+<a name="445915"></a>
+The revised specification seeks to clarify points that gave rise to misunderstanding and to correct ambiguities, errors, and omissions in the original specification. <p>
+<a name="447155"></a>
+Except for the treatment of floating-point computation, the differences between the revised specification and its predecessor have no effect on valid programs written in the Java programming language. The revisions influence only how the virtual machine handles incorrect programs. In many of these instances, most implementations did not implement the original specification. The revised specification documents the intended behavior.<p>
+<a name="445926"></a>
+The most obvious changes are in the specification of floating-point types and operations; <code>class</code> file verification; initialization, loading, and linking; and the method invocation instructions. In addition, several other important corrections have been made.<p>
+<a name="447989"></a>
+The revised specification also fixes errors or clarifies issues that were brought to our attention by readers of the original specification.<p>
+<a name="447830"></a>
+While we have made every effort to correct as many problems as possible, we recognize that additional improvements would benefit this specification. In particular, we believe that the description of <code>class</code> file verification should be further refined, ideally to the point of constituting a formal specification. We anticipate that future revisions will address remaining weaknesses and correct any newly reported bugs, while retaining unchanged the semantics of the Java programming language.<p>
+<a name="447828"></a>
+The following sections discuss the changes to the original specification in greater detail and explain why the changes were necessary.<p>
+<a name="445929"></a>
+<hr><h2> Floating-Point Types and Operations</h2>
+The original specification required that all single- and double-precision floating-
+point calculations round their results to the IEEE 754 single- and double-precision 
+formats, respectively. The revised specification permits additional floating-point calculations
+to be done using IEEE 754 extended precision formats. 
+<p><a name="448729"></a>
+As a result of this change, implementations on processors that more naturally and efficiently support extended precision formats and floating-point operations on extended precision formats can deliver better performance for floating-point calculations. Implementations on processors that naturally and efficiently implement IEEE 754 single- and double-precision operations as mandated by the original specification may continue to do so. The floating-point behavior of any Java virtual machine implementation that conforms to the original specification also conforms to the revised specification. <p>
+<a name="448680"></a>
+<hr><h2> Changes to <font size=+4><code>class</code></font> File Verification</h2>
+The most important clarification on the topic of <code>class</code> file verification is that every 
+Java virtual machine implementation must in fact perform verification. This is stated 
+unambiguously in the <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>. The original specification 
+of the Java virtual machine contained several misleading sentences that led some 
+readers to conclude that verification was optional. 
+<p><a name="448014"></a>
+The discussion of the <code>class</code> file format in Chapter 4 also corrects a number of small errors in the original specification. The most significant of these corrections are:<p>
+<ul><li>Interfaces can contain methods other than class or interface initialization  methods (<code>&lt;clinit&gt;</code> methods). <p>
+<li>The class reference in a <code>CONSTANT_Fieldref_info</code> can be an interface type since interfaces can contain <code>static</code> fields. <p>
+<li>Methods that are <code>native</code> or <code>abstract</code> cannot have a <code>Code</code> attribute. <p>
+<li>Multiple declarations of a field or method with the same name and descriptor are illegal.
+</ul>All of the preceding changes correct misstatements in the original specification that 
+were obviously untrue. In addition, <code>class</code> file verification no longer bans attempts 
+to invoke <code>abstract</code> methods; see a complete discussion of this issue later in this 
+appendix.
+<p><a name="447244"></a>
+<hr><h2> Initialization</h2>
+<i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> and the original specification of the Java virtual 
+machine contradict each other on the question of whether the element type of an 
+array type must be initialized when an instance of the array type is created. <i>The 
+Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specificatio</i>n specifies that the element type should be initialized 
+in this case, whereas the original specification of the Java virtual machine states that 
+it should not. We have resolved this contradiction in favor of the original Java virtual 
+machine specification. <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> is thus in error, and will 
+be corrected in its next edition. 
+<p><a name="449271"></a>
+The evident confusion over the circumstances triggering initialization led us to reword the specification of when initialization occurs (<a href="Concepts.doc.html#19075">&#167;2.17.4</a>). However, this reworded specification is equivalent to the original.<p>
+<a name="447274"></a>
+One of the original requirements was that a class would be initialized the first time one of its constructors is invoked. In the Java programming language, constructor invocation constitutes instance creation. Furthermore, since no instance method can be invoked if no instances exist, it is clear that the requirement that a class be initialized the first time one of its methods is invoked is relevant only for <code>static</code> methods. By similar reasoning, the requirement that a class be initialized if any of its fields is accessed applies only to <code>static</code> fields.<p>
+<a name="447369"></a>
+The original specification did not accurately describe the circumstances that would trigger initialization at the Java virtual machine level (see discussion later in this appendix). <a href="ConstantPool.doc.html#77976">Section 5.5</a> now gives a simple and precise definition in terms of Java virtual machine instructions.<p>
+<a name="447321"></a>
+<hr><h2> Loading and Linking</h2>
+Chapter 5, <a href="ConstantPool.doc.html#67962">"Loading, Linking, and Initializing,"</a> has been completely rewritten (and 
+retitled). Chapter 5 of the original specification was erroneous in several important 
+respects. The new chapter corrects these errors and tries to be both clearer and more 
+precise. The organization of the revised chapter closely follows the structure of the 
+corresponding sections in Chapter 12 of <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>. 
+<p><a name="446365"></a>
+The key changes include the following:<p>
+<ul><li><em>Clarifying that loading a class causes its superinterfaces to be resolved.</em>
+</ul><ul><p>
+The description of class loading in the original specification did not state that 
+resolving a class required its superinterfaces to be resolved. This was an error 
+in early Java virtual machine implementations that has been corrected.
+
+</p></ul><ul><li><em>Clarifying that resolution does not necessarily imply further linking.</em>
+</ul><ul><p>
+The description of <code>CONSTANT_Class_info</code> resolution in Section 5.1.1 of the 
+original specification implied that resolution of a reference to a class causes  
+it to be linked. While this was true of Sun's Java virtual machine implementation,
+the description was more restrictive than <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>
+, which clearly states that Java virtual machine implementations have 
+flexibility in the timing of linking activities. The revised specification of the 
+Java virtual machine agrees with The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> on this 
+issue.
+</i>
+</p></ul><ul><li><em>Clarifying that resolution does not imply initialization.</em>
+</ul><ul><p>
+The description of <code>CONSTANT_Class_info</code> resolution in Section 5.1.1 of the 
+original specification implied that resolution of a class causes it to be initialized.
+However, the original specification also included the contradictory  
+statement that initialization should occur only on the first active use of a class. 
+In a Java virtual machine implementation that performs lazy resolution, the  
+distinction is subtle. In other implementations the distinction is much clearer. 
+For example, eager resolution is explicitly allowed by <i>The Java</i><sup></sup>
+<i> Language 
+Specification</i>. If resolution always provoked initialization, such an implementation
+would be forced to perform eager initialization, in clear contradiction to 
+<i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>. The contradiction is resolved by decoupling
+resolution from initialization.
+
+</p><p>
+A closely related problem is the statement in Section 5.1.2 of the original 
+specification that the <code>loadClass</code> method of class <code>ClassLoader</code> can cause  
+initialization to occur if its second argument is <code>true</code>. This contradicts <i>The 
+Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>, which states that only loading and linking 
+occur in this case. Again, the contradiction has been resolved to conform to 
+<i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>, for essentially the same reasons.
+
+</p></ul><ul><li><em>Clarifying that class loading uses</em> <code>ClassLoader.loadClass(String)</code>.
+</ul><ul><p>
+The original specification stated that when loading a class or interface using a 
+user-defined class loader the Java virtual machine invokes the two-argument 
+method <code>ClassLoader.loadClass(String,</code> <code>boolean)</code>. The purpose of the 
+<code>boolean</code> argument was to indicate whether linking should take place. However,
+it was noted on page 144 of the original specification that this interface 
+was likely to change. It was recognized that placing responsibility for linking 
+on the class loader was both inappropriate and unreliable. 
+
+</p><p>
+Beginning with JDK release 1.1, linking is handled directly by the Java 
+virtual machine. An additional method <code>loadClass(String)</code> has also been 
+added to class <code>ClassLoader</code>. This method may similarly be invoked by the 
+Java virtual machine. The revised specification defines class loading in terms 
+of the new method. The two argument version is still retained in the Java 2 
+platform v1.2 in the interests of compatibility, but plays no role in the revised 
+specification.
+
+</p></ul><ul><li><em>Making explicit requirements for type safe class loading.</em> 
+</ul><ul><p>
+The subtleties of type safe linkage in the presence of multiple, user-defined 
+class loaders were not sufficiently appreciated when the original specification 
+was written. It has subsequently become clear that a detailed description of 
+loading constraints on runtime types is warranted. Of course, the presence of 
+loading constraints is observable only by invalid programs.
+
+</p></ul><ul><li><em>Specifying explicitly the rules for access control. </em>
+</ul><ul><p>
+These rules follow from <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>, but were left 
+implicit in the original specification. The rules correspond to the behavior of 
+existing implementations.
+
+</p></ul><ul><li><em>Indicating that more appropriate exceptions are thrown when a class  or interface is invalid.</em>
+</ul><ul><p>
+Section 5.1.1 of the original specification states that a <code>NoClassDefFoundError
+</code> should be thrown if the representation of a class or interface is invalid. 
+However, both <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> and Section 2.16.2 of the 
+original specification state that a <code>ClassFormatError</code> is thrown in this case. 
+Clearly, a <code>ClassFormatError</code> is more appropriate. 
+
+</p></ul><ul><li><em>Clarifying that the class hierarchy is searched when resolving fields  and methods.</em>
+</ul><ul><p>
+The original specification was unclear as to whether, during method or field 
+resolution, the referenced field had to be declared in the exact class  
+referenced or could be inherited. This led to variations among Java virtual 
+machine implementations and inconsistency between <em>The Java</em><sup></sup>
+<em> Virtual 
+Machine Specification</em> and <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>. The revised 
+specification gives a more precise description that agrees with the behavior of 
+most implementations, but not with <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>. <i>The 
+Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> will be corrected in its next edition.
+
+</p><p>
+This choice gives programmers the flexibility of moving methods and 
+fields in the class hierarchy while retaining binary compatibility with previous 
+implementations of their programs.
+
+</p></ul><ul><li><em>Clarifying that an</em> <code>AbstractMethodError</code> <em>may not be raised during  preparation.</em> 
+</ul><ul><p>
+<i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> requires that adding a method to an interface
+be a binary compatible change. However, Sections 5.1.1 and 2.16.3 of  
+the original specification require that preparation reject a class that has an 
+<code>abstract</code> method unless that class is itself <code>abstract</code>. The latter requirement 
+contradicts the former. 
+
+</p><p>
+Consider the case of an interface <i>I</i> implemented by a class <i>C</i> that is not 
+<code>abstract</code>. If a new method is added to <i>I</i>, <i>C</i> must implement it. However, if  
+an old version of <i>C</i> is used together with the new version of <i>I</i> at run time, <i>C</i> 
+will indeed have an <code>abstract</code> method. If preparation were to raise an 
+<code>AbstractMethodError</code> in this case, adding a method to <i>I</i> would not have 
+been a binary compatible change, since it would have resulted in a link-time 
+failure. Consequently, the check at preparation time has been dropped. This 
+change has implications for method invocation, as discussed below.
+
+</p></ul><ul><li><em>Clarifying that interface method resolution may raise exceptions.</em> 
+</ul><ul><p>
+The description in Section 5.3 of the original specification omitted the checks 
+required during interface method resolution. These checks (that the referenced 
+interface exists and that the referenced method exists in that interface) are 
+required by <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> and are performed by most 
+widely used implementations of the Java virtual machine. The checks are  
+documented in <a href="ConstantPool.doc.html#71722">Section 5.4.3.4</a> of the revised specification. 
+
+</p></ul><ul><li><em>Specifying events triggering class or interface initialization.</em> 
+</ul><ul><p>
+As a consequence of the decoupling of class and interface initialization from 
+resolution, it became necessary to specify when the Java virtual machine  
+triggers initialization. This specification is given in <a href="ConstantPool.doc.html#77976">Section 5.5</a> of the revised 
+specification. As noted earlier, this description agrees with the specification  
+of the events at the Java programming language level triggering initialization, 
+given in <a href="Concepts.doc.html#19075">Section 2.17.4</a> of the revised specification.
+
+</p></ul><a name="445933"></a>
+<hr><h2> Changes to Method Invocation</h2>
+The following changes have been made to the specification of the method invocation 
+instructions. Many of these are direct consequences of the changes described in the 
+previous section; others are designed merely to clarify the presentation.
+<p><ul><li><em>Reliance on method tables, which was merely illustrative, has been  removed.</em>
+</ul><ul><p>
+The descriptions of the method invocation instructions made use of the well-known concept of a method dispatch table. The method tables were used as 
+expository devices, but unfortunately many readers mistakenly thought that 
+the use of such tables was a requirement of the specification. To clarify this 
+point, a lookup algorithm is given instead.
+
+</p></ul><ul><li><em>Link-time and runtime exceptions are used consistently.</em>
+</ul><ul><p>
+The original specification sometimes listed exceptions that could be raised by 
+an instruction according to their position in the exception hierarchy, rather 
+than by when they might occur. This usage was inconsistent and sometimes 
+erroneous. 
+
+</p><p>
+The intent of the categories Linking Exceptions and Runtime Exceptions 
+at the end of each instruction description is to describe at what phase of execution
+an error will be thrown. An important example of this is the treatment 
+of <code>UnsatisfiedLinkError</code>. The descriptions of all method invocation 
+instructions specify that <code>native</code> methods are bound at run time if they have 
+not been bound already. If the binding fails, an <code>UnsatisfiedLinkError</code> is 
+thrown. However, <code>UnsatisfiedLinkError</code> is consistently listed in the 
+instruction descriptions of the original specification as a Linking Exception. 
+To make it clear that the exception is actually thrown at run time, the revised 
+specification lists <code>UnsatisfiedLinkError</code> as a Runtime Exception in the 
+descriptions of all the method invocation instructions.
+
+</p><p>
+Another instance of this problem was in the description of the <i>invokeinterface
+</i> instruction. Most of the exceptions listed in the original specification 
+of <i>invokeinterface</i> as Linking Exceptions actually occurred at run time. They 
+are listed in the revised specification as Runtime Exceptions.
+
+</p></ul><ul><li><em>It is possible to attempt to invoke</em> <code>abstract</code> <em>methods at run time.</em>
+</ul><ul><p>
+This is a direct result of the elimination of the <code>abstract</code> method check during 
+class or interface preparation, as discussed earlier. While in many cases the 
+use of an <code>abstract</code> method on a class that is not <code>abstract</code> will still result in 
+a link-time error, it is possible to construct cases where the error will not 
+occur until run time. 
+
+</p><p>
+Consider an <code>abstract</code> class <i>A</i> with <code>abstract</code> method <code>foo</code> and concrete 
+subclass <i>B</i>. If <i>B</i> neglects to implement <code>foo</code>, then a method 
+
+</p></ul><pre>&nbsp;&nbsp;&nbsp;&nbsp;<code>      void bar(A</code> <code>a) {a.foo();}</code> 
+</pre><ul><p>
+will fail if invoked upon an instance of <i>B</i>. This will not be detected at link 
+time, but at run time. As a result, <i>invokeinterface</i> and <i>invokevirtual</i> may raise 
+an <code>AbstractMethodError</code> at run time.
+
+</p></ul><ul><li><em>The</em> <i>invokeinterface</i> <em>instruction specification has changed.</em>
+</ul><ul><p>
+The description of the <i>invokeinterface</i> instruction now states that the target of 
+the method invocation must support the referenced interface. This is required 
+by <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i> and has been a property of all major 
+Java virtual machine implementations for some time.
+
+</p></ul><ul><li><em>The description of the</em> <i>invokespecial</i> <em>instruction has been clarified.</em> 
+</ul><ul><p>
+The second bullet on page 261 of the original specification was redundant and 
+has been removed. The other bullets have been reordered, and the fact that 
+ordinarily the resolved method is selected for execution has been asserted 
+explicitly. These changes do not alter the specification in any way, but serve 
+only to make the text more understandable.
+
+</p></ul><a name="448325"></a>
+<hr><h2> Nested Classes</h2>
+Nested classes were introduced into the Java programming language after the original
+specification of the Java virtual machine and the first edition of <i>The Java</i><sup></sup>
+<i> Language
+Specification </i>were printed. The <code>Innerclasses</code> and <code>Synthetic</code> attributes, 
+described in the revised specification in <a href="ClassFile.doc.html#79996">Section 4.7.5</a> and <a href="ClassFile.doc.html#80128">Section 4.7.6</a>, respectively,
+were added in JDK release 1.1 in order to support nested classes.
+<p><a name="448337"></a>
+Unfortunately, we have not been able to include a description of nested classes in the Java programming language overview given in Chapter 2. A complete description will be included in the next edition of the <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language Specification</i>. Until then, refer to the documentation on the World Wide Web at <a href=http://java.sun.com/products/jdk/1.1/docs/guide/innerclasses><code>http://java.sun.com/products/jdk/1.1/docs/guide/innerclasses</code></a>.<p>
+<a name="448885"></a>
+<hr><h2> Chapter 9 of Original Specification Deleted</h2>
+Chapter 9, "An Optimization," of the original specification documented an optimization
+technique used in Sun's contemporary Java virtual machine implementation. 
+The original specification was clear that this chapter and the technique it described 
+were not part of the Java virtual machine specification. However, the chapter provided
+an example of the flexibility that the Java virtual machine specification intends 
+to give implementors. This information about Sun's implementation was also considered
+possibly useful to writers of tools such as debuggers. 
+<p><a name="448965"></a>
+The chapter has been removed from the revised specification. The optimization technique it described is now well understood. More important, the technique exactly as described is not used by many of the Java virtual machine implementations, including some of Sun's, developed since the original specification was published. The value of the chapter to tool writers has diminished for the same reason. Thus, the chapter is now best seen as documentation for a specific Java virtual machine implementation, making it inappropriate for the Java virtual machine specification.<p>
+<a name="448889"></a>
+<hr><h2> Other Issues</h2>
+<ul><li>In light of our experience with several releases of the Java platform, the  interpretation of the version numbers defined as part of the <code>class</code> file format has changed. The major version number is now intended to correspond to new platform major releases (for instance, the Java 2 platform, Standard Edition, v1.2), while the minor version number may be used to represent release levels of platform implementations (for instance, the Java 2 SDK, Standard Edition, v1.2.1). Since the first public release of the Java platform, all <code>class</code> files have been generated using major version number 45 and minor version number 3. Hence, no existing well-formed <code>class</code> file is affected by this change in interpretation. <p>
+<li>Corresponding to the change in version number interpretation, the actual  version numbers accepted by new implementations of the Java virtual machine have changed. Existing binaries are not affected by this change because these new virtual machine implementations will continue to accept <code>class</code> files  with the historically used version numbers.<p>
+<li>It is now clear that reflective operations can cause class initialization. The  original specification did not discuss the topic of reflection at all, since  reflection did not yet exist in the Java programming language. Many subsequently added reflective operations correspond to language-level constructs that do require initialization and similarly must cause initialization. This is documented in the revised specification.<p>
+<li>Class finalization has been removed from the Java programming language  and, consequently, from the revised specification as well. Class finalization  had never been implemented, so the change had no effect on existing programs. The effects of class finalization are obtainable via instance finalization.<p>
+<li>The rules for class unloading have been clarified. The description of class unloading in the original specification gave, by way of illustration, certain  necessary conditions for unloading a class. These conditions were misinterpreted as being sufficient conditions. This led to implementations that unloaded classes usable by a running program. The revised specification describes the precise circumstances under which classes may be unloaded.<p>
+<li>The instructions <i>aastore</i><em>, </em><i>checkcast</i>, and <i>instanceof</i> contain a subtyping  algorithm. The original version of this algorithm was flawed in that it did not cover the case where two arrays whose component types were interfaces were being compared. The revised specification corrects this.<p>
+<li>The descriptions of the <i>getfield</i> and <i>putfield</i> instructions have been made less implementation specific. In particular, the revised specification eliminates the notion of particular field widths and offsets.<p>
+<li>The descriptions of the instructions <i>putfield </i>and <i>putstatic</i> now include a specification of their behavior when a field is <code>final</code>. This documents the behavior of existing implementations.<p>
+<li>The description of the process of throwing an exception in <a href="Overview.doc.html#15494">Section 3.10</a> has been made clearer and more precise.<p>
+<li>The descriptions of the various return instructions and <i>athrow</i> failed to note that these instructions could raise an <code>IllegalMonitorStateException</code>. The original specification implicitly allowed for the raising of such an exception as a consequence of <a href="Threads.doc.html#25549">Section 8.5</a>: 
+</ul><ul><p>
+An <i>unlock</i> operation by thread <i>T</i><em></em> on lock <i>L</i> may occur only if the number of 
+preceding <i>unlock</i> operations by <i>T</i><em></em> on <i>L</i> is strictly less than the number of preceding
+<i>lock</i> operations by <i>T</i><em></em> on <i>L</i>. 
+
+</p><p>
+and <a href="Threads.doc.html#22500">Section 8.13</a>: 
+
+</p><p>
+If execution of the method's body is ever completed, either normally or 
+abruptly, an <i>unlock</i> operation is automatically performed on that same lock.
+
+</p><p>
+However, this had not been stated clearly and explicitly. 
+
+</p></ul><ul><li>Structured use of locks may now be enforced. The description of locking in <code>synchronized</code> statements given in Section 8.13 of the original specification was erroneous. It stated the following:
+</ul><ul><p>
+If execution of the body is ever completed, either normally or abruptly, an 
+<i>unlock</i> operation is automatically performed on that same lock.
+
+</p><p>
+This is a property of programs written in the Java programming language, 
+guaranteed by correct compilers for the Java programming language; it is not 
+guaranteed by the Java virtual machine. However, programs do indeed make 
+structured use of locking, and Java virtual machine implementations may rely 
+on and enforce this property. The appropriate rules are given in the revised 
+version of <a href="Threads.doc.html#22500">Section 8.13</a>. As a consequence of those rules, <code>IllegalMonitorStateException
+</code> exceptions may be raised by the return instructions and  
+<i>athrow</i>, and by the method invocation instructions when invoking <code>native</code> 
+methods.
+
+</p></ul><ul><li>The <code>Deprecated</code> attribute, an attribute introduced in JDK release 1.1 to support the <code>@deprecated</code> tag in documentation comments, has been specified. The presence of a <code>Deprecated</code> attribute does not alter the semantics of a class or interface.
+</ul>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Mnemonics.doc.html">Prev</a> | <a href="VMSpecIX.fm.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 31, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

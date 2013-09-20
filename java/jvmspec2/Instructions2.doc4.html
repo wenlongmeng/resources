@@ -1,0 +1,734 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc3.html">Prev</a> | <a href="Instructions2.doc5.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+<a name="f2d"></a>
+<hr><h2>f2d</h2>
+<a name="f2d.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67882"></a>
+Convert <code>float</code> to <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67881"></a>
+ <i>f2d</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="f2d.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67883"></a>
+<i>f2d</i> = 141 (0x8d)</blockquote><p>
+<a name="f2d.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67884"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="f2d.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67885"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>float</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. Then <i>value'</i> is converted to a <code>double</code> <i>result</i>. This <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<a name="f2d.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67886"></a>
+Where an <i>f2d</i> instruction is FP-strict <a href="Overview.doc.html#28905">(&#167;3.8.2)</a> it performs a widening primitive conversion <a href="Concepts.doc.html#23435">(&#167;2.6.2)</a>. Because all values of the float value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a> are exactly representable by values of the double value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a>, such a conversion is exact.</blockquote><p>
+<blockquote><a name="452499"></a>
+Where an <i>f2d</i> instruction is not FP-strict, the result of the conversion may be taken from the double-extended-exponent value set; it is not necessarily rounded to the nearest representable value in the double value set. However, if the operand <i>value</i> is taken from the float-extended-exponent value set and the target result is constrained to the double value set, rounding of <i>value</i> may be required.</blockquote><p>
+<blockquote><a name="452494"></a>
+</blockquote><p>
+
+<a name="f2i"></a>
+<hr><h2>f2i</h2>
+<a name="f2i.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67896"></a>
+Convert <code>float</code> to <code>int</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67895"></a>
+ <i>f2i</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="f2i.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67897"></a>
+<i>f2i</i> = 139 (0x8b)</blockquote><p>
+<a name="f2i.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67898"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="f2i.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67899"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>float</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. Then <i>value' </i>is converted to an <code>int</code> <i>result</i>. This <i>result</i> is pushed onto the operand stack: </blockquote><p>
+<ul><li>If the <i>value'</i> is NaN, the <i>result</i> of the conversion is an <code>int</code> 0. <p>
+<li>Otherwise, if the <i>value'</i> is not an infinity, it is rounded to an  integer value <i>V</i>, rounding towards zero using IEEE 754 round towards zero mode. If this integer value <i>V</i> can be represented as an <code>int</code>, then the <i>result</i> is the <code>int</code> value <em>V</em>.<p>
+<li>Otherwise, either the <i>value'</i> must be too small (a negative value of large magnitude or negative infinity), and the <i>result</i> is the smallest representable value of type <code>int</code>, or the <i>value'</i> must be  too large (a positive value of large magnitude or positive infinity), and the <i>result</i> is the largest representable value of type <code>int</code>.
+</ul><a name="f2i.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="448323"></a>
+The <i>f2i</i> instruction performs a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. It may lose information about the overall magnitude of <i>value'</i> and may also lose precision.</blockquote><p>
+
+<a name="f2l"></a>
+<hr><h2>f2l</h2>
+<a name="f2l.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67913"></a>
+Convert <code>float</code> to <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67912"></a>
+ <i>f2l</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="f2l.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67914"></a>
+<i>f2l</i> = 140 (0x8c)</blockquote><p>
+<a name="f2l.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67915"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="f2l.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67916"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>float</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. Then <i>value' </i>is converted to a <code>long</code> <i>result</i>. This <i>result</i> is pushed onto the operand stack: </blockquote><p>
+<ul><li>If the <i>value'</i> is NaN, the <i>result</i> of the conversion is a <code>long</code> 0. <p>
+<li>Otherwise, if the <i>value'</i> is not an infinity, it is rounded to an  integer value <i>V</i>, rounding towards zero using IEEE 754 round towards zero mode. If this integer value <i>V</i> can be represented  as a <code>long</code>, then the <i>result</i> is the <code>long</code> value <em>V</em>.<p>
+<li>Otherwise, either the <i>value'</i> must be too small (a negative value of large magnitude or negative infinity), and the <i>result</i> is the smallest representable value of type <code>long</code>, or the <i>value'</i> must be too large (a positive value of large magnitude or positive infinity), and the <i>result</i> is the largest representable value of type <code>long</code>.
+</ul><a name="f2l.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67920"></a>
+The <i>f2l</i> instruction performs a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. It may lose information about the overall magnitude of <i>value'</i> and may also lose precision.</blockquote><p>
+
+<a name="fadd"></a>
+<hr><h2>fadd</h2>
+<a name="fadd.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67933"></a>
+Add <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67932"></a>
+ <i>fadd</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fadd.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67934"></a>
+<i>fadd</i> = 98 (0x62)</blockquote><p>
+<a name="fadd.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67935"></a>
+..., <i>value1</i><em>, </em><i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="fadd.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67936"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>float</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>float</code> <i>result</i> is <i>value1' </i>+ <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="67937"></a>
+The result of an <i>fadd</i> instruction is governed by the rules of IEEE arithmetic:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>The sum of two infinities of opposite sign is NaN.<p>
+<li>The sum of two infinities of the same sign is the infinity of that sign.<p>
+<li>The sum of an infinity and any finite value is equal to the infinity.<p>
+<li>The sum of two zeroes of opposite sign is positive zero.<p>
+<li>The sum of two zeroes of the same sign is the zero of that sign.<p>
+<li>The sum of a zero and a nonzero finite value is equal to the nonzero value.<p>
+<li>The sum of two nonzero finite values of the same magnitude and opposite sign is positive zero.
+</ul>
+<ul><li>In the remaining cases, where neither operand is an infinity, a zero, or NaN and the values have the same sign or have different magnitudes, the sum is computed and rounded to the nearest  representable value using IEEE 754 round to nearest mode. If the magnitude is too large to represent as a <code>float</code>, we say the operation overflows; the result is then an infinity of appropriate sign. If the magnitude is too small to represent as a <code>float</code>, we say the operation underflows; the result is then a zero of appropriate sign. 
+</ul><blockquote><a name="67947"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, or loss of precision may occur, execution of an <i>fadd</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="faload"></a>
+<hr><h2>faload</h2>
+<a name="faload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67957"></a>
+Load <code>float</code> from array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67956"></a>
+ <i>faload</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="faload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67958"></a>
+<i>faload</i> = 48 (0x30)</blockquote><p>
+<a name="faload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67959"></a>
+..., <i>arrayref</i>, <i>index</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="faload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67960"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>float</code>. The <i>index</i> must be of type <code>int</code>. Both <i>arrayref</i> and <i>index</i> are popped from the operand stack. The <code>float</code> <i>value</i> in the component of the array at <i>index</i> is retrieved and pushed onto the operand stack.</blockquote><p>
+<a name="faload.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="67962"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>faload</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="67963"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>faload</i> instruction throws an <code>ArrayIndexOutOfBoundsException</code>.</blockquote><p>
+
+<a name="fastore"></a>
+<hr><h2>fastore</h2>
+<a name="fastore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67970"></a>
+Store into <code>float</code> array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67969"></a>
+ <i>fastore</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fastore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67971"></a>
+<i>fastore</i> = 81 (0x51)</blockquote><p>
+<a name="fastore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67972"></a>
+..., <i>arrayref</i>, <i>index</i>, <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="fastore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67973"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>float</code>. The <i>index</i> must be of type <code>int</code>, and the <i>value</i> must be of type <code>float</code>. The <i>arrayref</i>, <i>index</i>, and <i>value</i> are popped from the operand stack. The <code>float</code> <i>value</i> undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>, and <i>value'</i> is stored as the component of the array indexed by <i>index</i>. </blockquote><p>
+<a name="fastore.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="67975"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>fastore</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="67976"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>fastore</i> instruction throws an <code>ArrayIndexOutOfBoundsException</code>.</blockquote><p>
+
+<a name="fcmpop"></a>
+<hr><h2>fcmp&lt;op&gt;</h2>
+<a name="fcmpop.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67986"></a>
+Compare <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67985"></a>
+ <i>fcmp&lt;op&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fcmpop.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67987"></a>
+<i>fcmpg</i> = 150 (0x96) <i>fcmpl</i> = 149 (0x95)</blockquote><p>
+<a name="fcmpop.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67988"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="fcmpop.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="96568"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>float</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. A floating-point comparison is performed:</blockquote><p>
+<a name="408885"></a>
+<ul><li>If <i>value1'</i> is greater than <i>value2'</i>, the <code>int</code> value <i>1</i> is pushed onto the operand stack. <p>
+<a name="408886"></a>
+<li>Otherwise, if <i>value1'</i> is equal to <i>value2'</i>, the <code>int</code> value <i>0</i> is pushed onto the operand stack.<p>
+<a name="408887"></a>
+<li>Otherwise, if <i>value1'</i> is less than <i>value2'</i>, the <code>int</code> value -<i>1</i> is pushed onto the operand stack. <p>
+<a name="408888"></a>
+<li>Otherwise, at least one of <i>value1'</i> or <i>value2'</i> is NaN. The <i>fcmpg</i> instruction pushes the <code>int</code> value <i>1</i> onto the operand stack and the <i>fcmpl</i> instruction pushes the <code>int</code> value -<i>1</i> onto the operand stack.<p>
+</ul>
+<blockquote><a name="67990"></a>
+Floating-point comparison is performed in accordance with IEEE 754. All values other than NaN are ordered, with negative infinity less than all finite values and positive infinity greater than all finite values. Positive zero and negative zero are considered equal.</blockquote><p>
+<a name="fcmpop."></a>
+<p><b></b><br>
+
+<a name="fcmpop.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="408942"></a>
+The <i>fcmpg</i> and <i>fcmpl</i> instructions differ only in their treatment of a comparison involving NaN. NaN is unordered, so any <code>float</code> comparison fails if either or both of its operands are NaN. With both <i>fcmpg</i> and <i>fcmpl</i> available, any <code>float</code> comparison may be compiled to push the same <i>result</i> onto the operand stack whether the comparison fails on non-NaN values or fails because it encountered a NaN. For more information, see <a href="Compiling.doc.html#8478">Section 7.5, "More Control Examples."</a></blockquote><p>
+
+<a name="fconst_f"></a>
+<hr><h2>fconst_&lt;f&gt;</h2>
+<a name="fconst_f.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68001"></a>
+Push <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68000"></a>
+ <i>fconst_&lt;f&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></code></blockquote><p>
+<a name="fconst_f.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68002"></a>
+<i>fconst_0</i> = 11 (0xb) <i>fconst_1</i> = 12 (0xc) <i>fconst_2</i> = 13 (0xd)</blockquote><p>
+<a name="fconst_f.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68003"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>&lt;f&gt;</i></blockquote><p>
+<a name="fconst_f.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68004"></a>
+Push the <code>float</code> constant <i>&lt;f&gt;</i> (<i>0.0</i>, <i>1.0</i>, or <i>2.0</i>) onto the operand stack.</blockquote><p>
+
+<a name="fdiv"></a>
+<hr><h2>fdiv</h2>
+<a name="fdiv.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68020"></a>
+Divide <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68019"></a>
+ <i>fdiv</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fdiv.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68021"></a>
+<i>fdiv</i> = 110 (0x6e)</blockquote><p>
+<a name="fdiv.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68022"></a>
+..., <i>value1</i><em>, </em><i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="fdiv.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68023"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>float</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>float</code> <i>result</i> is <i>value1'</i> / <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="68024"></a>
+The result of an <i>fdiv</i> instruction is governed by the rules of IEEE arithmetic:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>If neither <i>value1'</i> nor <i>value2'</i> is NaN, the sign of the result is  positive if both values have the same sign, negative if the values have different signs.<p>
+<li>Division of an infinity by an infinity results in NaN.<p>
+<li>Division of an infinity by a finite value results in a signed infinity, with the sign-producing rule just given.<p>
+<li>Division of a finite value by an infinity results in a signed zero, with the sign-producing rule just given.<p>
+<li>Division of a zero by a zero results in NaN; division of zero by any other finite value results in a signed zero, with the sign-producing rule just given.<p>
+<li>Division of a nonzero finite value by a zero results in a signed infinity, with the sign-producing rule just given.
+</ul>
+<ul><li>In the remaining cases, where neither operand is an infinity, a zero, or NaN, the quotient is computed and rounded to the nearest <code>float</code> using IEEE 754 round to nearest mode. If the magnitude is too large to represent as a <code>float</code>, we say the operation overflows; the result is then an infinity of appropriate sign. If the magnitude is too small to represent as a <code>float</code>, we say the operation underflows; the result is then a zero of appropriate sign. 
+</ul><blockquote><a name="68033"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, division by zero, or loss of precision may occur, execution of an <i>fdiv</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="fload"></a>
+<hr><h2>fload</h2>
+<a name="fload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68054"></a>
+Load <code>float</code> from local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68051"></a>
+ <i>fload</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68053"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68055"></a>
+<i>fload</i> = 23 (0x17)</blockquote><p>
+<a name="fload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68056"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="fload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68057"></a>
+The <i>index</i> is an unsigned byte that must be an index into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The local variable at <i>index</i> must contain a <code>float</code>. The <i>value</i> of the local variable at <i>index</i> is pushed onto the operand stack.</blockquote><p>
+<a name="fload.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="68061"></a>
+The <i>fload</i> opcode can be used in conjunction with the <i>wide</i> instruction to access a local variable using a two-byte unsigned index.</blockquote><p>
+
+<a name="fload_n"></a>
+<hr><h2>fload_&lt;n&gt;</h2>
+<a name="fload_n.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68071"></a>
+Load <code>float</code> from local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68070"></a>
+ <i>fload_&lt;n&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fload_n.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68072"></a>
+<i>fload_0</i> = 34 (0x22) <i>fload_1</i> = 35 (0x23) <i>fload_2</i> = 36 (0x24) <i>fload_3</i> = 37 (0x25)</blockquote><p>
+<a name="fload_n.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68073"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="fload_n.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68074"></a>
+The <i>&lt;n&gt;</i> must be an index into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The local variable at <i>&lt;n&gt;</i> must contain a <code>float</code>. The <i>value</i> of the local variable at <i>&lt;n&gt; </i>is pushed onto the operand stack.</blockquote><p>
+<a name="fload_n.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="68078"></a>
+Each of the <i>fload_&lt;n&gt;</i> instructions is the same as <i>fload</i> with an <i>index</i> of <i>&lt;n&gt;</i>, except that the operand <i>&lt;n&gt;</i> is implicit.</blockquote><p>
+
+<a name="fmul"></a>
+<hr><h2>fmul</h2>
+<a name="fmul.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68085"></a>
+Multiply <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68084"></a>
+ <i>fmul</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fmul.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68086"></a>
+<i>fmul</i> = 106 (0x6a)</blockquote><p>
+<a name="fmul.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68087"></a>
+..., <i>value1</i><em>, </em><i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="fmul.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68088"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>float</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>float</code> <i>result</i> is <i>value1'</i> * <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="68089"></a>
+The result of an <i>fmul</i> instruction is governed by the rules of IEEE arithmetic:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>If neither <i>value1'</i> nor <i>value2'</i> is NaN, the sign of the result is  positive if both values have the same sign, and negative if the  values have different signs.<p>
+<li>Multiplication of an infinity by a zero results in NaN.<p>
+<li>Multiplication of an infinity by a finite value results in a signed infinity, with the sign-producing rule just given.<p>
+<li>In the remaining cases, where neither an infinity nor NaN is involved, the product is computed and rounded to the nearest  representable value using IEEE 754 round to nearest mode. If the magnitude is too large to represent as a <code>float</code>, we say the operation overflows; the result is then an infinity of appropriate sign.  If the magnitude is too small to represent as a <code>float</code>, we say the operation underflows; the result is then a zero of appropriate sign. 
+</ul>
+<blockquote><a name="68095"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, or loss of precision may occur, execution of an <i>fmul</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="fneg"></a>
+<hr><h2>fneg</h2>
+<a name="fneg.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68108"></a>
+Negate <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68107"></a>
+ <i>fneg</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fneg.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68109"></a>
+<i>fneg</i> = 118 (0x76)</blockquote><p>
+<a name="fneg.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68110"></a>
+..., <i>value</i><em> </em><img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="fneg.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68111"></a>
+The <i>value</i> must be of type <code>float</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The <code>float</code> <i>result</i> is the arithmetic negation of <i>value'</i>. This <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="68112"></a>
+For <code>float</code> values, negation is not the same as subtraction from zero. If <code>x</code> is +<code>0.0</code>, then <code>0.0</code>-<code>x</code> equals +<code>0.0</code>, but -<code>x</code> equals -<code>0.0</code>. Unary minus merely inverts the sign of a <code>float</code>. </blockquote><p>
+<blockquote><a name="68113"></a>
+Special cases of interest:</blockquote><p>
+<ul><li>If the operand is NaN, the result is NaN (recall that NaN has no sign).<p>
+<li>If the operand is an infinity, the result is the infinity of opposite sign.<p>
+<li>If the operand is a zero, the result is the zero of opposite sign.
+</ul>
+<a name="frem"></a>
+<hr><h2>frem</h2>
+<a name="frem.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68126"></a>
+Remainder <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68125"></a>
+ <i>frem</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="frem.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68127"></a>
+<i>frem</i> = 114 (0x72)</blockquote><p>
+<a name="frem.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68128"></a>
+..., <i>value1</i><em>, </em><i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="frem.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68129"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>float</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <i>result</i> is calculated and pushed onto the operand stack as a <code>float</code>.</blockquote><p>
+<blockquote><a name="68130"></a>
+The <i>result</i> of an <i>frem</i> instruction is not the same as that of the so-called remainder operation defined by IEEE 754. The IEEE 754 "remainder" operation computes the remainder from a rounding division, not a truncating division, and so its behavior is <i>not</i> analogous to that of the usual integer remainder operator. Instead, the Java virtual machine defines <i>frem</i> to behave in a manner analogous to that of the Java virtual machine integer remainder instructions (<i>irem</i> and <i>lrem</i>); this may be compared with the C library function <code>fmod</code>.</blockquote><p>
+<blockquote><a name="68134"></a>
+The result of an <i>frem</i> instruction is governed by these rules:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>If neither <i>value1'</i> nor <i>value2'</i> is NaN, the sign of the result equals the sign of the dividend.<p>
+<li>If the dividend is an infinity or the divisor is a zero or both, the result is NaN.<p>
+<li>If the dividend is finite and the divisor is an infinity, the result equals the dividend.
+</ul>
+<ul><li>If the dividend is a zero and the divisor is finite, the result equals the dividend.<p>
+<li>In the remaining cases, where neither operand is an infinity, a zero, or NaN, the floating-point remainder <i>result</i><i> </i>from a dividend <i>value1'</i> and a divisor <i>value2'</i> is defined by the mathematical  relation <i>result </i>=<i> value1' </i>-<i> </i>(<i>value2' </i>*<i> q</i>), where <i>q</i> is an integer that is negative only if <i>value1' </i>/<i> value2' </i>is negative and positive only if <i>value1' </i>/<i> value2' </i>is positive, and whose magnitude is as large  as possible without exceeding the magnitude of the true mathematical quotient of <i>value1'</i> and <i>value2'</i>.
+</ul><blockquote><a name="68150"></a>
+Despite the fact that division by zero may occur, evaluation of an <i>frem</i> instruction never throws a runtime exception. Overflow, underflow, or loss of precision cannot occur.</blockquote><p>
+<a name="frem.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="68151"></a>
+The IEEE 754 remainder operation may be computed by the library routine <code>Math.IEEEremainder</code>.</blockquote><p>
+
+<a name="freturn"></a>
+<hr><h2>freturn</h2>
+<a name="freturn.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68158"></a>
+Return <code>float</code> from method<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68157"></a>
+ <i>freturn</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="freturn.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68159"></a>
+<i>freturn</i> = 174 (0xae)</blockquote><p>
+<a name="freturn.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="87907"></a>
+..., <i>value</i><em> </em><img src="chars/arrwdbrt.gif">  [empty]</blockquote><p>
+<a name="freturn.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68161"></a>
+The current method must have return type <code>float</code>. The <i>value</i> must be of type <code>float</code>. If the current method is a <code>synchronized</code> method, the monitor acquired or reentered on invocation of the method is released or exited (respectively) as if by execution of a <i>monitorexit</i> instruction. If no exception is thrown, <i>value</i> is popped from the operand stack of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The <i>value'</i> is pushed onto the operand stack of the frame of the invoker. Any other values on the operand stack of the current method are discarded.</blockquote><p>
+<blockquote><a name="68165"></a>
+The interpreter then returns control to the invoker of the method, reinstating the frame of the invoker.</blockquote><p>
+<a name="freturn.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="250717"></a>
+If the current method is a <code>synchronized</code> method and the current thread is not the owner of the monitor acquired or reentered on invocation of the method, <i>freturn</i> throws an <code>IllegalMonitorStateException</code>. This can happen, for example, if a <code>synchronized</code> method contains a <i>monitorexit</i> instruction, but no <i>monitorenter</i> instruction, on the object on which the method is synchronized.</blockquote><p>
+<blockquote><a name="250718"></a>
+Otherwise, if the virtual machine implementation enforces the rules on structured use of locks described in <a href="Threads.doc.html#22500">&#167;8.13</a> and if the first of those rules is violated during invocation of the current method, then <i>freturn</i> throws an <code>IllegalMonitorStateException</code>.</blockquote><p>
+
+<a name="fstore"></a>
+<hr><h2>fstore</h2>
+<a name="fstore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68177"></a>
+Store <code>float</code> into local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68174"></a>
+ <i>fstore</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68176"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fstore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68178"></a>
+<i>fstore</i> = 56 (0x38)</blockquote><p>
+<a name="fstore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68179"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="fstore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68180"></a>
+The <i>index</i> is an unsigned byte that must be an index into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The <i>value</i> on the top of the operand stack must be of type <code>float</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The value of the local variable at <i>index</i> is set to <i>value'</i>.</blockquote><p>
+<a name="fstore.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="68184"></a>
+The <i>fstore</i> opcode can be used in conjunction with the <i>wide</i> instruction to access a local variable using a two-byte unsigned index.</blockquote><p>
+
+<a name="fstore_n"></a>
+<hr><h2>fstore_&lt;n&gt;</h2>
+<a name="fstore_n.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote>Store <code>float</code> into local variable<a name="68194"></a>
+<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68193"></a>
+ <i>fstore_&lt;n&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fstore_n.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68195"></a>
+<i>fstore_0</i> = 67 (0x43) <i>fstore_1</i> = 68 (0x44) <i>fstore_2</i> = 69 (0x45) <i>fstore_3</i> = 70 (0x46)</blockquote><p>
+<a name="fstore_n.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68196"></a>
+..., <i>value</i><em> </em><img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="fstore_n.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68197"></a>
+The <i>&lt;n&gt;</i> must be an index into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The <i>value</i> on the top of the operand stack must be of type <code>float</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The value of the local variable at <i>&lt;n&gt;</i> is set to <i>value'</i>.</blockquote><p>
+<a name="fstore_n.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="68201"></a>
+Each of the <i>fstore_&lt;n&gt;</i> is the same as <i>fstore</i> with an <i>index</i> of <i>&lt;n&gt;</i>, except that the operand <i>&lt;n&gt;</i> is implicit.</blockquote><p>
+
+<a name="fsub"></a>
+<hr><h2>fsub</h2>
+<a name="fsub.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68208"></a>
+Subtract <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68207"></a>
+ <i>fsub</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="fsub.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68209"></a>
+<i>fsub</i> = 102 (0x66)</blockquote><p>
+<a name="fsub.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68210"></a>
+..., <i>value1</i><em>, </em><i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="fsub.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68211"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>float</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>float</code> <i>result</i> is <i>value1'</i> - <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="68212"></a>
+For <code>float</code> subtraction, it is always the case that <code>a</code>-<code>b</code> produces the same result as <code>a</code>+(-<code>b</code>). However, for the <i>fsub</i> instruction, subtraction from zero is not the same as negation, because if <code>x</code> is +<code>0.0</code>, then <code>0.0</code>-<code>x</code> equals +<code>0.0</code>, but -<code>x</code> equals -<code>0.0</code>. </blockquote><p>
+<blockquote><a name="68213"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, or loss of precision may occur, execution of an <i>fsub</i> instruction never throws a runtime exception.</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc3.html">Prev</a> | <a href="Instructions2.doc5.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

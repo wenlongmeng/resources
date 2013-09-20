@@ -1,0 +1,207 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm4.html">Prev</a> | <a href="VMSpecIX.fm6.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6957758"></a>
+<center><h1> E</h1></center>
+<dl><dt><b>end_pc <strong>item
+</strong></b><dl>
+<a name="6957761"></a>
+<dt>(Code_attribute<a href="ClassFile.doc.html#36348"> structure),&#32;120</a>
+</dl>
+<dt><b><strong>entering
+</strong></b><dl>
+<a name="6957764"></a>
+<dt><em>See also</em> locks; monitor
+<a name="6957767"></a>
+<dt>monitor for object, monitorenter<a href="Instructions2.doc9.html#monitorenter">,&#32;335</a>
+</dl>
+<dt><b>Error
+</b><dl>
+<a name="6957770"></a>
+<dt>as Throwable<a href="Concepts.doc.html#24868"> class direct subclass,&#32;43</a>
+<a name="6957772"></a>
+<dt>thrown by
+<dl>
+<a name="6957773"></a>
+<dt>getstatic<a href="Instructions2.doc5.html#getstatic">,&#32;251</a>
+<a name="6957775"></a>
+<dt>invokestatic<a href="Instructions2.doc6.html#invokestatic">,&#32;290</a>
+<a name="6957777"></a>
+<dt>new<a href="Instructions2.doc10.html#new">,&#32;342</a>
+<a name="6957779"></a>
+<dt>putstatic<a href="Instructions2.doc11.html#putstatic">,&#32;351</a>
+</dl>
+<a name="6957781"></a>
+<dt><a href="Concepts.doc.html#24955">as unrecoverable runtime exception class,&#32;44</a>
+</dl>
+<dt><b><strong>errors
+</strong></b><dl>
+<a name="6957784"></a>
+<dt><em>See also</em> exceptions
+<a name="6957786"></a>
+<dt><a href="Concepts.doc.html#24581">handling, exceptions use for,&#32;40</a>
+<a name="6957788"></a>
+<dt>heap-related, OutOfMemoryError<a href="Overview.doc.html#23149">,&#32;69</a>
+<a name="6957790"></a>
+<dt>Java virtual machine stack-related
+<dl>
+<a name="6957791"></a>
+<dt>OutOfMemoryError<a href="Overview.doc.html#24522">,&#32;68</a>
+<a name="6957793"></a>
+<dt>StackOverflowError<a href="Overview.doc.html#21922">,&#32;68</a>
+</dl>
+<a name="6957795"></a>
+<dt><a href="Concepts.doc.html#19063">loading,&#32;48</a>
+<a name="6957797"></a>
+<dt>method area-related, OutOfMemoryError<a href="Overview.doc.html#22069">,&#32;69</a>
+<a name="6957799"></a>
+<dt>native method stack-related
+<dl>
+<a name="6957800"></a>
+<dt>OutOfMemoryError<a href="Overview.doc.html#23252">,&#32;71</a>
+<a name="6957802"></a>
+<dt>StackOverflowError<a href="Overview.doc.html#21973">,&#32;71</a>
+</dl>
+<a name="6957804"></a>
+<dt><a href="Concepts.doc.html#24124">preparation,&#32;49</a>
+<a name="6957806"></a>
+<dt>throwing, athrow<a href="Instructions2.doc.html#athrow">,&#32;186</a>
+<a name="6957808"></a>
+<dt><a href="Concepts.doc.html#24124">verification,&#32;49</a>
+</dl>
+<dt><b>Exception
+</b><dl>
+<a name="6957811"></a>
+<dt>as Throwable<a href="Concepts.doc.html#24864"> class direct subclass,&#32;43</a>
+</dl>
+<dt><b>exception_index_table <strong>array
+</strong></b><dl>
+<a name="6957814"></a>
+<dt>(Exceptions_attribute<a href="ClassFile.doc.html#9432"> structure),&#32;124</a>
+</dl>
+<dt><b>exception_table <strong>array
+</strong></b><dl>
+<a name="6957817"></a>
+<dt>(Code_attribute<a href="ClassFile.doc.html#36348"> structure),&#32;120</a>
+</dl>
+<dt><b>exception_table_length <strong>item
+</strong></b><dl>
+<a name="6957820"></a>
+<dt>(Code_attribute<a href="ClassFile.doc.html#36348"> structure),&#32;120</a>
+</dl>
+<dt><b><strong>exceptions
+</strong></b><dl>
+<a name="6957823"></a>
+<dt><em>See also </em>catch clause(s); errors; try-catch-finally statement; try-finally statement
+<a name="6957825"></a>
+<dt><a href="Overview.doc.html#22092">abrupt completion,&#32;74</a>
+<a name="6957827"></a>
+<dt><a href="Concepts.doc.html#24832">asynchronous, reasons for and handling of,&#32;43</a>
+<a name="6957829"></a>
+<dt><a href="Concepts.doc.html#24614">causes of,&#32;40</a>
+<a name="6957831"></a>
+<dt><a href="Concepts.doc.html#24580">definition,&#32;39</a>
+<a name="6957833"></a>
+<dt><a href="Overview.doc.html#1962">dispatching, frame use for,&#32;71</a>
+<a name="6957835"></a>
+<dt>(Exceptions_attribute<a href="ClassFile.doc.html#"> structure),  support required for,&#32;116</a>
+<a name="6957837"></a>
+<dt><a href="Concepts.doc.html#22746">handling,&#32;41</a>
+<dl>
+<a name="6957839"></a>
+<dt><a href="Overview.doc.html#27444">by Java virtual machine,&#32;78</a>
+<a name="6957841"></a>
+<dt><a href="ClassFile.doc.html#9802">code verification, Pass 3 - bytecode verifier,&#32;143</a>
+<a name="6957843"></a>
+<dt><a href="Overview.doc.html#7361">instruction summary,&#32;90</a>
+<a name="6957845"></a>
+<dt><a href="ClassFile.doc.html#10697">structural constraints on instructions,&#32;138</a>
+</dl>
+<a name="6957847"></a>
+<dt><a href="Overview.doc.html#1920">normal completion, characterized  by lack of,&#32;74</a>
+<a name="6957849"></a>
+<dt><a href="ClassFile.doc.html#1586">requirements for throwing,&#32;123</a>
+<a name="6957851"></a>
+<dt><a href="Concepts.doc.html#28424">standard unchecked runtime, list of unrecoverable,&#32;45</a>
+<a name="6957853"></a>
+<dt>throwing, athrow<a href="Instructions2.doc.html#athrow">,&#32;186</a>
+</dl>
+<dt><b>Exceptions_attribute <strong>structure
+</strong></b><dl>
+<a name="6957856"></a>
+<dt>(method_info<a href="ClassFile.doc.html#74285"> structure),&#32;123</a>
+</dl>
+<dt><b><strong>execution
+</strong></b><dl>
+<a name="6957859"></a>
+<dt><a href="Threads.doc.html#22215">order, thread rules,&#32;399</a>
+<a name="6957861"></a>
+<dt><a href="ClassFile.doc.html#10682">paths, structural constraints on instructions,&#32;137</a>
+<a name="6957863"></a>
+<dt><a href="Concepts.doc.html#19013">program, life cycle,&#32;46</a>
+</dl>
+<dt><b><strong>exiting
+</strong></b><dl>
+<a name="6957866"></a>
+<dt><em>See also</em> Java virtual machine; locks;  monitor
+<a name="6957868"></a>
+<dt>exit<a href="Concepts.doc.html#29115"> method, Java virtual machine exit activated by,&#32;57</a>
+<a name="6957870"></a>
+<dt><a href="Concepts.doc.html#39425">Java virtual machine, conditions for,&#32;57</a>
+<a name="6957872"></a>
+<dt>monitor for object, monitorexit<a href="Instructions2.doc9.html#monitorenter">,&#32;337</a>
+</dl>
+<dt><b><strong>extend
+</strong></b><dl>
+<a name="6957875"></a>
+<dt>local variable index by additional bytes, wide<a href="Instructions2.doc15.html#wide">,&#32;360</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm4.html">Prev</a> | <a href="VMSpecIX.fm6.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

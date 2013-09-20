@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc4.html">Prev</a> | <a href="Instructions2.doc6.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="getfield"></a>
+<hr><h2>getfield</h2>
+<a name="getfield.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68230"></a>
+Fetch field from object<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68225"></a>
+ <i>getfield</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68227"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68229"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="getfield.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68231"></a>
+<i>getfield</i> = 180 (0xb4)</blockquote><p>
+<a name="getfield.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68232"></a>
+..., <i>objectref</i><em> </em><img src="chars/arrwdbrt.gif"> ..., <i>value</i> </blockquote><p>
+<a name="getfield.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68235"></a>
+The <i>objectref</i>, which must be of type <code>reference</code>, is popped from the operand stack. The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are used to construct an index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The runtime constant pool item at that index must be a symbolic reference to a field <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>, which gives the name and descriptor of the field as well as a symbolic reference to the class in which the field is to be found. The referenced field is resolved <a href="ConstantPool.doc.html#71685">(&#167;5.4.3.2)</a>. The <i>value</i> of the referenced field in <i>objectref</i> is fetched and pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="278581"></a>
+The class of <i>objectref</i> must not be an array. If the field is <code>protected</code> <a href="ClassFile.doc.html#1513">(&#167;4.6)</a>, and it is either a member of the current class or a member of a superclass of the current class, then the class of <i>objectref</i> must be either the current class or a subclass of the current class.</blockquote><p>
+<a name="getfield.Linking"></a>
+<p><b>Linking Exceptions</b><br>
+<blockquote><a name="346057"></a>
+During resolution of the symbolic reference to the field, any of the errors pertaining to field resolution documented in <a href="ConstantPool.doc.html#71685">Section 5.4.3.2</a> can be thrown.</blockquote><p>
+<blockquote><a name="346062"></a>
+Otherwise, if the resolved field is a <code>static</code> field, <i>getfield</i> throws an <code>IncompatibleClassChangeError</code>.</blockquote><p>
+<blockquote><a name="346054"></a>
+</blockquote><p>
+
+<a name="getfield.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="68249"></a>
+Otherwise, if <i>objectref</i><em> </em>is <code>null</code>, the <i>getfield</i> instruction throws a <code>NullPointerException</code>.</blockquote><p>
+<a name="getfield.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="203076"></a>
+The <i>getfield</i> instruction cannot be used to access the <code>length</code> field of an array. The <i>arraylength </i>instruction is used instead.</blockquote><p>
+
+<a name="getstatic"></a>
+<hr><h2>getstatic</h2>
+<a name="getstatic.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68261"></a>
+Get <code>static</code> field from class<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68256"></a>
+ <i>getstatic</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68258"></a>
+ <i>indexbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68260"></a>
+ <i>indexbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="getstatic.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68262"></a>
+<i>getstatic</i> = 178 (0xb2)</blockquote><p>
+<a name="getstatic.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68263"></a>
+...,<em> </em><img src="chars/arrwdbrt.gif"> ..., <i>value</i>	</blockquote><p>
+<a name="getstatic.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68266"></a>
+The unsigned <i>indexbyte1</i> and <i>indexbyte2</i> are used to construct an index into the runtime constant pool of the current class <a href="Overview.doc.html#17257">(&#167;3.6)</a>, where the value of the index is (<i>indexbyte1</i> << 8) | <i>indexbyte2</i>. The runtime constant pool item at that index must be a symbolic reference to a field <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a>, which gives the name and descriptor of the field as well as a symbolic reference to the class or interface in which the field is to be found. The referenced field is resolved <a href="ConstantPool.doc.html#71685">(&#167;5.4.3.2)</a>. </blockquote><p>
+<blockquote><a name="280902"></a>
+On successful resolution of the field, the class or interface that declared the resolved field is initialized <a href="ConstantPool.doc.html#77976">(&#167;5.5)</a> if that class or interface has not already been initialized.</blockquote><p>
+<blockquote><a name="280899"></a>
+The <i>value</i> of the class or interface field is fetched and pushed onto the operand stack.</blockquote><p>
+<a name="getstatic.Linking"></a>
+<p><b>Linking Exceptions</b><br>
+<blockquote><a name="346080"></a>
+During resolution of the symbolic reference to the class or interface field, any of the exceptions pertaining to field resolution documented in <a href="ConstantPool.doc.html#71685">Section 5.4.3.2</a> can be thrown.</blockquote><p>
+<blockquote><a name="346084"></a>
+Otherwise, if the resolved field is not a <code>static</code> (class) field or an interface field, <i>getstatic</i> throws an <code>IncompatibleClassChangeError</code>.</blockquote><p>
+
+<a name="getstatic.Runtime"></a>
+<p><b>Runtime Exception</b><br>
+<blockquote><a name="333038"></a>
+Otherwise, if execution of this <i>getstatic</i> instruction causes initialization of the referenced class or interface, <i>getstatic</i> may throw an <code>Error</code> as detailed in <a href="Concepts.doc.html#24237">Section 2.17.5</a>.</blockquote><p>
+
+<a name="goto"></a>
+<hr><h2>goto</h2>
+<a name="goto.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68293"></a>
+Branch always<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68288"></a>
+ <i>goto</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68290"></a>
+ <i>branchbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68292"></a>
+ <i>branchbyte2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="goto.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68294"></a>
+<i>goto</i> = 167 (0xa7)</blockquote><p>
+<a name="goto.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68295"></a>
+No change</blockquote><p>
+<a name="goto.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68296"></a>
+The unsigned bytes <i>branchbyte1</i> and <i>branchbyte2</i> are used to construct a signed 16-bit <i>branchoffset</i>, where <i>branchoffset</i> is (<i>branchbyte1</i> << 8) | <i>branchbyte2</i>. Execution proceeds at that offset from the address of the opcode of this <i>goto</i> instruction. The target address must be that of an opcode of an instruction within the method that contains this <i>goto</i> instruction.</blockquote><p>
+
+<a name="goto_w"></a>
+<hr><h2>goto_w</h2>
+<a name="goto_w.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="68311"></a>
+Branch always (wide index)<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="68302"></a>
+ <i>goto_w</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68304"></a>
+ <i>branchbyte1</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68306"></a>
+ <i>branchbyte2</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68308"></a>
+ <i>branchbyte3</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="68310"></a>
+ <i>branchbyte4</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="goto_w.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="68312"></a>
+<i>goto_w</i> = 200 (0xc8)</blockquote><p>
+<a name="goto_w.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="68313"></a>
+No change</blockquote><p>
+<a name="goto_w.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="68314"></a>
+The unsigned bytes <i>branchbyte1</i>, <i>branchbyte2</i>, <i>branchbyte3</i>, and <i>branchbyte4</i> are used to construct a signed 32-bit <i>branchoffset</i>, where <i>branchoffset</i> is (<i>branchbyte1</i> << 24) | (<i>branchbyte2</i> << 16) | (<i>branchbyte3</i> << 8) | <i>branchbyte4</i>. Execution proceeds at that offset from the address of the opcode of this <i>goto_w</i> instruction. The target address must be that of an opcode of an instruction within the method that contains this <i>goto_w</i> instruction.</blockquote><p>
+<a name="goto_w.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="68315"></a>
+Although the <i>goto_w</i> instruction takes a 4-byte branch offset, other factors limit the size of a method to 65535 bytes <a href="ClassFile.doc.html#88659">(&#167;4.10)</a>. This limit may be raised in a future release of the Java virtual machine.</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc4.html">Prev</a> | <a href="Instructions2.doc6.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

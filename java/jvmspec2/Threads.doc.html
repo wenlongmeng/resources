@@ -1,0 +1,360 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  Threads and Locks</title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Compiling.doc.html">Prev</a> | <a href="Mnemonics.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="21293"></a>
+<p><strong>CHAPTER 8 </strong></p>
+<a name="21294"></a>
+<h1>Threads and Locks</h1>
+<hr><p>
+This chapter details the low-level actions that may be used to explain the interaction
+of Java virtual machine threads with a shared main memory. It has been adapted 
+with minimal changes from Chapter 17 of the first edition of <i>The Java</i><sup><font size=-2>TM</font></sup>
+<i> Language 
+Specification</i>, by James Gosling, Bill Joy, and Guy Steele.
+<p><a name="22197"></a>
+<hr><h2>8.1    Terminology and Framework</h2>
+A <i>variable</i> is any location within a program that may be stored into. This includes 
+not only class variables and instance variables, but also components of arrays. Variables
+are kept in a <i>main memory</i> that is shared by all threads. Because it is impossible
+for one thread to access parameters or local variables of another thread, it does 
+not matter whether parameters and local variables are thought of as residing in the 
+shared main memory or in the working memory of the thread that owns them.
+<p><a name="24912"></a>
+Every thread has a <i>working memory</i> in which it keeps its own <i>working copy</i> of variables that it must use or assign. As the thread executes a program, it operates on these working copies. The main memory contains the <i>master copy</i> of every variable. There are rules about when a thread is permitted or required to transfer the contents of its working copy of a variable into the master copy or vice versa.<p>
+<a name="22200"></a>
+The main memory also contains <i>locks</i>; there is one lock associated with each object. Threads may compete to acquire a lock.<p>
+<a name="22201"></a>
+For the purposes of this chapter, the verbs <i>use</i>, <i>assign</i>, <i>load</i>, <i>store</i>, <i>lock</i>, and <i>unlock</i> name actions that a thread can perform. The verbs <i>read</i>, <i>write</i>, <i>lock</i>, and <i>unlock</i> name actions that the main memory subsystem can perform. Each of these operations is atomic (indivisible). <p>
+<a name="22202"></a>
+A <i>use</i> or <i>assign</i> operation is a tightly coupled interaction between a thread's execution engine and the thread's working memory. A <i>lock</i> or <i>unlock</i> operation is a tightly coupled interaction between a thread's execution engine and the main memory. But the transfer of data between the main memory and a thread's working memory is loosely coupled. When data is copied from the main memory to a working memory, two actions must occur: a <i>read</i> operation performed by the main memory, followed some time later by a corresponding <i>load</i> operation performed by the working memory. When data is copied from a working memory to the main memory, two actions must occur: a <i>store</i> operation performed by the working memory, followed some time later by a corresponding <i>write</i> operation performed by the main memory. There may be some transit time between main memory and a working memory, and the transit time may be different for each transaction; thus, operations initiated by a thread on different variables may be viewed by another thread as occurring in a different order. For each variable, however, the operations in main memory on behalf of any one thread are performed in the same order as the corresponding operations by that thread. (This is explained in greater detail later.)<p>
+<a name="22203"></a>
+A single thread issues a stream of <i>use</i>, <i>assign</i>, <i>lock</i>, and <i>unlock</i> operations as dictated by the semantics of the program it is executing. The underlying Java virtual machine implementation is then required additionally to perform appropriate <i>load</i>, <i>store</i>, <i>read</i>, and <i>write</i> operations so as to obey a certain set of constraints, explained later. If the implementation correctly follows these rules and the programmer follows certain other rules of programming, then data can be reliably transferred between threads through shared variables. The rules are designed to be "tight" enough to make this possible, but "loose" enough to allow hardware and software designers considerable freedom to improve speed and throughput through such mechanisms as registers, queues, and caches.<p>
+<a name="22204"></a>
+Here are the detailed definitions of each of the operations:<p>
+<ul><li>A <i>use</i> action (by a thread) transfers the contents of the thread's working copy of a variable to the thread's execution engine. This action is performed whenever a thread executes a virtual machine instruction that uses the value of a variable.<p>
+<li>An <i>assign</i> action (by a thread) transfers a value from the thread's execution engine into the thread's working copy of a variable. This action is performed whenever a thread executes a virtual machine instruction that assigns to a variable.<p>
+<li>A <i>read</i> action (by the main memory) transmits the contents of the master copy of a variable to a thread's working memory for use by a later <i>load</i> operation.<p>
+<li>A <i>load </i>action (by a thread) puts a value transmitted from main memory by a <i>read</i> action into the thread's working copy of a variable.<p>
+<li>A <i>store </i>action (by a thread) transmits the contents of the thread's working copy of a variable to main memory for use by a later <i>write</i> operation.<p>
+<li>A <i>write</i> action (by the main memory) puts a value transmitted from the thread's working memory by a <i>store</i> action into the master copy of a variable in main memory.<p>
+<li>A <i>lock</i> action (by a thread tightly synchronized with main memory) causes a thread to acquire one claim on a particular lock.<p>
+<li>An <i>unlock</i> action (by a thread tightly synchronized with main memory) causes a thread to release one claim on a particular lock.
+</ul><a name="22213"></a>
+Thus, the interaction of a thread with a variable over time consists of a sequence of <i>use</i>, <i>assign</i>, <i>load</i>, and <i>store</i> operations. Main memory performs a <i>read</i> operation for every <i>load</i> and a <i>write</i> operation for every <i>store</i>. A thread's interactions with a lock over time consist of a sequence of <i>lock</i> and <i>unlock</i> operations. All the globally visible behavior of a thread thus comprises all the thread's operations on variables and locks.<p>
+<a name="22214"></a>
+<hr><h2>8.2    Execution Order and Consistency</h2>
+The rules of execution order constrain the order in which certain events may occur. 
+There are four general constraints on the relationships among actions:
+<p><ul><li>The actions performed by any one thread are totally ordered; that is, for any two actions performed by a thread, one action precedes the other.<p>
+<li>The actions performed by the main memory for any one variable are totally ordered; that is, for any two actions performed by the main memory on the same variable, one action precedes the other.<p>
+<li>The actions performed by the main memory for any one lock are totally ordered; that is, for any two actions performed by the main memory on the same lock, one action precedes the other.<p>
+<li>It is not permitted for an action to follow itself.
+</ul>The last rule may seem trivial, but it does need to be stated separately and explicitly 
+for completeness. Without the rule, it would be possible to propose a set of actions 
+by two or more threads and precedence relationships among the actions that would 
+satisfy all the other rules but would require an action to follow itself.
+<p><a name="22221"></a>
+Threads do not interact directly; they communicate only through the shared main memory. The relationships between the actions of a thread and the actions of main memory are constrained in three ways: <p>
+<ul><li>Each <i>lock</i> or <i>unlock</i> action is performed jointly by some thread and the main memory.<p>
+<li>Each <i>load</i> action by a thread is uniquely paired with a <i>read</i> action by the main memory such that the <i>load</i> action follows the <i>read</i> action.<p>
+<li>Each <i>store</i> action by a thread is uniquely paired with a <i>write</i> action by the main memory such that the <i>write</i> action follows the <i>store</i> action.
+</ul><a name="22225"></a>
+Most of the rules in the following sections further constrain the order in which certain actions take place. A rule may state that one action must precede or follow some other action. Note that this relationship is transitive: if action <i>A</i> must precede action <i>B</i>, and <i>B</i> must precede <i>C</i>, then <i>A</i> must precede <i>C</i>. The programmer must remember that these rules are the <i>only</i> constraints on the ordering of actions; if no rule or combination of rules implies that action <i>A</i> must precede action <i>B</i>, then a Java virtual machine implementation is free to perform action <i>B</i> before action <i>A</i>, or to perform action <i>B</i> concurrently with action <i>A</i>. This freedom can be the key to good performance. Conversely, an implementation is not required to take advantage of all the freedoms given it.<p>
+<a name="22226"></a>
+In the rules that follow, the phrasing "<i>B</i> must intervene between <i>A</i> and <i>C</i>" means that action <i>B</i> must follow action <i>A</i> and precede action <i>C</i>.<p>
+<a name="22227"></a>
+<hr><h2>8.3    Rules About Variables</h2>
+Let <i>T</i><em></em> be a thread and <i>V</i><i></i> be a variable. There are certain constraints on the operations 
+performed by <i>T</i><em></em> with respect to <i>V &#32;</i><i></i>:
+<p><ul><li>A <i>use</i> or <i>assign</i> by <i>T</i><em></em> of <i>V</i><i></i> is permitted only when dictated by execution by <i>T</i><em></em> of the program according to the standard execution model. For example, an occurrence of <i>V</i><i></i> as an operand of the <code>+</code> operator requires that a single <i>use</i> operation occur on <i>V</i><i> &#32;</i>; an occurrence of <i>V</i><i></i> as the left-hand operand of the assignment operator <code>=</code> requires that a single <i>assign</i> operation occur. All <i>use</i> and <i>assign</i> actions by a given thread must occur in the order specified by the program being executed by the thread. If the following rules forbid <i>T</i><em></em> to perform a required <i>use</i> as its next action, it may be necessary for <i>T</i><em></em> to perform a <i>load </i>first in order to make progress.<p>
+<li>A <i>store</i> operation by <i>T</i><em></em> on <i>V</i><i></i> must intervene between an <i>assign</i> by <i>T</i><em></em> of <i>V</i><i></i> and a subsequent <i>load</i> by <i>T</i><em></em> of <i>V</i><i></i>. (Less formally: a thread is not permitted to lose the most recent assign.)<p>
+<li>An <i>assign</i> operation by <i>T</i><em></em> on <i>V</i><i></i> must intervene between a <i>load</i> or <i>store</i> by <i>T</i><em></em> of <i>V</i><i></i> and a subsequent <i>store</i> by <i>T</i><em></em> of <i>V</i><i></i>. (Less formally: a thread is not permitted to write data from its working memory back to main memory for no reason.)<p>
+<li>After a thread is created, it must perform an <i>assign</i> or <i>load</i> operation on a variable before performing a <i>use</i> or <i>store</i> operation on that variable. (Less formally: a new thread starts with an empty working memory.)<p>
+<li>After a variable is created, every thread must perform an <i>assign</i> or <i>load</i> operation on that variable before performing a <i>use</i> or <i>store</i> operation on that variable. (Less formally: a new variable is created only in main memory and is not initially in any thread's working memory.)
+</ul><a name="22234"></a>
+Provided that all the constraints in Sections <a href="Threads.doc.html#22227">8.3</a>, <a href="Threads.doc.html#22253">8.6</a>, and <a href="Threads.doc.html#22258">8.7</a> are obeyed, a <i>load</i> or <i>store</i> operation may be issued at any time by any thread on any variable, at the whim of the implementation.<p>
+<a name="22235"></a>
+There are also certain constraints on the <i>read</i> and <i>write</i> operations performed by main memory:<p>
+<ul><li>For every <i>load</i> operation performed by any thread <em>T</em> on its working copy of a variable <i>V</i><i></i>, there must be a corresponding preceding <i>read</i> operation by the main memory on the master copy of <i>V</i><i></i>, and the <i>load</i> operation must put into the working copy the data transmitted by the corresponding <i>read</i> operation.<p>
+<li>For every <i>store</i> operation performed by any thread <em>T</em> on its working copy of a variable <i>V</i><i></i>, there must follow a corresponding <i>write</i> operation by the main memory on the master copy of <i>V</i><i></i>, and the <i>write</i> operation must put into the master copy the data transmitted by the corresponding <i>store</i> operation.<p>
+<li>Let action <i>A</i> be a <i>load</i> or <i>store</i> by thread <em>T</em> on variable <i>V</i><i></i>, and let action <i>P</i> be the corresponding <i>read</i> or <i>write</i> by the main memory on variable <i>V</i><i></i>. Similarly, let action <i>B</i><i> </i>be some other <i>load</i> or <i>store</i> by thread <em>T</em> on that same variable <i>V</i><i></i>, and let action <i>Q</i> be the corresponding <i>read</i> or <i>write</i> by the main memory on variable <i>V</i><i></i>. If <i>A</i> precedes <i>B</i>, then <i>P</i> must precede <i>Q</i>. (Less formally: operations on the master copy of any given variable on behalf of a thread are performed by the main memory in exactly the order that the thread requested.)
+</ul>Note that this last rule applies <i>only</i> to actions by a thread on the <i>same</i> variable. However,
+there is a more stringent rule for <code>volatile</code> variables <a href="Threads.doc.html#22258">(&#167;8.7)</a>.
+<p><a name="22244"></a>
+<hr><h2>8.4    Nonatomic Treatment of <font size=+4><code>double</code></font> and <font size=+4><code>long</code></font> Variables</h2>
+If a <code>double</code> or <code>long</code> variable is not declared <code>volatile</code>, then for the purposes of 
+<i>load</i>, <i>store</i>, <i>read</i>, and <i>write</i> operations it is treated as if it were two variables of 
+32 bits each; wherever the rules require one of these operations, two such operations
+are performed, one for each 32-bit half. The manner in which the 64 bits of 
+a <code>double</code> or <code>long</code> variable are encoded into two 32-bit quantities and the order 
+of the operations on the halves of the variables are not defined by <i>The Java</i><sup></sup>
+<i> 
+Language Specification</i>. 
+<p><a name="22246"></a>
+This matters only because a <i>read</i> or <i>write</i> of a <code>double</code> or <code>long</code> variable may be handled by an actual main memory as two 32-bit <i>read</i> or <i>write</i> operations that may be separated in time, with other operations coming between them. Consequently, if two threads concurrently assign distinct values to the same shared non-<code>volatile</code> <code>double</code> or <code>long</code> variable, a subsequent use of that variable may obtain a value that is not equal to either of the assigned values, but rather some implementation-dependent mixture of the two values.<p>
+<a name="25546"></a>
+An implementation is free to implement <i>load</i>, <i>store</i>, <i>read</i>, and <i>write</i> operations for <code>double</code> and <code>long</code> values as atomic 64-bit operations; in fact, this is strongly encouraged. The model divides them into 32-bit halves for the sake of currently popular microprocessors that fail to provide efficient atomic memory transactions on 64-bit quantities. It would have been simpler for the Java virtual machine to define all memory transactions on single variables as atomic; this more complex definition is a pragmatic concession to current hardware practice. In the future this concession may be eliminated. Meanwhile, programmers are cautioned to explicitly synchronize access to shared <code>double</code> and <code>long</code> variables.<p>
+<a name="25549"></a>
+<hr><h2>8.5    Rules About Locks</h2>
+Let <i>T</i><em></em> be a thread and <i>L</i> be a lock. There are certain constraints on the operations 
+performed by <i>T</i><em></em> with respect to <i>L</i>:
+<p><ul><li>A <i>lock</i> operation by <i>T</i><em></em> on <i>L</i> may occur only if, for every thread <i>S</i><i></i> other than <i>T</i><em></em>, the number of preceding <i>unlock</i> operations by <i>S</i><i></i> on <i>L</i> equals the number of preceding <i>lock</i> operations by <i>S</i><i></i> on <i>L</i>. (Less formally: only one thread at a time is permitted to lay claim to a lock; moreover, a thread may acquire the same lock multiple times and does not relinquish ownership of it until a matching number of <i>unlock</i> operations have been performed.)<p>
+<li>An <i>unlock</i> operation by thread <i>T</i><em></em> on lock <i>L</i> may occur only if the number of preceding <i>unlock</i> operations by <i>T</i><em></em> on <i>L</i> is strictly less than the number of preceding <i>lock</i> operations by <i>T</i><em></em> on <i>L</i>. (Less formally: a thread is not permitted to unlock a lock it does not own.)
+</ul>With respect to a lock, the <i>lock</i> and <i>unlock</i> operations performed by all the threads 
+are performed in some total sequential order. This total order must be consistent 
+with the total order on the operations of each thread.
+<p><a name="22253"></a>
+<hr><h2>8.6    Rules About the Interaction of Locks and Variables</h2>
+Let <i>T</i><em></em> be any thread, let <i>V</i><i></i> be any variable, and let <i>L</i> be any lock. There are certain 
+constraints on the operations performed by <i>T</i><em></em> with respect to <i>V</i><i></i> and <i>L</i>:
+<p><ul><li>Between an <i>assign</i> operation by <i>T</i><em></em> on <i>V</i><i></i> and a subsequent <i>unlock</i> operation by <i>T</i><em></em> on <i>L</i>, a <i>store</i> operation by <i>T</i><em></em> on <i>V</i><i></i> must intervene; moreover, the <i>write</i> operation corresponding to that <i>store</i> must precede the <i>unlock</i> operation, as seen by main memory. (Less formally: if a thread is to perform an <i>unlock</i> operation on <i>any</i> lock, it must first copy <i>all</i> assigned values in its working memory back out to main memory.)<p>
+<li>Between a <i>lock</i> operation by <i>T</i><em></em> on <i>L</i> and a subsequent <i>use</i> or <i>store</i> operation by <i>T</i><em></em> on a variable <i>V</i><i></i>, an <i>assign</i> or <i>load</i> operation on <i>V</i> must intervene; moreover, if it is a <i>load</i> operation, then the <i>read</i> operation corresponding to that <i>load</i> must follow the <i>lock</i> operation, as seen by main memory. (Less formally: a <i>lock</i> operation behaves as if it flushes <i>all</i> variables from the thread's working memory, after which the thread must either assign them itself or load copies anew from main memory.)
+</ul><a name="22258"></a>
+<hr><h2>8.7    Rules for <font size=+4><code>volatile</code></font> Variables</h2>
+If a variable is declared volatile, then additional constraints apply to the operations 
+of each thread. Let <i>T</i><em></em> be a thread and let <i>V</i><i></i> and <i>W</i> be volatile variables.
+<p><ul><li>A <i>use</i> operation by <i>T</i><em></em> on <i>V</i><i></i> is permitted only if the previous operation by <i>T</i><em></em> on <i>V</i><i></i> was <i>load</i>, and a <i>load</i> operation by <i>T</i><em></em> on <i>V</i><i></i> is permitted only if the next operation by <i>T</i><em></em> on <i>V</i><i></i> is <i>use</i>. The <i>use</i> operation is said to be "associated" with the <i>read</i> operation that corresponds to the <i>load</i>.<p>
+<li>A <i>store</i> operation by <i>T</i><em></em> on <i>V</i><i></i> is permitted only if the previous operation by <i>T</i><em></em> on <i>V</i><i></i> was <i>assign</i>, and an <i>assign</i> operation by <i>T</i><em></em> on <i>V</i><i></i> is permitted only if the next operation by <i>T</i><em></em> on <i>V</i><i></i> is <i>store</i>. The <i>assign</i> operation is said to be "associated" with the <i>write</i> operation that corresponds to the <i>store</i>.<p>
+<li>Let action <i>A</i> be a <i>use</i> or <i>assign</i> by thread <i>T</i><em></em> on variable <i>V</i><i></i>, let action <i>F</i> be the <i>load</i> or <i>store</i> associated with <i>A</i>, and let action <i>P</i> be the <i>read</i> or <i>write</i> of <i>V</i><i></i> that corresponds to <i>F</i>. Similarly, let action <i>B</i> be a <i>use</i> or <i>assign</i> by thread <i>T</i><em></em> on variable <i>W</i><i></i>, let action <i>G</i> be the <i>load</i> or <i>store</i> associated with <i>B</i>, and let action <i>Q</i> be the <i>read</i> or <i>write</i> of <i>W</i><i></i> that corresponds to <i>G</i><i></i>. If <i>A</i> precedes <i>B</i>, then <i>P</i> must precede <i>Q</i>. (Less formally: operations on the master copies of volatile variables on behalf of a thread are performed by the main memory in exactly the order that the thread requested.)
+</ul><a name="24432"></a>
+<hr><h2>8.8    Prescient Store Operations</h2>
+If a variable is not declared <code>volatile</code>, then the rules in the previous sections are 
+relaxed slightly to allow <i>store</i> operations to occur earlier than would otherwise be 
+permitted. The purpose of this relaxation is to allow optimizing compilers to perform
+certain kinds of code rearrangement that preserve the semantics of properly 
+synchronized programs, but might be caught in the act of performing memory operations
+out of order by programs that are not properly synchronized.
+<p><a name="24434"></a>
+Suppose that a <i>store</i> by <i>T</i> of <i>V</i> would follow a particular <i>assign</i> by <i>T</i> of <i>V</i> according to the rules of the previous sections, with no intervening <i>load</i> or <i>assign</i> by <i>T</i> of <i>V</i>. Then that <i>store</i> operation would send to the main memory the value that the <i>assign</i> operation put into the working memory of thread <i>T</i>. The special rule allows the <i>store</i> operation actually to occur before the <i>assign</i> operation instead, if the following restrictions are obeyed:<p>
+<ul><li>If the <i>store</i> operation occurs, the <i>assign</i> is bound to occur. (Remember, these are restrictions on what actually happens, not on what a thread plans to do. No fair performing a <i>store</i> and then throwing an exception before the <i>assign</i> occurs!)<p>
+<li>No <i>lock</i> operation intervenes between the relocated <i>store</i> and the <i>assign</i>.<p>
+<li>No <i>load</i> of <i>V</i> intervenes between the relocated <i>store</i> and the <i>assign</i>.<p>
+<li>No other <i>store</i> of <i>V</i> intervenes between the relocated <i>store</i> and the <i>assign</i>.<p>
+<li>The <i>store</i> operation sends to the main memory the value that the <i>assign</i>  operation will put into the working memory of thread <i>T</i>. 
+</ul>This last property inspires us to call such an early <i>store</i> operation <i>prescient</i>: it has to 
+know ahead of time, somehow, what value will be stored by the <i>assign</i> that it should 
+have followed. In practice, optimized compiled code will compute such values early 
+(which is permitted if, for example, the computation has no side effects and throws 
+no exceptions), store them early (before entering a loop, for example), and keep 
+them in working registers for later use within the loop.
+<p><a name="22263"></a>
+<hr><h2>8.9    Discussion</h2>
+Any association between locks and variables is purely conventional. Locking 
+any lock conceptually flushes <em>all</em> variables from a thread's working memory, 
+and unlocking any lock forces the writing out to main memory of <em>all</em> variables 
+that the thread has assigned. That a lock may be associated with a particular 
+object or a class is purely a convention. For example, in some applications it 
+may be appropriate always to lock an object before accessing any of its instance 
+variables; <code>synchronized</code> methods are a convenient way to follow this convention.
+In other applications, it may suffice to use a single lock to synchronize 
+access to a large collection of objects.
+<p><a name="22265"></a>
+If a thread uses a particular shared variable only after locking a particular lock and before the corresponding unlocking of that same lock, then the thread will read the shared value of that variable from main memory after the <i>lock</i> operation, if necessary, and will copy back to main memory the value most recently assigned to that variable before the <i>unlock</i> operation. This, in conjunction with the mutual exclusion rules for locks, suffices to guarantee that values are correctly transmitted from one thread to another through shared variables.<p>
+<a name="22266"></a>
+The rules for volatile variables effectively require that main memory be touched exactly once for each <i>use</i> or <i>assign</i> of a volatile variable by a thread, and that main memory be touched in exactly the order dictated by the thread execution semantics. However, such memory operations are not ordered with respect to <i>read</i> and <i>write</i> operations on nonvolatile variables.<p>
+<a name="23865"></a>
+<hr><h2>8.10    Example: Possible Swap</h2>
+Consider a class that has class variables <code>a</code> and <code>b</code> and methods <code>hither</code> and <code>yon</code>:
+<p><blockquote><pre>class Sample {
+    int a = 1, b = 2;
+    void hither() {
+    	a = b;
+    }
+    void yon() 
+    	b = a;
+    }
+}
+</pre></blockquote>Now suppose that two threads are created and that one thread calls <code>hither</code> while 
+the other thread calls <code>yon</code>. What is the required set of actions and what are the ordering
+constraints?
+<p><a name="23877"></a>
+Let us consider the thread that calls <code>hither</code>. According to the rules, this thread must perform a <i>use</i> of <code>b</code> followed by an <i>assign</i> of <code>a</code>. That is the bare minimum required to execute a call to the method <code>hither</code>.<p>
+<a name="23878"></a>
+Now, the first operation on variable <code>b</code> by the thread cannot be <i>use</i>. But it may be <i>assign</i> or <i>load</i>. An <i>assign</i> to <code>b</code> cannot occur because the program text does not call for such an <i>assign</i> operation, so a <i>load</i> of <code>b</code> is required. This <i>load</i> operation by the thread in turn requires a preceding <i>read</i> operation for <code>b</code> by the main memory.<p>
+<a name="23879"></a>
+The thread may optionally <i>store</i> the value of <code>a</code> after the <i>assign</i> has occurred. If it does, then the <i>store</i> operation in turn requires a following <i>write</i> operation for <code>a</code> by the main memory.<p>
+<a name="23880"></a>
+The situation for the thread that calls <code>yon</code> is similar, but with the roles of <code>a</code> and <code>b</code> exchanged.<p>
+<a name="25448"></a>
+The total set of operations may be pictured as follows:<p>
+<br><br><img src="Threads.doc.anc.gif">
+<br><br>Here an arrow from action <i>A</i> to action <i>B</i> indicates that <i>A</i> must precede <i>B</i>.
+<p><a name="24312"></a>
+In what order may the operations by the main memory occur? The only constraint is that it is not possible both for the <i>write</i> of <code>a</code> to precede the <i>read</i> of <code>a</code> and for the <i>write</i> of <code>b</code> to precede the <i>read</i> of <code>b</code>, because the causality arrows in the diagram would form a loop so that an action would have to precede itself, which is not allowed. Assuming that the optional <i>store</i> and <i>write</i> operations are to occur, there are three possible orderings in which the main memory might legitimately perform its operations. Let <code>ha</code> and <code>hb</code> be the working copies of <code>a</code> and <code>b</code> for the <code>hither</code> thread, let <code>ya</code> and <code>yb</code> be the working copies for the <code>yon</code> thread, and let <code>ma</code> and <code>mb</code> be the master copies in main memory. Initially <code>ma=1</code> and <code>mb=2</code>. Then the three possible orderings of operations and the resulting states are as follows:<p>
+<ul><li><i>write</i> <code>a</code><code><img src="chars/arrwrite.gif"></code><i>read</i> <code>a</code>, <i>read</i> <code>b</code><code><img src="chars/arrwrite.gif"></code><i>write</i> <code>b</code> (then <code>ha=2</code>, <code>hb=2</code>, <code>ma=2</code>, <code>mb=2</code>, <code>ya=2</code>, <code>yb=2</code>)<p>
+<li><i>read</i> <code>a</code><code><img src="chars/arrwrite.gif"></code><i>write</i> <code>a</code>, <i>write</i> <code>b</code><code><img src="chars/arrwrite.gif"></code><i>read</i> <code>b</code> (then <code>ha=1</code>, <code>hb=1</code>, <code>ma=1</code>, <code>mb=1</code>, <code>ya=1</code>, <code>yb=1</code>)<p>
+<li><i>read</i> <code>a</code><code><img src="chars/arrwrite.gif"></code><i>write</i> <code>a</code>, <i>read</i> <code>b</code><code><img src="chars/arrwrite.gif"></code><i>write</i> <code>b</code> (then <code>ha=2</code>, <code>hb=2</code>, <code>ma=2</code>, <code>mb=1</code>, <code>ya=1</code>, <code>yb=1</code>)
+</ul>Thus, the net result might be that, in main memory, <code>b</code> is copied into <code>a</code>, <code>a</code> is copied 
+into <code>b</code>, or the values of <code>a</code> and <code>b</code> are swapped; moreover, the working copies of the 
+variables might or might not agree. It would be incorrect, of course, to assume that 
+any one of these outcomes is more likely than another. This is one place in which the 
+behavior of a program is necessarily timing-dependent.
+<p><a name="23915"></a>
+Of course, an implementation might also choose not to perform the <i>store</i> and <i>write</i> operations, or only one of the two pairs, leading to yet other possible results.<p>
+<a name="23916"></a>
+Now suppose that we modify the example to use <code>synchronized</code> methods:<p>
+<blockquote><pre>class SynchSample {
+    int a = 1, b = 2;
+    synchronized void hither() {
+    	a = b;
+    }
+    synchronized void yon() 
+    	b = a;
+    }
+}
+</pre></blockquote>Let us again consider the thread that calls <code>hither</code>. According to the rules, this 
+thread must perform a <i>lock</i> operation (on the instance of class <code>SynchSample</code> on 
+which the <code>hither</code> method is being called) before the body of method <code>hither</code> is 
+executed. This is followed by a <i>use</i> of <code>b</code> and then an <i>assign</i> of <code>a</code>. Finally, an <i>unlock</i> 
+operation on that same instance of <code>SynchSample</code> must be performed after the body 
+of method <code>hither</code> completes. That is the bare minimum required to execute a call 
+to the method <code>hither</code>.
+<p><a name="23927"></a>
+As before, a <i>load</i> of <code>b</code> is required, which in turn requires a preceding <i>read</i> operation for <code>b</code> by the main memory. Because the <i>load</i> follows the <i>lock</i> operation, the corresponding <i>read</i> must also follow the <i>lock</i> operation.<p>
+<a name="23928"></a>
+Because an <i>unlock</i> operation follows the <i>assign</i> of <code>a</code>, a <i>store</i> operation on <code>a</code> is mandatory, which in turn requires a following <i>write</i> operation for <code>a</code> by the main memory. The <i>write</i> must precede the <i>unlock</i> operation.<p>
+<a name="25341"></a>
+The situation for the thread that calls <code>yon</code> is similar, but with the roles of <code>a</code> and <code>b</code> exchanged.<p>
+<a name="25401"></a>
+The total set of operations may be pictured as follows:<p>
+<a name="25445"></a>
+<br><br><img src="Threads.doc.anc1.gif">
+<br><br>The <i>lock</i> and <i>unlock</i> operations provide further constraints on the order of operations by the main memory; the <i>lock</i> operation by one thread cannot occur between the <i>lock</i> and <i>unlock</i> operations of the other thread. Moreover, the <i>unlock</i> operations require that the <i>store</i> and <i>write</i> operations occur. It follows that only two sequences are possible:<p>
+<ul><li><i>write</i> <code>a</code><code><img src="chars/arrwrite.gif"></code><i>read</i> <code>a</code>, <i>read</i> <code>b</code><code><img src="chars/arrwrite.gif"></code><i>write</i> <code>b</code> (then <code>ha=2</code>, <code>hb=2</code>, <code>ma=2</code>, <code>mb=2</code>,<code> ya=2</code>, <code>yb=2</code>)<p>
+<li><i>read</i> <code>a</code><code><img src="chars/arrwrite.gif"></code><i>write</i> <code>a</code>, <i>write</i> <code>b</code><code><img src="chars/arrwrite.gif"></code><i>read</i> <code>b</code> (then <code>ha=1</code>, <code>hb=1</code>, <code>ma=1</code>, <code>mb=1</code>, <code>ya=1</code>, <code>yb=1</code>)
+</ul>While the resulting state is timing-dependent, it can be seen that the two threads will 
+necessarily agree on the values of <code>a</code> and <code>b</code>.
+<p><a name="23974"></a>
+<hr><h2>8.11    Example: Out-of-Order Writes</h2>
+This example is similar to that in the preceding section, except that one method 
+assigns to both variables and the other method reads both variables. Consider a class 
+that has class variables <code>a</code> and <code>b</code> and methods <code>to</code> and <code>fro</code>:
+<p><blockquote><pre>class Simple {
+    int a = 1, b = 2;
+    void to() {
+    	a = 3;
+    	b = 4;
+    }
+    void fro() 
+    	System.out.println("a= " + a + ", b=" + b);
+    }
+}
+</pre></blockquote>Now suppose that two threads are created and that one thread calls <code>to</code> while the 
+other thread calls <code>fro</code>. What is the required set of actions and what are the ordering 
+constraints?
+<p><a name="23987"></a>
+Let us consider the thread that calls <code>to</code>. According to the rules, this thread must perform an <i>assign</i> of <code>a</code> followed by an <i>assign</i> of <code>b</code>. That is the bare minimum required to execute a call to the method <code>to</code>. Because there is no synchronization, it is at the option of the implementation whether or not to <i>store</i> the assigned values back to main memory! Therefore, the thread that calls <code>fro</code> may obtain either <code>1</code> or <code>3</code> for the value of <code>a</code> and independently may obtain either <code>2</code> or <code>4</code> for the value of <code>b</code>.<p>
+<a name="23988"></a>
+Now suppose that <code>to</code> is <code>synchronized</code> but <code>fro</code> is not:<p>
+<blockquote><pre>class SynchSimple {
+    int a = 1, b = 2;
+    synchronized void to() {
+    	a = 3;
+    	b = 4;
+    }
+    void fro() 
+    	System.out.println("a= " + a + ", b=" + b);
+    }
+}
+</pre></blockquote>In this case the method <code>to</code> will be forced to <i>store</i> the assigned values back to main 
+memory before the <i>unlock</i> operation at the end of the method. The method <code>fro</code> 
+must, of course, use <code>a</code> and <code>b</code> (in that order) and so must <i>load</i> values for <code>a</code> and <code>b</code> from 
+main memory.
+<p><a name="24042"></a>
+The total set of operations may be pictured as follows:<br><br><img src="Threads.doc.anc2.gif">
+<br><br><p>
+Here an arrow from action <i>A</i> to action <i>B</i> indicates that <i>A</i> must precede <i>B</i>.
+<p><a name="24044"></a>
+In what order may the operations by the main memory occur? Note that the rules do not require that <i>write</i> <code>a</code> occur before <i>write</i> <code>b</code>; neither do they require that <i>read</i> <code>a</code> occur before <i>read</i> <code>b</code>. Also, even though method <code>to</code> is synchronized, method <code>fro</code> is not synchronized, so there is nothing to prevent the <i>read</i> operations from occurring between the <i>lock</i> and <i>unlock</i> operations. (The point is that declaring one method <code>synchronized</code> does not of itself make that method behave as if it were atomic.)<p>
+<a name="24045"></a>
+As a result, the method <code>fro</code> could still obtain either <code>1</code> or <code>3</code> for the value of <code>a</code> and independently could obtain either <code>2</code> or <code>4</code> for the value of <code>b</code>. In particular, <code>fro</code> might observe the value <code>1</code> for <code>a</code> and <code>4</code> for <code>b</code>. Thus, even though <code>to</code> does an <i>assign</i> to <code>a</code> and then an <i>assign</i> to <code>b</code>, the <i>write</i> operations to main memory may be observed by another thread to occur as if in the opposite order. <p>
+<a name="25553"></a>
+Finally, suppose that <code>to</code> and <code>fro</code> are both <code>synchronized</code>:<p>
+<blockquote><pre>class SynchSynchSimple {
+    int a = 1, b = 2;
+    synchronized void to() {
+    	a = 3;
+    	b = 4;
+    }
+    synchronized void fro() 
+    	System.out.println("a= " + a + ", b=" + b);
+    }
+}
+</pre></blockquote><a name="24057"></a>
+In this case, the actions of method <code>fro</code> cannot be interleaved with the actions of method <code>to</code>, and so <code>fro</code> will print either "<code>a=1, b=2</code>" or "<code>a=3, b=4</code>".<p>
+<a name="22488"></a>
+<hr><h2>8.12    Threads</h2>
+Threads are created and managed by the classes <code>Thread</code> and <code>ThreadGroup</code>. Creating
+a <code>Thread</code> object creates a thread, and that is the only way to create a thread. 
+When the thread is created, it is not yet active; it begins to run when its <code>start</code> 
+method is called.
+<p><a name="22500"></a>
+<hr><h2>8.13    Locks and Synchronization</h2>
+There is a lock associated with every object. The Java programming language does 
+not provide a way to perform separate <i>lock</i> and <i>unlock</i> operations; instead, they are 
+implicitly performed by high-level constructs that always arrange to pair such operations
+correctly. (The Java virtual machine, however, provides separate <i>monitorenter</i> 
+and <i>monitorexit</i> instructions that implement the <i>lock</i> and <i>unlock</i> operations.)
+<p><a name="24410"></a>
+The <code>synchronized</code> statement computes a reference to an object; it then attempts to perform a <i>lock</i> operation on that object and does not proceed further until the <i>lock</i> operation has successfully completed. (A <i>lock</i> operation may be delayed because the rules about locks can prevent the main memory from participating until some other thread is ready to perform one or more <i>unlock</i> operations.) After the lock operation has been performed, the body of the <code>synchronized</code> statement is executed. Normally, a compiler for the Java programming language ensures that the <i>lock</i> operation implemented by a <i>monitorenter</i> instruction executed prior to the execution of the body of the <code>synchronized</code> statement is matched by an unlock operation implemented by a <i>monitorexit</i> instruction whenever the <code>synchronized</code> statement completes, whether completion is normal or abrupt.<p>
+<a name="22509"></a>
+A <code>synchronized</code> method automatically performs a <i>lock</i> operation when it is invoked; its body is not executed until the <i>lock</i> operation has successfully completed. If the method is an instance method, it locks the lock associated with the instance for which it was invoked (that is, the object that will be known as <code>this</code> during execution of the method's body). If the method is <code>static</code>, it locks the lock associated with the <code>Class</code> object that represents the class in which the method is defined. If execution of the method's body is ever completed, either normally or abruptly, an <i>unlock</i> operation is automatically performed on that same lock.<p>
+<a name="22510"></a>
+Best practice is that if a variable is ever to be assigned by one thread and used or assigned by another, then all accesses to that variable should be enclosed in <code>synchronized</code> methods or <code>synchronized</code> statements.<p>
+<a name="24717"></a>
+Although a compiler for the Java programming language normally guarantees structured use of locks (see <a href="Compiling.doc.html#6530">Section 7.14, "Synchronization"</a>), there is no assurance that all code submitted to the Java virtual machine will obey this property. Implementations of the Java virtual machine are permitted but not required to enforce both of the following two rules guaranteeing structured locking.<p>
+<a name="24721"></a>
+Let <i>T</i> be a thread and <i>L</i> be a lock. Then:<p>
+<ol>
+<a name="24722"></a>
+<li>The number of <i>lock</i> operations performed by <i>T</i> on <i>L</i> during a method invocation must equal the number of <i>unlock</i> operations performed by <i>T</i> on <i>L</i> during the method invocation whether the method invocation completes normally or abruptly. <p>
+<a name="24623"></a>
+<li>At no point during a method invocation may the number of <i>unlock</i> operations performed by <i>T</i> on <i>L</i> since the method invocation exceed the number of <i>lock</i> operations performed by <i>T</i> on <i>L </i>since the method invocation.
+</ol>
+In less formal terms, during a method invocation every <i>unlock</i> operation on <i>L</i> must 
+match some preceding <i>lock</i> operation on <i>L</i>. 
+<p><a name="25011"></a>
+Note that the locking and unlocking automatically performed by the Java virtual machine when invoking a synchronized method are considered to occur during the calling method's invocation.<p>
+<a name="24566"></a>
+<hr><h2>8.14    Wait Sets and Notification</h2>
+Every object, in addition to having an associated lock, has an associated wait set, 
+which is a set of threads. When an object is first created, its wait set is empty.
+<p><a name="23519"></a>
+Wait sets are used by the methods <code>wait</code>, <code>notify</code>, and <code>notifyAll</code> of class <code>Object</code>. These methods also interact with the scheduling mechanism for threads.<p>
+<a name="23520"></a>
+The method <code>wait</code> should be invoked for an object only when the current thread (call it <i>T &#32;</i>) has already locked the object's lock. Suppose that thread <i>T</i> has in fact performed <i>N</i> <i>lock</i> operations on the object that have not been matched by <i>unlock</i> operations on that same object. The <code>wait</code> method then adds the current thread to the wait set for the object, disables the current thread for thread scheduling purposes, and performs <i>N</i> <i>unlock</i> operations on the object to relinquish the lock on it. Locks having been locked by thread <i>T</i> on objects other than the one <i>T</i> is to wait on are not relinquished. The thread <i>T</i> then lies dormant until one of three things happens:<p>
+<ul><li>Some other thread invokes the <code>notify</code> method for that object, and thread <i>T</i> happens to be the one arbitrarily chosen as the one to notify.<p>
+<li>Some other thread invokes the <code>notifyAll</code> method for that object.<p>
+<li>If the call by thread <i>T</i> to the <code>wait</code> method specified a time-out interval, then the specified amount of real time elapses.
+</ul><a name="23527"></a>
+The thread <i>T</i> is then removed from the wait set and reenabled for thread scheduling. It then locks the object again (which may involve competing in the usual manner with other threads); once it has gained control of the lock, it performs <i>N</i> - <i>1</i> additional <i>lock</i> operations on that same object and then returns from the invocation of the <code>wait</code> method. Thus, on return from the <code>wait</code> method, the state of the object's lock is exactly as it was when the <code>wait</code> method was invoked.<p>
+<a name="23528"></a>
+The <code>notify</code> method should be invoked for an object only when the current thread has already locked the object's lock, or an <code>IllegalMonitorStateException</code> will be thrown. If the wait set for the object is not empty, then some arbitrarily chosen thread is removed from the wait set and reenabled for thread scheduling. (Of course, that thread will not be able to proceed until the current thread relinquishes the object's lock.)<p>
+<a name="23537"></a>
+The <code>notifyAll</code> method should be invoked for an object only when the current thread has already locked the object's lock, or an <code>IllegalMonitorStateException</code> will be thrown. Every thread in the wait set for the object is removed from the wait set and reenabled for thread scheduling. (Those threads will not be able to proceed until the current thread relinquishes the object's lock.)<p>
+<a name="23512"></a>
+<p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Compiling.doc.html">Prev</a> | <a href="Mnemonics.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 31, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

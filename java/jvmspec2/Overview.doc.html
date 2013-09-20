@@ -1,0 +1,1400 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  The Structure of the  Java Virtual Machine</title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Concepts.doc.html">Prev</a> | <a href="ClassFile.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="2839"></a>
+<p><strong>CHAPTER 3 </strong></p>
+<a name="25786"></a>
+<h1>The Structure of the  Java Virtual Machine</h1>
+<hr><p>
+<a name="25787"></a>
+This book specifies an abstract machine. It does not document any particular 
+implementation of the Java virtual machine, including Sun Microsystems'.
+<p><a name="25427"></a>
+To implement the Java virtual machine correctly, you need only be able to read the <code>class</code> file format and correctly perform the operations specified therein. Implementation details that are not part of the Java virtual machine's specification would unnecessarily constrain the creativity of implementors. For example, the memory layout of run-time data areas, the garbage-collection algorithm used, and any internal optimization of the Java virtual machine instructions (for example, translating them into machine code) are left to the discretion of the implementor. <p>
+<a name="32310"></a>
+<hr><h2>3.1    The <code><font size=+4>class</font></code> File Format</h2>
+<a name="32311"></a>
+Compiled code to be executed by the Java virtual machine is represented using a 
+hardware- and operating system-independent binary format, typically (but not necessarily)
+stored in a file, known as the <code>class</code> file format. The <code>class</code> file format precisely
+defines the representation of a class or interface, including details such as byte 
+ordering that might be taken for granted in a platform-specific object file format. 
+<p><a name="32320"></a>
+<a href="ClassFile.doc.html#80959">Chapter 4, "The <code>class</code> File Format"</a>, covers the <code>class</code> file format in detail.<p>
+<a name="12237"></a>
+<hr><h2>3.2    Data Types</h2>
+<a name="15063"></a>
+Like the Java programming language, the Java virtual machine operates on two 
+kinds of types: <i>primitive types</i> and <i>reference types</i>. There are, correspondingly, two 
+kinds of values that can be stored in variables, passed as arguments, returned by 
+methods, and operated upon: <i>primitive values</i> and <i>reference values</i>.
+<p><a name="15114"></a>
+The Java virtual machine expects that nearly all type checking is done prior to run time, typically by a compiler, and does not have to be done by the Java virtual machine itself. Values of primitive types need not be tagged or otherwise be inspectable to determine their types at run time, or to be distinguished from values of reference types. Instead, the instruction set of the Java virtual machine distinguishes its operand types using instructions intended to operate on values of specific types. For instance, <i>iadd</i>, <i>ladd</i>, <i>fadd</i>, and <i>dadd</i> are all Java virtual machine instructions that add two numeric values and produce numeric results, but each is specialized for its operand type: <code>int</code>, <code>long</code>, <code>float</code>, and <code>double</code>, respectively. For a summary of type support in the Java virtual machine instruction set, see <a href="Overview.doc.html#7565">&#167;3.11.1</a>.<p>
+<a name="15118"></a>
+The Java virtual machine contains explicit support for objects. An object is either a dynamically allocated class instance or an array. A reference to an object is considered to have Java virtual machine type <code>reference</code>. Values of type <code>reference</code> can be thought of as pointers to objects. More than one reference to an object may exist. Objects are always operated on, passed, and tested via values of type <code>reference</code>. <p>
+<a name="22239"></a>
+<hr><h2>3.3    Primitive Types and Values</h2>
+<a name="3560"></a>
+The primitive data types supported by the Java virtual machine are the <i>numeric 
+types</i>, the <code>boolean</code> type <a href="Overview.doc.html#22909">(&#167;3.3.4)</a>,<a href="#33623"><sup>1</sup></a> and the <code>returnAddress</code> type <a href="Overview.doc.html#34568">(&#167;3.3.3)</a>. The 
+numeric types consist of the <i>integral types</i> <a href="Overview.doc.html#31446">(&#167;3.3.1)</a> and the <i>floating-point types</i> <a href="Overview.doc.html#28147">
+(&#167;3.3.2)</a>. The integral types are:
+<p><ul><li><code>byte</code>, whose values are 8-bit signed two's-complement integers<p>
+<li><code>short</code>, whose values are 16-bit signed two's-complement integers<p>
+<li><code>int</code>, whose values are 32-bit signed two's-complement integers<p>
+<li><code>long</code>, whose values are 64-bit signed two's-complement integers<p>
+<li><code>char</code>, whose values are 16-bit unsigned integers representing Unicode characters <a href="Concepts.doc.html#25310">(&#167;2.1)</a>
+</ul><a name="22892"></a>
+The floating-point types<i></i> are:
+<p><ul><li><code>float</code>, whose values are elements of the float value set or, where supported, the float-extended-exponent value set <p>
+<li><code>double</code>, whose values are elements of the double value set or, where supported, the double-extended-exponent value set
+</ul><a name="31730"></a>
+The values of the <code>boolean</code> type encode the truth values <code>true</code> and <code>false</code>.<p>
+<a name="31712"></a>
+The values of the <code>returnAddress</code> type are pointers to the opcodes of Java virtual machine instructions. Of the primitive types only the <code>returnAddress</code> type is not directly associated with a Java programming language type.<p>
+<a name="31446"></a>
+<h3>3.3.1    Integral Types and Values</h3>
+<a name="25222"></a>
+The values of the integral types of the Java virtual machine are the same as those for 
+the integral types of the Java programming language <a href="Concepts.doc.html#19511">(&#167;2.4.1)</a>:
+<p><ul><li>For <code>byte</code>, from -128 to 127 (-2<sup>7</sup> to 2<sup>7</sup>-1), inclusive<p>
+<li>For <code>short</code>, from -32768 to 32767 (-2<sup>15</sup> to 2<sup>15</sup>-1), inclusive<p>
+<li>For <code>int</code>, from -2147483648 to 2147483647 (-2<sup>31</sup> to 2<sup>31</sup>-1), inclusive<p>
+<li>For <code>long</code>, from -9223372036854775808 to 9223372036854775807 (-2<sup>63</sup>  to 2<sup>63</sup>-1), inclusive<p>
+<li>For <code>char</code>, from 0 to 65535 inclusive
+</ul><a name="28147"></a>
+<h3>3.3.2    Floating-Point Types, Value Sets, and Values</h3>
+<a name="29104"></a>
+The floating-point types are <code>float</code> and <code>double</code>, which are conceptually associated 
+with the 32-bit single-precision and 64-bit double-precision format IEEE 754 values 
+and operations as specified in <i>IEEE Standard for Binary Floating-Point Arithmetic
+</i>, ANSI/IEEE Std. 754-1985 (IEEE, New York).
+<p><a name="33745"></a>
+The IEEE 754 standard includes not only positive and negative sign-magnitude numbers, but also positive and negative zeros, positive and negative <i>infinities</i>, and a special <i>Not-a-Number value </i>(hereafter abbreviated as "NaN"). The NaN value is used to represent the result of certain invalid operations such as dividing zero by zero.<p>
+<a name="33963"></a>
+Every implementation of the Java virtual machine is required to support two standard sets of floating-point values, called the <i>float value set</i> and the <i>double value set</i>. In addition, an implementation of the Java virtual machine may, at its option, support either or both of two extended-exponent floating-point value sets, called the<i> float-extended-exponent value set</i> and the<i> double-extended-exponent value set</i>. These extended-exponent value sets may, under certain circumstances, be used instead of the standard value sets to represent the values of type float or double.<p>
+<a name="33964"></a>
+The finite nonzero values of any floating-point value set can all be expressed in the form s &#183; <i>m</i>&#183; &#32;2<sup>(e &#32;-N &#32;+ &#32;1)</sup>, where <i>s</i> is +1 or -1, <i>m</i> is a positive integer less than 2<sup>N</sup>, and <i>e</i> is an integer between <i>E</i>min = - (2<sup>K &#32;-1</sup>-2) and <i>E</i>max = 2<sup>K &#32;-1</sup>-1, inclusive, and where <i>N</i> and <i>K</i> are parameters that depend on the value set. Some values can be represented in this form in more than one way; for example, supposing that a value <i>v</i> in a value set might be represented in this form using certain values for <i>s</i>, <i>m</i>, and <i>e</i>, then if it happened that <i>m</i> were even and <i>e</i> were less than 2<sup>K &#32;-1</sup>, one could halve <i>m</i> and increase <i>e</i> by 1 to produce a second representation for the same value <i>v</i>. A representation in this form is called <i>normalized</i> if <i>m</i> <img src="chars/gtequal.gif"> 2<sup>N &#32;-1</sup>; otherwise the representation is said to be <i>denormalized</i>. If a value in a value set cannot be represented in such a way that <i>m</i> <img src="chars/gtequal.gif"> 2<sup>N &#32;-1</sup>, then the value is said to be a <i>denormalized value</i>, because it has no normalized representation.<p>
+<a name="34070"></a>
+The constraints on the parameters <i>N</i> and <i>K</i> (and on the derived parameters <i>E</i>min and <i>E</i>max) for the two required and two optional floating-point value sets are summarized in <a href="Overview.doc.html#34123">Table 3.1</a>.
+<a name="34123"></a><p><Table Border="1">
+<tr><th><b><i>
+</i></b>
+<b><i>Parameter
+</i></b>
+<th><b><i>
+</i></b>
+<b><i>float
+</i></b>
+<th><b><i>float-extended-
+exponent
+</i></b>
+<th><b><i>
+</i></b>
+<b><i>double
+</i></b>
+<th><b><i>double-extended- 
+exponent
+</i></b>
+<tr><td><a name="34083"></a>
+<i>N</i>
+<td><a name="34085"></a>
+24
+<td><a name="34087"></a>
+24
+<td><a name="34089"></a>
+53
+<td><a name="34091"></a>
+53
+
+<tr><td><a name="34093"></a>
+K
+<td><a name="34095"></a>
+8
+<td><a name="34097"></a>
+<img src="chars/gtequal.gif"> 11
+<td><a name="34099"></a>
+11
+<td><a name="34101"></a>
+<img src="chars/gtequal.gif"> 15
+
+<tr><td><a name="34103"></a>
+<i>E</i>max
+<td><a name="34105"></a>
++127
+<td><a name="34107"></a>
+<img src="chars/gtequal.gif"> +1023
+<td><a name="34109"></a>
++1023
+<td><a name="34111"></a>
+<img src="chars/gtequal.gif"> +16383
+
+<tr><td><a name="34113"></a>
+<i>E</i>min
+<td><a name="34115"></a>
+-126
+<td><a name="34117"></a>
+<img src="chars/lt_equal.gif"> -1022
+<td><a name="34119"></a>
+-1022
+<td><a name="34121"></a>
+<img src="chars/lt_equal.gif"> -16382
+
+</Table><br><br><p>
+<a name="36244"></a>
+Where one or both extended-exponent value sets are supported by an implementation, then for each supported extended-exponent value set there is a specific implementation-dependent constant <i>K</i>, whose value is constrained by <a href="Overview.doc.html#34123">Table 3.1</a>; this value <i>K</i> in turn dictates the values for <i>E</i>min and <i>E</i>max.<p>
+<a name="34020"></a>
+Each of the four value sets includes not only the finite nonzero values that are ascribed to it above, but also the five values positive zero, negative zero, positive infinity, negative infinity, and NaN.<p>
+<a name="34021"></a>
+Note that the constraints in <a href="Overview.doc.html#34123">Table 3.1</a> are designed so that every element of the float value set is necessarily also an element of the float-extended-exponent value set, the double value set, and the double-extended-exponent value set. Likewise, each element of the double value set is necessarily also an element of the double-extended-exponent value set. Each extended-exponent value set has a larger range of exponent values than the corresponding standard value set, but does not have more precision.<p>
+<a name="32626"></a>
+The elements of the float value set are exactly the values that can be represented using the single floating-point format defined in the IEEE 754 standard, except that there is only one NaN value (IEEE 754 specifies 2<sup>24</sup> - 2 distinct NaN values). The elements of the double value set are exactly the values that can be represented using the double floating-point format defined in the IEEE 754 standard, except that there is only one NaN value (IEEE 754 specifies 2<sup>53</sup> - 2 distinct NaN values). Note, however, that the elements of the float-extended-exponent and double-extended-exponent value sets defined here do <i>not</i> correspond to the values that be represented using IEEE 754 single extended and double extended formats, respectively. This specification does not mandate a specific representation for the values of the floating-point value sets except where floating-point values must be represented in the <code>class</code> file format (<a href="ClassFile.doc.html#21942">&#167;4.4.4</a>, <a href="ClassFile.doc.html#1348">&#167;4.4.5)</a>.<p>
+<a name="33767"></a>
+The float, float-extended-exponent, double, and double-extended-exponent value sets are not types. It is always correct for an implementation of the Java virtual machine to use an element of the float value set to represent a value of type float; however, it may be permissible in certain contexts for an implementation to use an element of the float-extended-exponent value set instead. Similarly, it is always correct for an implementation to use an element of the double value set to represent a value of type double; however, it may be permissible in certain contexts for an implementation to use an element of the double-extended-exponent value set instead.<p>
+<a name="28247"></a>
+Except for NaNs, values of the floating-point value sets are <i>ordered</i>. When arranged from smallest to largest, they are negative infinity, negative finite values, positive and negative zero, positive finite values, and positive infinity.<p>
+<a name="28249"></a>
+Floating-point positive zero and floating-point negative zero compare as equal, but there are other operations that can distinguish them; for example, dividing <code>1.0</code> by <code>0.0</code> produces positive infinity, but dividing <code>1.0</code> by <code>-0.0</code> produces negative infinity.<p>
+<a name="34565"></a>
+NaNs are <i>unordered</i>, so numerical comparisons and tests for numerical equality have the value <code>false</code> if either or both of their operands are NaN. In particular, a test for numerical equality of a value against itself has the value <code>false</code> if and only if the value is NaN. A test for numerical inequality has the value <code>true</code> if either operand is NaN.<p>
+<a name="34568"></a>
+<h3>3.3.3    The <code>returnAddress</code> Type and Values</h3>
+<a name="34571"></a>
+The <code>returnAddress</code> type is used by the Java virtual machine's <i>jsr</i>, <i>ret</i>, and <i>jsr_w</i> 
+instructions. The values of the <code>returnAddress</code> type are pointers to the opcodes 
+of Java virtual machine instructions. Unlike the numeric primitive types, the 
+<code>returnAddress</code> type does not correspond to any Java programming language 
+type and cannot be modified by the running program.
+<p><a name="22909"></a>
+<h3>3.3.4    The <code>boolean</code> Type</h3>
+<a name="22914"></a>
+Although the Java virtual machine defines a <code>boolean</code> type, it only provides very 
+limited support for it. There are no Java virtual machine instructions solely dedicated
+to operations on <code>boolean</code> values. Instead, expressions in the Java programming
+language that operate on <code>boolean</code> values are compiled to use values of the 
+Java virtual machine <code>int</code> data type. 
+<p><a name="22912"></a>
+The Java virtual machine does directly support <code>boolean</code> arrays. Its <i>newarray</i> instruction enables creation of <code>boolean</code> arrays. Arrays of type <code>boolean</code> are accessed and modified using the <code>byte</code> array instructions <i>baload</i> and <i>bastore</i>.<a href="#24357"><sup>2</sup></a><p>
+<a name="31764"></a>
+The Java virtual machine encodes <code>boolean</code> array components using <i>1</i> to represent <code>true</code> and <i>0</i> to represent <code>false</code>. Where Java programming language <code>boolean</code> values are mapped by compilers to values of Java virtual machine type <code>int</code>, the compilers must use the same encoding. <p>
+<a name="15079"></a>
+<hr><h2>3.4    Reference Types and Values</h2>
+<a name="15127"></a>
+There are three kinds of <code>reference</code> types: class types, array types, and interface 
+types. Their values are references to dynamically created class instances, arrays, or 
+class instances or arrays that implement interfaces, respectively. A <code>reference</code> 
+value may also be the special null reference, a reference to no object, which will be 
+denoted here by <code>null</code>. The <code>null</code> reference initially has no runtime type, but may be 
+cast to any type <a href="Concepts.doc.html#22930">(&#167;2.4)</a>. 
+<p><a name="31978"></a>
+The Java virtual machine specification does not mandate a concrete value encoding <code>null</code>.<p>
+<a name="1732"></a>
+<hr><h2>3.5    Runtime Data Areas</h2>
+<a name="35268"></a>
+The Java virtual machine defines various runtime data areas that are used during 
+execution of a program. Some of these data areas are created on Java virtual 
+machine start-up and are destroyed only when the Java virtual machine exits. Other 
+data areas are per thread. Per-thread data areas are created when a thread is created 
+and destroyed when the thread exits.
+<p><a name="6648"></a>
+<h3>3.5.1    The <code>pc</code> Register</h3>
+<a name="25816"></a>
+The Java virtual machine can support many threads of execution at once <a href="Concepts.doc.html#33308">(&#167;2.19)</a>. 
+Each Java virtual machine thread has its own <code>pc</code> (program counter) register. At any 
+point, each Java virtual machine thread is executing the code of a single method, the 
+current method <a href="Overview.doc.html#17257">(&#167;3.6)</a> for that thread. If that method is not <code>native</code>, the <code>pc</code> register 
+contains the address of the Java virtual machine instruction currently being executed.
+If the method currently being executed by the thread is <code>native</code>, the value of 
+the Java virtual machine's <code>pc</code> register is undefined. The Java virtual machine's <code>pc</code> 
+register is wide enough to hold a <code>returnAddress</code> or a native pointer on the specific 
+platform.
+<p><a name="6654"></a>
+<h3>3.5.2    Java Virtual Machine Stacks</h3>
+<a name="30934"></a>
+Each Java virtual machine thread has a private <i>Java virtual machine stack</i>, created at 
+the same time as the thread.<a href="#30937"><sup>3</sup></a> A Java virtual machine stack stores frames (<a href="Overview.doc.html#17257">&#167;3.6)</a>. A 
+Java virtual machine stack is analogous to the stack of a conventional language such 
+as C: it holds local variables and partial results, and plays a part in method invocation
+and return. Because the Java virtual machine stack is never manipulated directly 
+except to push and pop frames, frames may be heap allocated. The memory for a 
+Java virtual machine stack does not need to be contiguous.
+<p><a name="36272"></a>
+The Java virtual machine specification permits Java virtual machine stacks either to be of a fixed size or to dynamically expand and contract as required by the computation. If the Java virtual machine stacks are of a fixed size, the size of each Java virtual machine stack may be chosen independently when that stack is created. A Java virtual machine implementation may provide the programmer or the user control over the initial size of Java virtual machine stacks, as well as, in the case of dynamically expanding or contracting Java virtual machine stacks, control over the maximum and minimum sizes.<a href="#36275"><sup>4</sup></a> <p>
+<a name="23152"></a>
+The following exceptional conditions are associated with Java virtual machine stacks:<p>
+<ul><li>If the computation in a thread requires a larger Java virtual machine stack than is permitted, the Java virtual machine throws a <code>StackOverflowError</code>. <p>
+<li>If Java virtual machine stacks can be dynamically expanded, and expansion is attempted but insufficient memory can be made available to effect the expansion, or if insufficient memory can be made available to create the initial Java virtual machine stack for a new thread, the Java virtual machine throws an <code>OutOfMemoryError</code>.
+</ul><a name="15730"></a>
+<h3>3.5.3    Heap</h3>
+<a name="6655"></a>
+The Java virtual machine has a <i>heap</i> that is shared among all Java virtual machine 
+threads. The heap is the runtime data area from which memory for all class 
+instances and arrays is allocated. 
+<p><a name="21949"></a>
+The heap is created on virtual machine start-up. Heap storage for objects is reclaimed by an automatic storage management system (known as a <i>garbage collector</i>); objects are never explicitly deallocated. The Java virtual machine assumes no particular type of automatic storage management system, and the storage management technique may be chosen according to the implementor's system requirements. The heap may be of a fixed size or may be expanded as required by the computation and may be contracted if a larger heap becomes unnecessary. The memory for the heap does not need to be contiguous. <p>
+<a name="37329"></a>
+A Java virtual machine implementation may provide the programmer or the user control over the initial size of the heap, as well as, if the heap can be  dynamically expanded or contracted, control over the maximum and minimum heap size.<a href="#30988"><sup>5</sup></a>
+<p><a name="23145"></a>
+The following exceptional condition is associated with the heap:<p>
+<ul><li>If a computation requires more heap than can be made available by the automatic storage management system, the Java virtual machine throws an <code>OutOfMemoryError</code>.
+</ul><a name="6656"></a>
+<h3>3.5.4    Method Area</h3>
+<a name="6657"></a>
+The Java virtual machine has a <i>method area</i> that is shared among all Java virtual 
+machine threads. The method area is analogous to the storage area for compiled 
+code of a conventional language or analogous to the "text" segment in a UNIX process.
+It stores per-class structures such as the runtime constant pool, field and 
+method data, and the code for methods and constructors, including the special methods
+<a href="Overview.doc.html#12174">(&#167;3.9)</a> used in class and instance initialization and interface type initialization. 
+<p><a name="21952"></a>
+The method area is created on virtual machine start-up. Although the method area is logically part of the heap, simple implementations may choose not to either garbage collect or compact it. This version of the Java virtual machine specification does not mandate the location of the method area or the policies used to manage compiled code. The method area may be of a fixed size or may be expanded as required by the computation and may be contracted if a larger method area becomes unnecessary. The memory for the method area does not need to be contiguous. <p>
+<a name="22992"></a>
+A Java virtual machine implementation may provide the programmer or the user control over the initial size of the method area, as well as, in the case of a varying-size method area, control over the maximum and minimum method area size.<a href="#31002"><sup>6</sup></a><p>
+<a name="23163"></a>
+The following exceptional condition is associated with the method area:<p>
+<ul><li>If memory in the method area cannot be made available to satisfy an allocation request, the Java virtual machine throws an <code>OutOfMemoryError.</code>
+</ul><a name="22972"></a>
+<h3>3.5.5    Runtime Constant Pool</h3>
+<a name="22973"></a>
+A <i>runtime constant pool</i> is a per-class or per-interface runtime representation of the 
+<code>constant_pool</code> table in a <code>class</code> file (<a href="ClassFile.doc.html#20080">&#167;4.4</a>). It contains several kinds of constants, 
+ranging from numeric literals known at compile time to method and field references 
+that must be resolved at run time. The runtime constant pool serves a function similar
+to that of a symbol table for a conventional programming language, although 
+it contains a wider range of data than a typical symbol table.
+<p><a name="23189"></a>
+Each runtime constant pool is allocated from the Java virtual machine's method area <a href="Overview.doc.html#6656">(&#167;3.5.4)</a>. The runtime constant pool for a class or interface is constructed when the class or interface is created <a href="ConstantPool.doc.html#72007">(&#167;5.3)</a> by the Java virtual machine. <p>
+<a name="23215"></a>
+The following exceptional condition is associated with the construction of the runtime constant pool for a class or interface:<p>
+<ul><li>When creating a class or interface, if the construction of the runtime constant pool requires more memory than can be made available in the method area of the Java virtual machine, the Java virtual machine throws an <code>OutOfMemoryError</code>.
+</ul><a name="23194"></a>
+See <a href="ConstantPool.doc.html#67960">Chapter 5</a> for information about the construction of the runtime constant pool.<p>
+<a name="15637"></a>
+<h3>3.5.6    Native Method Stacks</h3>
+<a name="25597"></a>
+An implementation of the Java virtual machine may use conventional stacks, colloquially
+called "C stacks," to support <code>native</code> methods, methods written in a language
+other than the Java programming language. Native method stacks may also be 
+used by the implementation of an interpreter for the Java virtual machine's instruction
+set in a language such as C. Java virtual machine implementations that cannot 
+load <code>native</code> methods and that do not themselves rely on conventional stacks need 
+not supply native method stacks. If supplied, native method stacks are typically allocated
+per thread when each thread is created.
+<p><a name="36284"></a>
+The Java virtual machine specification permits native method stacks either to be of a fixed size or to dynamically expand and contract as required by the computation. If the native method stacks are of a fixed size, the size of each native method stack may be chosen independently when that stack is created. In any case, a Java virtual machine implementation may provide the programmer or the user control over the initial size of the native method stacks. In the case of varying-size native method stacks, it may also make available control over the maximum and minimum method stack sizes.<a href="#36289"><sup>7</sup></a><p>
+<a name="31034"></a>
+The following exceptional conditions are associated with native method stacks:<p>
+<ul><li>If the computation in a thread requires a larger native method stack than is  permitted, the Java virtual machine throws a <code>StackOverflowError</code>. <p>
+<li>If native method stacks can be dynamically expanded and native method stack expansion is attempted but insufficient memory can be made available, or if insufficient memory can be made available to create the initial native method stack for a new thread, the Java virtual machine throws an <code>OutOfMemoryError</code>.
+</ul><a name="17257"></a>
+<hr><h2>3.6    Frames</h2>
+<a name="1962"></a>
+A <i>frame</i> is used to store data and partial results, as well as to perform dynamic linking
+, return values for methods, and dispatch exceptions. 
+<p><a name="15581"></a>
+A new frame is created each time a method is invoked. A frame is destroyed when its method invocation completes, whether that completion is normal or abrupt (it throws an uncaught exception). Frames are allocated from the Java virtual machine stack <a href="Overview.doc.html#6654">(&#167;3.5.2)</a> of the thread creating the frame. Each frame has its own array of local variables <a href="Overview.doc.html#15722">(&#167;3.6.1)</a>, its own operand stack <a href="Overview.doc.html#28851">(&#167;3.6.2)</a>, and a reference to the runtime constant pool <a href="Overview.doc.html#22972">(&#167;3.5.5)</a> of the class of the current method. <p>
+<a name="31659"></a>
+The sizes of the local variable array and the operand stack are determined at compile time and are supplied along with the code for the method associated with the frame <a href="ClassFile.doc.html#1546">(&#167;4.7.3)</a>. Thus the size of the frame data structure depends only on the implementation of the Java virtual machine, and the memory for these structures can be allocated simultaneously on method invocation.<p>
+<a name="15582"></a>
+Only one frame, the frame for the executing method, is active at any point in a given thread of control. This frame is referred to as the <i>current frame</i>, and its method is known as the <i>current method</i>. The class in which the current method is defined is the <i>current class</i>. Operations on local variables and the operand stack are typically with reference to the current frame. <p>
+<a name="23270"></a>
+A frame ceases to be current if its method invokes another method or if its method completes. When a method is invoked, a new frame is created and becomes current when control transfers to the new method. On method return, the current frame passes back the result of its method invocation, if any, to the previous frame. The current frame is then discarded as the previous frame becomes the current one.<p>
+<a name="30465"></a>
+Note that a frame created by a thread is local to that thread and cannot be referenced by any other thread.<p>
+<a name="15722"></a>
+<h3>3.6.1    Local Variables</h3>
+<a name="31542"></a>
+Each frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> contains an array of variables known as its <i>local variables</i>. The 
+length of the local variable array of a frame is determined at compile time and supplied
+in the binary representation of a class or interface along with the code for the 
+method associated with the frame <a href="ClassFile.doc.html#1546">(&#167;4.7.3)</a>.
+<p><a name="30435"></a>
+A single local variable can hold a value of type <code>boolean</code>, <code>byte</code>, <code>char</code>, <code>short</code>, <code>int</code>, <code>float</code>, <code>reference</code>, or <code>returnAddress</code>. A pair of local variables can hold a value of type <code>long</code> or <code>double</code>.<p>
+<a name="15724"></a>
+Local variables are addressed by indexing. The index of the first local variable is zero. An integer is be considered to be an index into the local variable array if and only if that integer is between zero and one less than the size of the local variable array. <p>
+<a name="29885"></a>
+A value of type <code>long</code> or type <code>double</code> occupies two consecutive local variables. Such a value may only be addressed using the lesser index. For example, a value of type <code>double</code> stored in the local variable array at index <em>n</em> actually occupies the local variables with indices <em>n</em> and <em>n</em> &#32;+1; however, the local variable at index <em>n</em> &#32;+1 cannot be loaded from. It can be stored into. However, doing so invalidates the contents of local variable <em>n</em>.<p>
+<a name="30397"></a>
+The Java virtual machine does not require <i>n</i> to be even. In intuitive terms, values of types <code>double</code> and <code>long</code> need not be 64-bit aligned in the local variables array. Implementors are free to decide the appropriate way to represent such values using the two local variables reserved for the value.<p>
+<a name="31482"></a>
+The Java virtual machine uses local variables to pass parameters on method invocation. On class method invocation any parameters are passed in consecutive local variables starting from local variable <i>0</i>. On instance method invocation, local variable <i>0</i> is always used to pass a reference to the object on which the instance method is being invoked (<code>this</code> in the Java programming language). Any parameters are subsequently passed in consecutive local variables starting from local variable <i>1</i>.<p>
+<a name="28851"></a>
+<h3>3.6.2    Operand Stacks</h3>
+<a name="31560"></a>
+Each frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> contains a last-in-first-out (LIFO) stack known as its <i>operand 
+stack</i>. The maximum depth of the operand stack of a frame is determined at compile 
+time and is supplied along with the code for the method associated with the frame 
+<a href="ClassFile.doc.html#1546">(&#167;4.7.3)</a>.
+<p><a name="31519"></a>
+Where it is clear by context, we will sometimes refer to the operand stack of the current frame as simply the operand stack.<p>
+<a name="29825"></a>
+The operand stack is empty when the frame that contains it is created. The Java virtual machine supplies instructions to load constants or values from local variables or fields onto the operand stack. Other Java virtual machine instructions take operands from the operand stack, operate on them, and push the result back onto the operand stack. The operand stack is also used to prepare parameters to be passed to methods and to receive method results. <p>
+<a name="15727"></a>
+For example, the <i>iadd</i> instruction adds two <code>int</code> values together. It requires that the <code>int</code> values to be added be the top two values of the operand stack, pushed there by previous instructions. Both of the <code>int</code> values are popped from the operand stack. They are added, and their sum is pushed back onto the operand stack. Subcomputations may be nested on the operand stack, resulting in values that can be used by the encompassing computation. <p>
+<a name="15728"></a>
+Each entry on the operand stack can hold a value of any Java virtual machine type, including a value of type <code>long</code> or type <code>double</code>. <p>
+<a name="15729"></a>
+Values from the operand stack must be operated upon in ways appropriate to their types. It is not possible, for example, to push two <code>int</code> values and subsequently treat them as a <code>long</code> or to push two <code>float</code> values and subsequently add them with an <i>iadd</i> instruction. A small number of Java virtual machine instructions (the <i>dup</i> instructions and <i>swap</i>) operate on runtime data areas as raw values without regard to their specific types; these instructions are defined in such a way that they cannot be used to modify or break up individual values. These restrictions on operand stack manipulation are enforced through <code>class</code> file verification <a href="ClassFile.doc.html#88597">(&#167;4.9)</a>.<p>
+<a name="29842"></a>
+At any point in time an operand stack has an associated depth, where a value of type <code>long</code> or <code>double</code> contributes two units to the depth and a value of any other type contributes one unit.<p>
+<a name="1963"></a>
+<h3>3.6.3    Dynamic Linking</h3>
+<a name="1913"></a>
+Each frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> contains a reference to the runtime constant pool <a href="Overview.doc.html#22972">(&#167;3.5.5)</a> for 
+the type of the current method to support <i>dynamic linking</i> of the method code. The 
+<code>class</code> file code for a method refers to methods to be invoked and variables to be 
+accessed via symbolic references. Dynamic linking translates these symbolic 
+method references into concrete method references, loading classes as necessary 
+to resolve as-yet-undefined symbols, and translates variable accesses into appropriate
+offsets in storage structures associated with the runtime location of these 
+variables.
+<p><a name="1972"></a>
+This late binding of the methods and variables makes changes in other classes that a method uses less likely to break this code.<p>
+<a name="1973"></a>
+<h3>3.6.4    Normal Method Invocation Completion</h3>
+<a name="1920"></a>
+A method invocation <i>completes normally</i> if that invocation does not cause an exception
+(<a href="Concepts.doc.html#22727">&#167;2.16</a>, <a href="Overview.doc.html#15494">&#167;3.10)</a> to be thrown, either directly from the Java virtual machine or as a 
+result of executing an explicit <code>throw</code> statement. If the invocation of the current 
+method completes normally, then a value may be returned to the invoking method. 
+This occurs when the invoked method executes one of the return instructions 
+<a href="Overview.doc.html#31293">(&#167;3.11.8)</a>, the choice of which must be appropriate for the type of the value being 
+returned (if any).
+<p><a name="1980"></a>
+The current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> is used in this case to restore the state of the invoker, including its local variables and operand stack, with the program counter of the invoker appropriately incremented to skip past the method invocation instruction. Execution then continues normally in the invoking method's frame with the returned value (if any) pushed onto the operand stack of that frame.<p>
+<a name="22091"></a>
+<h3>3.6.5    Abrupt Method Invocation Completion</h3>
+<a name="22092"></a>
+A method invocation <i>completes abruptly </i>if execution of a Java virtual machine 
+instruction within the method causes the Java virtual machine to throw an exception 
+(<a href="Concepts.doc.html#22727">&#167;2.16</a>, <a href="Overview.doc.html#15494">&#167;3.10)</a>, and that exception is not handled within the method. Execution of an 
+<i>athrow</i> instruction also causes an exception to be explicitly thrown and, if the 
+exception is not caught by the current method, results in abrupt method invocation 
+completion. A method invocation that completes abruptly never returns a value to its 
+invoker.
+<p><a name="22093"></a>
+<h3>3.6.6    Additional Information</h3>
+<a name="22094"></a>
+A frame may be extended with additional implementation-specific information, 
+such as debugging information.
+<p><a name="16066"></a>
+<hr><h2>3.7    Representation of Objects</h2>
+<a name="16067"></a>
+The Java virtual machine does not mandate any particular internal structure for 
+objects.<a href="#31069"><sup>8</sup></a>
+<p><a name="35253"></a>
+<hr><h2>3.8    Floating-Point Arithmetic</h2>
+<a name="35257"></a>
+The Java virtual machine incorporates a subset of the floating-point arithmetic specified
+in <i>IEEE Standard for Binary Floating-Point Arithmetic</i> (ANSI/IEEE Std. 
+754-1985, New York).
+<p><a name="35254"></a>
+<h3>3.8.1    Java Virtual Machine Floating-Point Arithmetic and IEEE 754</h3>
+<a name="33128"></a>
+The key differences between the floating-point arithmetic supported by the Java virtual
+machine and the IEEE 754 standard are:
+<p><ul><li>The floating-point operations of the Java virtual machine do not throw exceptions, trap, or otherwise signal the IEEE 754 exceptional conditions of invalid operation, division by zero, overflow, underflow, or inexact. The Java virtual machine has no signaling NaN value.<p>
+<li>The Java virtual machine does not support IEEE 754 signaling floating-point comparisons.<p>
+<li>The rounding operations of the Java virtual machine always use IEEE 754 round to nearest mode. Inexact results are rounded to the nearest representable value, with ties going to the value with a zero least-significant bit. This is the IEEE 754 default mode. But Java virtual machine instructions that convert   values of floating-point types to values of integral types round toward zero. The Java virtual machine does not give any means to change the floating-point rounding mode.<p>
+<li>The Java virtual machine does not support either the IEEE 754 single extended or double extended format, except insofar as the double and double-extended-exponent value sets may be said to support the single extended format. The float-extended-exponent and double-extended-exponent value sets, which may optionally be supported, do not correspond to the values of the IEEE 754 extended formats: the IEEE 754 extended formats require extended precision as well as extended exponent range.
+</ul><a name="28905"></a>
+<h3>3.8.2    Floating-Point Modes</h3>
+<a name="31078"></a>
+Every method has a <i>floating-point mode</i>, which is either <i>FP-strict</i> or <i>not FP-strict</i>. 
+The floating-point mode of a method is determined by the setting of the 
+<code>ACC_STRICT</code> bit of the <code>access_flags</code> item of the <code>method_info</code> structure <a href="ClassFile.doc.html#1513">(&#167;4.6)</a> 
+defining the method. A method for which this bit is set is FP-strict; otherwise, the 
+method is not FP-strict.
+<p><a name="28953"></a>
+Note that this mapping of the <code>ACC_STRICT</code> bit implies that methods in classes compiled by a compiler that predates the Java 2 platform, v1.2, are effectively not FP-strict.<p>
+<a name="28951"></a>
+We will refer to an operand stack as having a given floating-point mode when the method whose invocation created the frame containing the operand stack has that floating-point mode. Similarly, we will refer to a Java virtual machine instruction as having a given floating-point mode when the method containing that instruction has that floating-point mode.<p>
+<a name="37338"></a>
+If a float-extended-exponent value set is supported <a href="Overview.doc.html#28147">(&#167;3.3.2)</a>, values of type <code>float</code> on an operand stack that is not FP-strict may range over that value set except where prohibited by value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>. If a double-extended-exponent value set is supported <a href="Overview.doc.html#28147">(&#167;3.3.2)</a>, values of type <code>double</code> on an operand stack that is not FP-strict may range over that value set except where prohibited by value set conversion. <p>
+<a name="33036"></a>
+In all other contexts, whether on the operand stack or elsewhere, and regardless of floating-point mode, floating-point values of type <code>float</code> and <code>double</code> may only range over the float value set and double value set, respectively. In particular, class and instance fields, array elements, local variables, and method parameters may only contain values drawn from the standard value sets.<p>
+<a name="33120"></a>
+<h3>3.8.3    Value Set Conversion</h3>
+<a name="29146"></a>
+An implementation of the Java virtual machine that supports an extended floating-point
+value set is permitted or required, under specified circumstances, to map a 
+value of the associated floating-point type between the extended and the standard 
+value sets. Such a <i>value set conversion</i> is not a type conversion, but a mapping 
+between the value sets associated with the same type.
+<p><a name="29147"></a>
+Where value set conversion is indicated, an implementation is permitted to perform one of the following operations on a value:<p>
+<ul><li>If the value is of type <code>float</code> and is not an element of the float value set, it maps the value to the nearest element of the float value set. <p>
+<li>If the value is of type <code>double</code> and is not an element of the double value set, it maps the value to the nearest element of the double value set. 
+<p><a name="29150"></a>
+In addition, where value set conversion is indicated certain operations are required:<p>
+<li>Suppose execution of a Java virtual machine instruction that is not FP-strict causes a value of type <code>float</code> to be pushed onto an operand stack that is FP-strict, passed as a parameter, or stored into a local variable, a field, or an element of an array. If the value is not an element of the float value set, it maps the value to the nearest element of the float value set.<p>
+<li>Suppose execution of a Java virtual machine instruction that is not FP-strict causes a value of type <code>double</code> to be pushed onto an operand stack that is FP-strict, passed as a parameter, or stored into a local variable, a field, or an element of an array. If the value is not an element of the double value set, it maps the value to the nearest element of the double value set. 
+</ul><a name="29294"></a>
+Such required value set conversions may occur as a result of passing a parameter of a floating-point type during method invocation, including <code>native</code> method invocation; returning a value of a floating-point type from a method that is not FP-strict to a method that is FP-strict; or storing a value of a floating-point type into a local variable, a field, or an array in a method that is not FP-strict.<p>
+<a name="33077"></a>
+Not all values from an extended-exponent value set can be mapped exactly to a value in the corresponding standard value set. If a value being mapped is too large to be represented exactly (its exponent is greater than that permitted by the standard value set), it is converted to a (positive or negative) infinity of the corresponding type. If a value being mapped is too small to be represented exactly (its exponent is smaller than that permitted by the standard value set), it is rounded to the nearest of a representable denormalized value or zero of the same sign.<p>
+<a name="29306"></a>
+Value set conversion preserves infinities and NaNs and cannot change the sign of the value being converted. Value set conversion has no effect on a value that is not of a floating-point type.<p>
+<a name="12174"></a>
+<hr><h2>3.9    Specially Named Initialization Methods</h2>
+<a name="16270"></a>
+At the level of the Java virtual machine, every constructor <a href="Concepts.doc.html#16411">(&#167;2.12)</a> appears as an 
+<i>instance initialization method</i> that has the <code></code>special name <code>&lt;init&gt;</code>. This name is 
+supplied by a compiler. Because the name <code>&lt;init&gt;</code> is not a valid identifier, it cannot
+be used directly in a program written in the Java programming language. 
+Instance initialization methods may be invoked only within the Java virtual 
+machine by the <i>invokespecial</i> instruction, and they may be invoked only on uninitialized
+class instances. An instance initialization method takes on the access permissions
+ <a href="Concepts.doc.html#18914">(&#167;2.7.4)</a> of the constructor from which it was derived.
+<p><a name="16262"></a>
+A class or interface has at most one <i>class or interface initialization method</i> and is initialized <a href="Concepts.doc.html#19075">(&#167;2.17.4)</a> by invoking that method. The initialization method of a class or interface is static and takes no arguments. It has the special name <code>&lt;clinit&gt;</code>. This name is supplied by a compiler. Because the name <code>&lt;clinit&gt;</code> is not a valid identifier, it cannot be used directly in a program written in the Java programming language. Class and interface initialization methods are invoked implicitly by the Java virtual machine; they are never invoked directly from any Java virtual machine instruction, but are invoked only indirectly as part of the class initialization process.<p>
+<a name="15494"></a>
+<hr><h2>3.10    Exceptions</h2>
+<a name="27444"></a>
+In the Java programming language, throwing an exception results in an immediate nonlocal transfer of control from the point where the exception was thrown. This transfer of control may abruptly complete, one by one, multiple statements, constructor invocations, static and field initializer evaluations, and method invocations. The process continues until a <code>catch</code> clause <a href="Concepts.doc.html#22746">(&#167;2.16.2)</a> is found that handles the thrown value. If no such clause can be found, the current thread exits. <p>
+<a name="32345"></a>
+In cases where a <code>finally</code> clause <a href="Concepts.doc.html#22746">(&#167;2.16.2)</a> is used, the <code>finally</code> clause is executed during the propagation of an exception thrown from the associated <code>try</code> block and any associated <code>catch</code> block, even if no <code>catch</code> clause that handles the thrown exception may be found.<p>
+<a name="27504"></a>
+As implemented by the Java virtual machine, each <code>catch</code> or <code>finally</code> clause of a method is represented by an exception handler. An exception handler specifies the range of offsets into the Java virtual machine code implementing the method for which the exception handler is active, describes the type of exception that the exception handler is able to handle, and specifies the location of the code that is to handle that exception. An exception matches an exception handler if the offset of the instruction that caused the exception is in the range of offsets of the exception handler and the exception type is the same class as or a subclass of the class of exception that the exception handler handles. When an exception is thrown, the Java virtual machine searches for a matching exception handler in the current method. If a matching exception handler is found, the system branches to the exception handling code specified by the matched handler.<p>
+<a name="25058"></a>
+If no such exception handler is found in the current method, the current method invocation completes abruptly <a href="Overview.doc.html#22091">(&#167;3.6.5)</a>. On abrupt completion, the operand stack and local variables of the current method invocation are discarded, and its frame is popped, reinstating the frame of the invoking method. The exception is then rethrown in the context of the invoker's frame and so on, continuing up the method invocation chain. If no suitable exception handler is found before the top of the method invocation chain is reached, the execution of the thread in which the exception was thrown is terminated.<p>
+<a name="25062"></a>
+The order in which the exception handlers of a method are searched for a match is important. Within a <code>class</code> file the exception handlers for each method are stored in a table <a href="ClassFile.doc.html#1546">(&#167;4.7.3)</a>. At run time, when an exception is thrown, the Java virtual machine searches the exception handlers of the current method in the order that they appear in the corresponding exception handler table in the <code>class</code> file, starting from the beginning of that table. Because <code>try</code> statements are structured, a compiler for the Java programming language can always order the entries of the exception handler table such that, for any thrown exception and any program counter value in that method, the first exception handler that matches the thrown exception corresponds to the innermost matching <code>catch</code> or <code>finally</code> clause. <p>
+<a name="25026"></a>
+Note that the Java virtual machine does not enforce nesting of or any ordering of the exception table entries of a method <a href="ClassFile.doc.html#9855">(&#167;4.9.5)</a>. The exception handling semantics of the Java programming language are implemented only through cooperation with the compiler. When <code>class</code> files are generated by some other means, the defined search procedure ensures that all Java virtual machines will behave consistently.<p>
+<a name="25085"></a>
+More information on the implementation of <code>catch</code> and <code>finally</code> clauses is given in &#32;<a href="Compiling.doc.html#2839">Chapter 7</a>, <a href="Compiling.doc.html#2989"></a><a href="Compiling.doc.html#2989">"Compiling for the Java Virtual Machine."</a><p>
+<a name="7143"></a>
+<hr><h2>3.11    Instruction Set Summary</h2>
+<a name="2111"></a>
+A Java virtual machine instruction consists of a one-byte <em>opcode</em> specifying the 
+operation to be performed, followed by zero or more <em>operands </em>supplying arguments 
+or data that are used by the operation. Many instructions have no operands and consist
+only of an opcode.
+<p><a name="2073"></a>
+Ignoring exceptions, the inner loop of a Java virtual machine interpreter is effectively<p>
+<blockquote><pre>
+do {
+     fetch an opcode;
+     if (operands) fetch operands;
+     execute the action for the opcode;
+} while (there is more to do);
+</pre></blockquote><a name="16703"></a>
+The number and size of the operands are determined by the opcode. If an operand is more than one byte in size, then it is stored in <em>big-endian</em> order-high-order byte first. For example, an unsigned 16-bit index into the local variables is stored as two unsigned bytes, <i>byte1</i> and <i>byte2</i>, such that its value is <p>
+<blockquote>(<i>byte1</i> << <code>8)&#32;|&#32;</code><i>byte2
+</i></blockquote><a name="21440"></a>
+The bytecode instruction stream is only single-byte aligned. The two exceptions are 
+the <i>tableswitch</i> and <i>lookupswitch</i> instructions, which are padded to force internal 
+alignment of some of their operands on 4-byte boundaries.
+<p><a name="25234"></a>
+The decision to limit the Java virtual machine opcode to a byte and to forgo data alignment within compiled code reflects a conscious bias in favor of compactness, possibly at the cost of some performance in naive implementations. A one-byte opcode also limits the size of the instruction set. Not assuming data alignment means that immediate data larger than a byte must be constructed from bytes at run time on many machines.<p>
+<a name="7565"></a>
+<h3>3.11.1    Types and the Java Virtual Machine</h3>
+<a name="7566"></a>
+Most of the instructions in the Java virtual machine instruction set encode type 
+information about the operations they perform. For instance, the <i>iload</i> instruction 
+loads the contents of a local variable, which must be an <code>int</code>, onto the operand stack. 
+The <i>fload</i> instruction does the same with a <code>float</code> value. The two instructions may 
+have identical implementations, but have distinct opcodes.
+<p><a name="7572"></a>
+For the majority of typed instructions, the instruction type is represented explicitly in the opcode mnemonic by a letter: <i>i</i> for an <code>int</code> operation, <i>l</i> for <code>long</code>, <i>s</i> for <code>short</code>, <i>b</i> for <code>byte</code>, <i>c</i> for <code>char</code>, <i>f</i> for <code>float</code>, <i>d</i> for <code>double</code>, and <i>a</i> for <code>reference</code>. Some instructions for which the type is unambiguous do not have a type letter in their mnemonic. For instance, <i>arraylength</i> always operates on an object that is an array. Some instructions, such as <i>goto</i>, an unconditional control transfer, do not operate on typed operands.<p>
+<a name="16866"></a>
+Given the Java virtual machine's one-byte opcode size, encoding types into opcodes places pressure on the design of its instruction set. If each typed instruction supported all of the Java virtual machine's runtime data types, there would be more instructions than could be represented in a byte. Instead, the instruction set of the Java virtual machine provides a reduced level of type support for certain operations. In other words, the instruction set is intentionally not orthogonal. Separate instructions can be used to convert between unsupported and supported data types as necessary.<p>
+<a name="20055"></a>
+<a href="Overview.doc.html#37356">Table 3.2</a> summarizes the type support in the instruction set of the Java virtual machine. A specific instruction, with type information, is built by replacing the <i>T</i> in the instruction template in the opcode column by the letter in the type column. If the type column for some instruction template and type is blank, then no instruction exists supporting that type of operation. For instance, there is a load instruction for type <code>int</code>, <i>iload</i>, but there is no load instruction for type <code>byte</code>. <p>
+<a name="37350"></a>
+Note that most instructions in <a href="Overview.doc.html#37356">Table 3.2</a> do not have forms for the integral types <code>byte</code>, <code>char</code>, and <code>short</code>. None have forms for the <code>boolean</code> type. Compilers encode loads of literal values of types <code>byte</code> and <code>short</code> using Java virtual machine instructions that sign-extend those values to values of type <code>int</code> at compile time or run time. Loads of literal values of types <code>boolean</code> and <code>char</code> are encoded using instructions that zero-extend the literal to a value of type <code>int</code> at compile time or run time. Likewise, loads from arrays of values of type <code>boolean</code>, <code>byte</code>, <code>short</code>, and <code>char</code> are encoded using Java virtual machine instructions that sign-extend or zero-extend the values to values of type <code>int</code>. Thus, most operations on values of actual types <code>boolean</code>, <code>byte</code>, <code>char</code>, and <code>short</code> are correctly performed by instructions operating on values of computational type <code>int</code>. 
+<p><a name="37356"></a><Table Border="1">
+<tr><th><b><i>opcode
+</i></b>
+<th><b><i><strong>byte
+</strong></i></b>
+<th><b><i><strong>short
+</strong></i></b>
+<th><b><i><strong>int
+</strong></i></b>
+<th><b><i><strong>long
+</strong></i></b>
+<th><b><i><strong>float
+</strong></i></b>
+<th><b><i><strong>double
+</strong></i></b>
+<th><b><i><strong>char
+</strong></i></b>
+<th><b><i><strong>reference
+</strong></i></b>
+<tr><td><a name="37392"></a>
+<i>Tipush</i>
+<td><a name="37394"></a>
+<i>bipush</i>
+<td><a name="37396"></a>
+<i>sipush</i>
+<td><a name="37398"></a>
+
+<td><a name="37400"></a>
+
+<td><a name="37402"></a>
+
+<td><a name="37404"></a>
+
+<td><a name="37406"></a>
+
+<td><a name="37408"></a>
+
+
+<tr><td><a name="37410"></a>
+<i>Tconst</i>
+<td><a name="37412"></a>
+
+<td><a name="37414"></a>
+
+<td><a name="37416"></a>
+<i>iconst</i>
+<td><a name="37418"></a>
+<i>lconst</i>
+<td><a name="37420"></a>
+<i>fconst</i>
+<td><a name="37422"></a>
+<i>dconst</i>
+<td><a name="37424"></a>
+
+<td><a name="37426"></a>
+<i>aconst</i>
+
+<tr><td><a name="37428"></a>
+<i>Tload</i>
+<td><a name="37430"></a>
+
+<td><a name="37432"></a>
+
+<td><a name="37434"></a>
+<i>iload</i>
+<td><a name="37436"></a>
+<i>lload</i>
+<td><a name="37438"></a>
+<i>fload</i>
+<td><a name="37440"></a>
+<i>dload</i>
+<td><a name="37442"></a>
+
+<td><a name="37444"></a>
+<i>aload</i>
+
+<tr><td><a name="37446"></a>
+<i>Tstore</i>
+<td><a name="37448"></a>
+
+<td><a name="37450"></a>
+
+<td><a name="37452"></a>
+<i>istore</i>
+<td><a name="37454"></a>
+<i>lstore</i>
+<td><a name="37456"></a>
+<i>fstore</i>
+<td><a name="37458"></a>
+<i>dstore</i>
+<td><a name="37460"></a>
+
+<td><a name="37462"></a>
+<i>astore</i>
+
+<tr><td><a name="37464"></a>
+<i>Tinc</i>
+<td><a name="37466"></a>
+
+<td><a name="37468"></a>
+
+<td><a name="37470"></a>
+<i>iinc</i>
+<td><a name="37472"></a>
+
+<td><a name="37474"></a>
+
+<td><a name="37476"></a>
+
+<td><a name="37478"></a>
+
+<td><a name="37480"></a>
+
+
+<tr><td><a name="37482"></a>
+<i>Taload</i>
+<td><a name="37484"></a>
+<i>baload</i>
+<td><a name="37486"></a>
+<i>saload</i>
+<td><a name="37488"></a>
+<i>iaload</i>
+<td><a name="37490"></a>
+<i>laload</i>
+<td><a name="37492"></a>
+<i>faload</i>
+<td><a name="37494"></a>
+<i>daload</i>
+<td><a name="37496"></a>
+<i>caload</i>
+<td><a name="37498"></a>
+<i>aaload</i>
+
+<tr><td><a name="37500"></a>
+<i>Tastore</i>
+<td><a name="37502"></a>
+<i>bastore</i>
+<td><a name="37504"></a>
+<i>sastore</i>
+<td><a name="37506"></a>
+<i>iastore</i>
+<td><a name="37508"></a>
+<i>lastore</i>
+<td><a name="37510"></a>
+<i>fastore</i>
+<td><a name="37512"></a>
+<i>dastore</i>
+<td><a name="37514"></a>
+<i>castore</i>
+<td><a name="37516"></a>
+<i>aastore</i>
+
+<tr><td><a name="37518"></a>
+<i>Tadd</i>
+<td><a name="37520"></a>
+
+<td><a name="37522"></a>
+
+<td><a name="37524"></a>
+<i>iadd</i>
+<td><a name="37526"></a>
+<i>ladd</i>
+<td><a name="37528"></a>
+<i>fadd</i>
+<td><a name="37530"></a>
+<i>dadd</i>
+<td><a name="37532"></a>
+
+<td><a name="37534"></a>
+
+
+<tr><td><a name="37536"></a>
+<i>Tsub</i>
+<td><a name="37538"></a>
+
+<td><a name="37540"></a>
+
+<td><a name="37542"></a>
+<i>isub</i>
+<td><a name="37544"></a>
+<i>lsub</i>
+<td><a name="37546"></a>
+<i>fsub</i>
+<td><a name="37548"></a>
+<i>dsub</i>
+<td><a name="37550"></a>
+
+<td><a name="37552"></a>
+
+
+<tr><td><a name="37554"></a>
+<i>Tmul</i>
+<td><a name="37556"></a>
+
+<td><a name="37558"></a>
+
+<td><a name="37560"></a>
+<i>imul</i>
+<td><a name="37562"></a>
+<i>lmul</i>
+<td><a name="37564"></a>
+<i>fmul</i>
+<td><a name="37566"></a>
+<i>dmul</i>
+<td><a name="37568"></a>
+
+<td><a name="37570"></a>
+
+
+<tr><td><a name="37572"></a>
+<i>Tdiv</i>
+<td><a name="37574"></a>
+
+<td><a name="37576"></a>
+
+<td><a name="37578"></a>
+<i>idiv</i>
+<td><a name="37580"></a>
+<i>ldiv</i>
+<td><a name="37582"></a>
+<i>fdiv</i>
+<td><a name="37584"></a>
+<i>ddiv</i>
+<td><a name="37586"></a>
+
+<td><a name="37588"></a>
+
+
+<tr><td><a name="37590"></a>
+<i>Trem</i>
+<td><a name="37592"></a>
+
+<td><a name="37594"></a>
+
+<td><a name="37596"></a>
+<i>irem</i>
+<td><a name="37598"></a>
+<i>lrem</i>
+<td><a name="37600"></a>
+<i>frem</i>
+<td><a name="37602"></a>
+<i>drem</i>
+<td><a name="37604"></a>
+
+<td><a name="37606"></a>
+
+
+<tr><td><a name="37608"></a>
+<i>Tneg</i>
+<td><a name="37610"></a>
+
+<td><a name="37612"></a>
+
+<td><a name="37614"></a>
+<i>ineg</i>
+<td><a name="37616"></a>
+<i>lneg</i>
+<td><a name="37618"></a>
+<i>fneg</i>
+<td><a name="37620"></a>
+<i>dneg</i>
+<td><a name="37622"></a>
+
+<td><a name="37624"></a>
+
+
+<tr><td><a name="37626"></a>
+<i>Tshl</i>
+<td><a name="37628"></a>
+
+<td><a name="37630"></a>
+
+<td><a name="37632"></a>
+<i>ishl</i>
+<td><a name="37634"></a>
+<i>lshl</i>
+<td><a name="37636"></a>
+
+<td><a name="37638"></a>
+
+<td><a name="37640"></a>
+
+<td><a name="37642"></a>
+
+
+<tr><td><a name="37644"></a>
+<i>Tshr</i>
+<td><a name="37646"></a>
+
+<td><a name="37648"></a>
+
+<td><a name="37650"></a>
+<i>ishr</i>
+<td><a name="37652"></a>
+<i>lshr</i>
+<td><a name="37654"></a>
+
+<td><a name="37656"></a>
+
+<td><a name="37658"></a>
+
+<td><a name="37660"></a>
+
+
+<tr><td><a name="37662"></a>
+Tushr
+<td><a name="37664"></a>
+
+<td><a name="37666"></a>
+
+<td><a name="37668"></a>
+iushr
+<td><a name="37670"></a>
+lushr
+<td><a name="37672"></a>
+
+<td><a name="37674"></a>
+
+<td><a name="37676"></a>
+
+<td><a name="37678"></a>
+
+
+<tr><td><a name="37680"></a>
+<i>Tand</i>
+<td><a name="37682"></a>
+
+<td><a name="37684"></a>
+
+<td><a name="37686"></a>
+<i>iand</i>
+<td><a name="37688"></a>
+<i>land</i>
+<td><a name="37690"></a>
+
+<td><a name="37692"></a>
+
+<td><a name="37694"></a>
+
+<td><a name="37696"></a>
+
+
+<tr><td><a name="37698"></a>
+<i>Tor</i>
+<td><a name="37700"></a>
+
+<td><a name="37702"></a>
+
+<td><a name="37704"></a>
+<i>ior</i>
+<td><a name="37706"></a>
+<i>lor</i>
+<td><a name="37708"></a>
+
+<td><a name="37710"></a>
+
+<td><a name="37712"></a>
+
+<td><a name="37714"></a>
+
+
+<tr><td><a name="37716"></a>
+<i>Txor</i>
+<td><a name="37718"></a>
+
+<td><a name="37720"></a>
+
+<td><a name="37722"></a>
+<i>ixor</i>
+<td><a name="37724"></a>
+<i>lxor</i>
+<td><a name="37726"></a>
+
+<td><a name="37728"></a>
+
+<td><a name="37730"></a>
+
+<td><a name="37732"></a>
+
+
+<tr><td><a name="37734"></a>
+<i>i2T</i>
+<td><a name="37736"></a>
+<i>i2b</i>
+<td><a name="37738"></a>
+<i>i2s</i>
+<td><a name="37740"></a>
+
+<td><a name="37742"></a>
+<i>i2l</i>
+<td><a name="37744"></a>
+<i>i2f</i>
+<td><a name="37746"></a>
+<i>i2d</i>
+<td><a name="37748"></a>
+
+<td><a name="37750"></a>
+
+
+<tr><td><a name="37752"></a>
+<i>l2T</i>
+<td><a name="37754"></a>
+
+<td><a name="37756"></a>
+
+<td><a name="37758"></a>
+<i>l2i</i>
+<td><a name="37760"></a>
+
+<td><a name="37762"></a>
+<i>l2f</i>
+<td><a name="37764"></a>
+<i>l2d</i>
+<td><a name="37766"></a>
+
+<td><a name="37768"></a>
+
+
+<tr><td><a name="37770"></a>
+<i>f2T</i>
+<td><a name="37772"></a>
+
+<td><a name="37774"></a>
+
+<td><a name="37776"></a>
+<i>f2i</i>
+<td><a name="37778"></a>
+<i>f2l</i>
+<td><a name="37780"></a>
+
+<td><a name="37782"></a>
+<i>f2d</i>
+<td><a name="37784"></a>
+
+<td><a name="37786"></a>
+
+
+<tr><td><a name="37788"></a>
+<i>d2T</i>
+<td><a name="37790"></a>
+
+<td><a name="37792"></a>
+
+<td><a name="37794"></a>
+<i>d2i</i>
+<td><a name="37796"></a>
+<i>d2l</i>
+<td><a name="37798"></a>
+<i>d2f</i>
+<td><a name="37800"></a>
+
+<td><a name="37802"></a>
+
+<td><a name="37804"></a>
+
+
+<tr><td><a name="37806"></a>
+<i>Tcmp</i>
+<td><a name="37808"></a>
+
+<td><a name="37810"></a>
+
+<td><a name="37812"></a>
+
+<td><a name="37814"></a>
+<i>lcmp</i>
+<td><a name="37816"></a>
+
+<td><a name="37818"></a>
+
+<td><a name="37820"></a>
+
+<td><a name="37822"></a>
+
+
+<tr><td><a name="37824"></a>
+<i>Tcmpl</i>
+<td><a name="37826"></a>
+
+<td><a name="37828"></a>
+
+<td><a name="37830"></a>
+
+<td><a name="37832"></a>
+
+<td><a name="37834"></a>
+<i>fcmpl</i>
+<td><a name="37836"></a>
+<i>dcmpl</i>
+<td><a name="37838"></a>
+
+<td><a name="37840"></a>
+
+
+<tr><td><a name="37842"></a>
+<i>Tcmpg</i>
+<td><a name="37844"></a>
+
+<td><a name="37846"></a>
+
+<td><a name="37848"></a>
+
+<td><a name="37850"></a>
+
+<td><a name="37852"></a>
+<i>fcmpg</i>
+<td><a name="37854"></a>
+<i>dcmpg</i>
+<td><a name="37856"></a>
+
+<td><a name="37858"></a>
+
+
+<tr><td><a name="37860"></a>
+<i>if_TcmpOP</i>
+<td><a name="37862"></a>
+
+<td><a name="37864"></a>
+
+<td><a name="37866"></a>
+<i>if_icmpOP</i>
+<td><a name="37868"></a>
+
+<td><a name="37870"></a>
+
+<td><a name="37872"></a>
+
+<td><a name="37874"></a>
+
+<td><a name="37876"></a>
+<i>if_acmpOP</i>
+
+<tr><td><a name="37878"></a>
+<i>Treturn</i>
+<td><a name="37880"></a>
+
+<td><a name="37882"></a>
+
+<td><a name="37884"></a>
+<i>ireturn</i>
+<td><a name="37886"></a>
+<i>lreturn</i>
+<td><a name="37888"></a>
+<i>freturn</i>
+<td><a name="37890"></a>
+<i>dreturn</i>
+<td><a name="37892"></a>
+
+<td><a name="37894"></a>
+<i>areturn</i>
+
+</Table><br><br><p>
+<a name="37979"></a>
+The mapping between Java virtual machine actual types and Java virtual machine computational types is summarized by <a href="Overview.doc.html#37906">Table 3.3</a>.
+<a name="37906"></a><p><Table Border="1">
+<tr><th><b><i>Actual Type
+</i></b>
+<th><b><i>Computational Type
+</i></b>
+<th><b><i>Category 
+</i></b>
+<tr><td><a name="37918"></a>
+<code>boolean</code>
+<td><a name="37920"></a>
+<code>int</code>
+<td><a name="37922"></a>
+category 1
+
+<tr><td><a name="37924"></a>
+<code>byte</code>
+<td><a name="37926"></a>
+<code>int</code>
+<td><a name="37928"></a>
+category 1
+
+<tr><td><a name="37930"></a>
+<code>char</code>
+<td><a name="37932"></a>
+<code>int</code>
+<td><a name="37934"></a>
+category 1
+
+<tr><td><a name="37936"></a>
+<code>short</code>
+<td><a name="37938"></a>
+<code>int</code>
+<td><a name="37940"></a>
+category 1
+
+<tr><td><a name="37942"></a>
+<code>int</code>
+<td><a name="37944"></a>
+<code>int</code>
+<td><a name="37946"></a>
+category 1
+
+<tr><td><a name="37948"></a>
+<code>float</code>
+<td><a name="37950"></a>
+<code>float</code>
+<td><a name="37952"></a>
+category 1
+
+<tr><td><a name="37954"></a>
+<code>reference</code>
+<td><a name="37956"></a>
+<code>reference</code>
+<td><a name="37958"></a>
+category 1
+
+<tr><td><a name="37960"></a>
+<code>returnAddress</code>
+<td><a name="37962"></a>
+<code>returnAddress</code>
+<td><a name="37964"></a>
+category 1
+
+<tr><td><a name="37966"></a>
+<code>long</code>
+<td><a name="37968"></a>
+<code>long</code>
+<td><a name="37970"></a>
+category 2
+
+<tr><td><a name="37972"></a>
+<code>double</code>
+<td><a name="37974"></a>
+<code>double</code>
+<td><a name="37976"></a>
+category 2
+
+</Table><br><br><p>
+<a name="27876"></a>
+<p>
+<a name="35235"></a>
+Certain Java virtual machine instructions such as <i>pop</i> and <i>swap</i> operate on the operand stack without regard to type; however, such instructions are constrained to use only on values of certain categories of computational types, also given in <a href="Overview.doc.html#37906">Table 3.3</a>.<p>
+<a name="27882"></a>
+The remainder of this chapter summarizes the Java virtual machine instruction set.<p>
+<a name="6348"></a>
+<h3>3.11.2    Load and Store Instructions</h3>
+<a name="31927"></a>
+The load and store instructions transfer values between the local variables <a href="Overview.doc.html#15722">(&#167;3.6.1)</a> 
+and the operand stack <a href="Overview.doc.html#28851">(&#167;3.6.2)</a> of a Java virtual machine frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>:
+<p><ul><li>Load a local variable onto the operand stack: <i>iload</i>, <i>iload_&lt;n&gt;</i>, <i>lload</i>, <i>lload_&lt;n&gt;</i>, <i>fload</i>, <i>fload_&lt;n&gt;</i>, <i>dload</i>, <i>dload_&lt;n&gt;</i>, <i>aload</i>, <i>aload_&lt;n&gt;</i>.<p>
+<li>Store a value from the operand stack into a local variable: <i>istore</i>, <i>istore_&lt;n&gt;</i>, <i>lstore</i>, <i>lstore_&lt;n&gt;</i>, <i>fstore</i>, <i>fstore_&lt;n&gt;</i>, <i>dstore</i>, <i>dstore_&lt;n&gt;</i>, <i>astore</i>, <i>astore_&lt;n&gt;</i>.<p>
+<li>Load a constant onto the operand stack: <i>bipush</i>, <i>sipush</i>, <i>ldc</i>, <i>ldc_w</i>, <i>ldc2_w</i>, <i>aconst_null</i>, <i>iconst_m1</i>, <i>iconst_&lt;i&gt;</i>, <i>lconst_&lt;l&gt;</i>, <i>fconst_&lt;f&gt;</i>, <i>dconst_&lt;d&gt;</i>.<p>
+<li>Gain access to more local variables using a wider index, or to a larger immediate operand: <i>wide</i>.
+</ul><a name="7346"></a>
+Instructions that access fields of objects and elements of arrays <a href="Overview.doc.html#16535">(&#167;3.11.5)</a> also transfer
+data to and from the operand stack.
+<p><a name="22321"></a>
+Instruction mnemonics shown above with trailing letters between angle brackets (for instance, <i>iload_&lt;n&gt;</i>) denote families of instructions (with members <i>iload_0</i>, <i>iload_1</i>, <i>iload_2</i>, and <i>iload_3</i> in the case of <i>iload_&lt;n&gt;</i>). Such families of instructions are specializations of an additional generic instruction (<i>iload</i>) that takes one operand. For the specialized instructions, the operand is implicit and does not need to be stored or fetched. The semantics are otherwise the same (<i>iload_0</i> means the same thing as <i>iload</i> with the operand <i>0</i>). The letter between the angle brackets specifies the type of the implicit operand for that family of instructions: for <i>&lt;n&gt;</i>, a nonnegative integer; for <i>&lt;i&gt;</i>, an <code>int</code>; for <i>&lt;l&gt;</i>, a <code>long</code>; for <i>&lt;f&gt;</i>, a <code>float</code>; and for <i>&lt;d&gt;</i>, a <code>double</code>. Forms for type <code>int</code> are used in many cases to perform operations on values of type <code>byte</code>, <code>char</code>, and <code>short</code> <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>. <p>
+<a name="22452"></a>
+This notation for instruction families is used throughout <i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification</i>.<p>
+<a name="6410"></a>
+<h3>3.11.3    Arithmetic Instructions</h3>
+<a name="31951"></a>
+The arithmetic instructions compute a result that is typically a function of two values
+on the operand stack, pushing the result back on the operand stack. There are 
+two main kinds of arithmetic instructions: those operating on integer values and 
+those operating on floating-point values. Within each of these kinds, the arithmetic 
+instructions are specialized to Java virtual machine numeric types. There is no direct 
+support for integer arithmetic on values of the <code>byte</code>, <code>short</code>, and <code>char</code> types 
+<a href="Overview.doc.html#7565">(&#167;3.11.1)</a>, or for values of the <code>boolean</code> type; those operations are handled by 
+instructions operating on type <code>int</code>. Integer and floating-point instructions also differ 
+in their behavior on overflow and divide-by-zero. The arithmetic instructions are as 
+follows:
+<p><ul><li>Add: <i>iadd</i>, <i>ladd</i>, <i>fadd</i>, <i>dadd</i>.<p>
+<li>Subtract: <i>isub</i>, <i>lsub</i>, <i>fsub</i>, <i>dsub</i>.<p>
+<li>Multiply: <i>imul</i>, <i>lmul</i>, <i>fmul</i>, <i>dmul</i>.<p>
+<li>Divide: <i>idiv</i>, <i>ldiv</i>, <i>fdiv</i>, <i>ddiv</i>.<p>
+<li>Remainder: <i>irem</i>, <i>lrem</i>, <i>frem</i>, <i>drem</i>.<p>
+<li>Negate: <i>ineg</i>, <i>lneg</i>, <i>fneg</i>, <i>dneg</i>.<p>
+<li>Shift: <i>ishl</i>, <i>ishr</i>, <i>iushr</i>, <i>lshl</i>, <i>lshr</i>, <i>lushr</i>.<p>
+<li>Bitwise OR: <i>ior</i>, <i>lor</i>.<p>
+<li>Bitwise AND: <i>iand</i>, <i>land</i>.<p>
+<li>Bitwise exclusive OR: <i>ixor</i>, <i>lxor</i>.<p>
+<li>Local variable increment: <i>iinc</i>.<p>
+<li>Comparison: <i>dcmpg</i>, <i>dcmpl</i>, <i>fcmpg</i>, <i>fcmpl</i>, <i>lcmp</i>.
+</ul><a name="31340"></a>
+The semantics of the Java programming language operators on integer and floating-point values (<a href="Concepts.doc.html#17876">&#167;2.4.2</a>, <a href="Concepts.doc.html#33499">&#167;2.4.4)</a> are directly supported by the semantics of the Java virtual machine instruction set.<p>
+<a name="16827"></a>
+The Java virtual machine does not indicate overflow during operations on integer data types. The only integer operations that can throw an exception are the integer divide instructions (<i>idiv</i> and <i>ldiv</i>) and the integer remainder instructions (<i>irem</i> and <i>lrem</i>), which throw an <code>ArithmeticException</code> if the divisor is zero.<p>
+<a name="14562"></a>
+Java virtual machine operations on floating-point numbers behave as specified in IEEE 754. In particular, the Java virtual machine requires full support of IEEE 754 <em>denormalized</em> floating-point numbers and <em>gradual underflow, </em>which make it easier to prove desirable properties of particular numerical algorithms.<p>
+<a name="14548"></a>
+The Java virtual machine requires that floating-point arithmetic behave as if every floating-point operator rounded its floating-point result to the result precision. <i>Inexact</i> results must be rounded to the representable value nearest to the infinitely precise result; if the two nearest representable values are equally near, the one having a least significant bit of zero is chosen. This is the IEEE 754 standard's default rounding mode, known as <i>round to nearest</i> mode.<p>
+<a name="24715"></a>
+The Java virtual machine uses the IEEE 754 <i>round towards zero</i> mode when converting a floating-point value to an integer. This results in the number being truncated; any bits of the significand that represent the fractional part of the operand value are discarded. Round towards zero mode chooses as its result the type's value closest to, but no greater in magnitude than, the infinitely precise result.<p>
+<a name="14553"></a>
+The Java virtual machine's floating-point operators do not throw runtime exceptions (not to be confused with IEEE 754 floating-point exceptions). An operation that overflows produces a signed infinity, an operation that underflows produces a denormalized value or a signed zero, and an operation that has no mathematically definite result produces NaN. All numeric operations with NaN as an operand produce NaN as a result.<p>
+<a name="32045"></a>
+Comparisons on values of type <code>long</code> (<i>lcmp</i>) perform a signed comparison. Comparisons on values of floating-point types (<i>dcmpg</i>, <i>dcmpl</i>, <i>fcmpg</i>, <i>fcmpl</i>) are performed using IEEE 754 nonsignaling comparisons.<p>
+<a name="14620"></a>
+<h3>3.11.4    Type Conversion Instructions</h3>
+<a name="21747"></a>
+The type conversion instructions allow conversion between Java virtual machine 
+numeric types. These may be used to implement explicit conversions in user code or 
+to mitigate the lack of orthogonality in the instruction set of the Java virtual machine. 
+<p><a name="16068"></a>
+The Java virtual machine directly supports the following widening numeric conversions:<p>
+<ul><li><code>int</code> to <code>long</code>, <code>float</code>, or <code>double</code><p>
+<li><code>long</code> to <code>float</code> or <code>double</code><p>
+<li><code>float</code> to <code>double</code>
+</ul><a name="35319"></a>
+The widening numeric conversion instructions are <i>i2l</i>, <i>i2f</i>, <i>i2d</i>, <i>l2f</i>, <i>l2d</i>, and <i>f2d</i>. The mnemonics for these opcodes are straightforward given the naming conventions for typed instructions and the punning use of 2 to mean "to." For instance, the <i>i2d</i> instruction converts an <code>int</code> value to a <code>double</code>. Widening numeric conversions do not lose information about the overall magnitude of a numeric value. Indeed, conversions widening from <code>int</code> to <code>long</code> and <code>int</code> to <code>double</code> do not lose any information at all; the numeric value is preserved exactly. Conversions widening from <code>float</code> to <code>double</code> that are FP-strict <a href="Overview.doc.html#28905">(&#167;3.8.2)</a> also preserve the numeric value exactly; however, such conversions that are not FP-strict may lose information about the overall magnitude of the converted value. <p>
+<a name="35344"></a>
+Conversion of an <code>int</code> or a <code>long</code> value to <code>float</code>, or of a <code>long</code> value to <code>double</code>, may lose <i>precision</i>, that is, may lose some of the least significant bits of the value; the resulting floating-point value is a correctly rounded version of the integer value, using IEEE 754 round to nearest mode.<p>
+<a name="16099"></a>
+A widening numeric conversion of an <code>int</code> to a <code>long</code> simply sign-extends the two's-complement representation of the <code>int</code> value to fill the wider format. A widening numeric conversion of a <code>char</code> to an integral type zero-extends the representation of the <code>char</code> value to fill the wider format.<p>
+<a name="16100"></a>
+Despite the fact that loss of precision may occur, widening numeric conversions never cause the Java virtual machine to throw a runtime exception (not to be confused with an IEEE 754 floating-point exception).<p>
+<a name="22401"></a>
+Note that widening numeric conversions do not exist from integral types <code>byte</code>, <code>char</code>, and <code>short</code> to type <code>int</code>. As noted in <a href="Overview.doc.html#7565">&#167;3.11.1</a>, values of type <code>byte</code>, <code>char</code>, and <code>short</code> are internally widened to type <code>int</code>, making these conversions implicit.<p>
+<a name="16095"></a>
+The Java virtual machine also directly supports the following narrowing numeric conversions:<p>
+<ul><li><code>int</code> to <code>byte</code>, <code>short</code>, or <code>char</code><p>
+<li><code>long</code> to <code>int</code><p>
+<li><code>float</code> to <code>int</code> or <code>long</code><p>
+<li><code>double</code> to <code>int</code>, <code>long</code>, or <code>float</code>
+</ul><a name="36943"></a>
+The narrowing numeric conversion instructions are <i>i2b</i>, <i>i2c</i>, <i>i2s</i>, <i>l2i</i>, <i>f2i</i>, <i>f2l</i>, <i>d2i</i>, <i>d2l</i>, and <i>d2f</i>. A narrowing numeric conversion can result in a value of different sign, a different order of magnitude, or both; it may thereby lose precision.<p>
+<a name="14592"></a>
+A narrowing numeric conversion of an <code>int</code> or <code>long</code> to an integral type T simply discards all but the N lowest-order bits, where N is the number of bits used to represent type T. This may cause the resulting value not to have the same sign as the input value.<p>
+<a name="14593"></a>
+In a narrowing numeric conversion of a floating-point value to an integral type T, where T is either <code>int</code> or <code>long</code>, the floating-point value is converted as follows:<p>
+<ul><li>If the floating-point value is NaN, the result of the conversion is an <code>int</code> or <code>long</code> <code>0</code>.<p>
+<li>Otherwise, if the floating-point value is not an infinity, the floating-point value is rounded to an integer value V using IEEE 754 round towards zero mode. There are two cases:<p>
+<ul><li>If T is <code>long</code> and this integer value can be represented as a <code>long</code>, then the result is the <code>long</code> value V.<p>
+<li>If T is of type <code>int</code> and this integer value can be represented as an <code>int</code>, then the result is the <code>int</code> value V.<p>
+</ul>
+<li>Otherwise:<p>
+<ul><li>Either the value must be too small (a negative value of large magnitude or negative infinity), and the result is the smallest representable value of type <code>int</code> or <code>long</code>.<p>
+<li>Or the value must be too large (a positive value of large magnitude or positive infinity), and the result is the largest representable value of type <code>int</code> or <code>long</code>.
+</ul></ul><a name="14609"></a>
+A narrowing numeric conversion from <code>double</code> to <code>float</code> behaves in accordance with IEEE 754. The result is correctly rounded using IEEE 754 round to nearest mode. A value too small to be represented as a <code>float</code> is converted to a positive or negative zero of type <code>float</code>; a value too large to be represented as a <code>float</code> is converted to a positive or negative infinity. A <code>double</code> NaN is always converted to a <code>float</code> NaN.<p>
+<a name="14611"></a>
+Despite the fact that overflow, underflow, or loss of precision may occur, narrowing conversions among numeric types never cause the Java virtual machine to throw a runtime exception (not to be confused with an IEEE 754 floating-point exception).<p>
+<a name="16535"></a>
+<h3>3.11.5    Object Creation and Manipulation</h3>
+<a name="16536"></a>
+Although both class instances and arrays are objects, the Java virtual machine 
+creates and manipulates class instances and arrays using distinct sets of 
+instructions:
+<p><ul><li>Create a new class instance: <i>new</i>.<p>
+<li>Create a new array: <i>newarray</i>, <i>anewarray</i>, <i>multianewarray</i>.<p>
+<li>Access fields of classes (<code>static</code> fields, known as class variables) and fields  of class instances (non-<code>static</code> fields, known as instance variables): <i>getfield</i>, <i>putfield</i>, <i>getstatic</i>, <i>putstatic</i>.<p>
+<li>Load an array component onto the operand stack: <i>baload</i>, <i>caload</i>, <i>saload</i>, <i>iaload</i>, <i>laload</i>, <i>faload</i>, <i>daload</i>, <i>aaload</i>.<p>
+<li>Store a value from the operand stack as an array component: <i>bastore</i>, <i>castore</i>, <i>sastore</i>, <i>iastore</i>, <i>lastore</i>, <i>fastore</i>, <i>dastore</i>, <i>aastore</i>.<p>
+<li>Get the length of array: <i>arraylength</i>.<p>
+<li>Check properties of class instances or arrays: <i>instanceof</i>, <i>checkcast</i>.
+</ul><a name="16561"></a>
+<h3>3.11.6    Operand Stack Management Instructions</h3>
+<a name="16562"></a>
+A number of instructions are provided for the direct manipulation of the operand 
+stack: <i>pop</i>, <i>pop2</i>, <i>dup</i>, <i>dup2</i>, <i>dup_x1</i>, <i>dup2_x1</i>, <i>dup_x2</i>, <i>dup2_x2</i>, <i>swap</i>.
+<p><a name="6493"></a>
+<h3>3.11.7    Control Transfer Instructions</h3>
+<a name="6419"></a>
+The control transfer instructions conditionally or unconditionally cause the Java virtual
+machine to continue execution with an instruction other than the one following 
+the control transfer instruction. They are:
+<p><ul><li>Conditional branch: <i>ifeq</i>, <i>iflt</i>, <i>ifle</i>, <i>ifne</i>, <i>ifgt</i>, <i>ifge</i>, <i>ifnull</i>, <i>ifnonnull</i>, <i>if_icmpeq</i>, <i>if_icmpne</i>, <i>if_icmplt</i>, <i>if_icmpgt</i>, <i>if_icmple</i>, <i>if_icmpge</i>, <i>if_acmpeq</i>, <i>if_acmpne</i>.<p>
+<li>Compound conditional branch: <i>tableswitch</i>, <i>lookupswitch</i>.<p>
+<li>Unconditional branch: <i>goto</i>, <i>goto_w</i>, <i>jsr</i>, <i>jsr_w</i>, <i>ret</i>.
+</ul><a name="32018"></a>
+The Java virtual machine has distinct sets of instructions that conditionally branch on comparison with data of <code>int</code> and <code>reference</code> types. It also has distinct conditional branch instructions that test for the null reference and thus is not required to specify a concrete value for <code>null</code> <a href="Overview.doc.html#15079">(&#167;3.4)</a>.<p>
+<a name="32024"></a>
+Conditional branches on comparisons between data of types <code>boolean</code>, <code>byte</code>, <code>char</code>, and <code>short</code> are performed using <code>int</code> comparison instructions <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>. A conditional branch on a comparison between data of types <code>long</code>, <code>float</code>, or <code>double</code> is initiated using an instruction that compares the data and produces an <code>int</code> result of the comparison <a href="Overview.doc.html#6410">(&#167;3.11.3)</a>. A subsequent <code>int</code> comparison instruction tests this result and effects the conditional branch. Because of its emphasis on <code>int</code> comparisons, the Java virtual machine provides a rich complement of conditional branch instructions for type <code>int</code>.<p>
+<a name="31288"></a>
+All <code>int</code> conditional control transfer instructions perform signed comparisons.<p>
+<a name="31293"></a>
+<h3>3.11.8    Method Invocation and Return Instructions</h3>
+<a name="37282"></a>
+The following four instructions invoke methods:	
+<p><ul><li><i>invokevirtual</i> invokes an instance method of an object, dispatching on the  (virtual) type of the object. This is the normal method dispatch in the Java  programming language.	<p>
+<li><i>invokeinterface</i> invokes a method that is implemented by an interface, searching the methods implemented by the particular runtime object to find the appropriate method.<p>
+<li><i>invokespecial</i> invokes an instance method requiring special handling, whether an instance initialization method <a href="Overview.doc.html#12174">(&#167;3.9)</a>, a <code>private</code> method, or a superclass method.<p>
+<li><i>invokestatic</i> invokes a class (<code>static</code>) method in a named class. 	
+</ul><a name="11355"></a>
+The method return instructions, which are distinguished by return type, are <i>ireturn 
+</i>(used to return values of type <code>boolean</code>, <code>byte</code>, <code>char</code>, <code>short</code>, or <code>int</code>), <i>lreturn</i>, <i>freturn
+</i>, <i>dreturn</i>, and <i>areturn</i>. In addition, the <i>return</i> instruction is used to return from 
+methods declared to be <code>void</code>, instance initialization methods, and class or interface 
+initialization methods.
+<p><a name="7361"></a>
+<h3>3.11.9    Throwing Exceptions</h3>
+<a name="15789"></a>
+An exception is thrown programmatically using the <i>athrow</i> instruction. Exceptions 
+can also be thrown by various Java virtual machine instructions if they detect an 
+abnormal condition.
+<p><a name="16207"></a>
+<h3>3.11.10    Implementing <code>finally</code></h3>
+<a name="7362"></a>
+The implementation of the <code>finally</code> keyword uses the <i>jsr</i>, <i>jsr_w</i>, and <i>ret</i> instructions.
+See <a href="ClassFile.doc.html#9862">Section 4.9.6, "Exceptions and finally,"</a> and <a href="Compiling.doc.html#13789">Section 7.13, "Compiling 
+finally."</a>
+<p><a name="25390"></a>
+<h3>3.11.11    Synchronization</h3>
+<a name="25391"></a>
+The Java virtual machine supports synchronization of both methods and sequences 
+of instructions within a method using a single synchronization construct: the <em>monitor
+</em>. 
+<p><a name="32134"></a>
+Method-level synchronization is handled as part of method invocation and return (see <a href="Overview.doc.html#31293">Section 3.11.8, "Method Invocation and Return Instructions"</a>). <p>
+<a name="32135"></a>
+Synchronization of sequences of instructions is typically used to encode the synchronized blocks of the Java programming language. The Java virtual machine supplies the <i>monitorenter</i> and <i>monitorexit</i> instructions to support such constructs.<p>
+<a name="32220"></a>
+Proper implementation of synchronized blocks requires cooperation from a compiler targeting the Java virtual machine. The compiler must ensure that at any method invocation completion a <i>monitorexit</i> instruction will have been executed for each <i>monitorenter</i> instruction executed since the method invocation. This must be the case whether the method invocation completes normally <a href="Overview.doc.html#1973">(&#167;3.6.4)</a> or abruptly <a href="Overview.doc.html#22091">(&#167;3.6.5)</a>. <p>
+<a name="36957"></a>
+The compiler enforces proper pairing of <i>monitorenter</i> and <i>monitorexit</i> instructions on abrupt method invocation completion by generating exception handlers <a href="Overview.doc.html#15494">(&#167;3.10)</a> that will match any exception and whose associated code executes the necessary <i>monitorexit</i> instructions <a href="Compiling.doc.html#6530">(&#167;7.14)</a>.<p>
+<a name="15641"></a>
+<hr><h2>3.12    Class Libraries</h2>
+<a name="28339"></a>
+The Java virtual machine must provide sufficient support for the implementation of 
+the class libraries of the associated platform. Some of the classes in these libraries 
+cannot be implemented without the cooperation of the Java virtual machine. 
+<p><a name="28362"></a>
+Classes that might require special support from the Java virtual machine include those that support:<p>
+<ul><li>Reflection, such as the classes in the package <code>java.lang.reflect</code> and the class <code>Class</code>. <p>
+<li>Loading and creation of a class or interface. The most obvious example is the class <code>ClassLoader</code>.<p>
+<li>Linking and initialization of a class or interface. The example classes cited above fall into this category as well.<p>
+<li>Security, such as the classes in the package <code>java.security</code> and other classes such as <code>SecurityManage</code>r.<p>
+<li>Multithreading, such as the class <code>Thread</code>. <p>
+<li>Weak references, such as the classes in the package <code>java.lang.ref</code>.<a href="#31136"><sup>9</sup></a>
+</ul><a name="28512"></a>
+The list above is meant to be illustrative rather than comprehensive. An exhaustive list of these classes or of the functionality they provide is beyond the scope of this book. See the specifications of the Java and Java 2 platform class libraries for details. <p>
+<a name="28439"></a>
+<hr><h2>3.13    Public Design, Private Implementation</h2>
+<a name="15642"></a>
+Thus far this book has sketched the public view of the Java virtual machine: the 
+<code>class</code> file format and the instruction set. These components are vital to the hardware-,
+operating system-, and implementation-independence of the Java virtual 
+machine. The implementor may prefer to think of them as a means to securely communicate
+fragments of programs between hosts each implementing the Java or Java 
+2 platform, rather than as a blueprint to be followed exactly.
+<p><a name="36956"></a>
+<p>
+<a name="15643"></a>
+It is important to understand where the line between the public design and the private implementation lies. A Java virtual machine implementation must be able to read <code>class</code> files and must exactly implement the semantics of the Java virtual machine code therein. One way of doing this is to take this document as a specification and to implement that specification literally. But it is also perfectly feasible and desirable for the implementor to modify or optimize the implementation within the constraints of this specification. So long as the <code>class</code> file format can be read and the semantics of its code are maintained, the implementor may implement these semantics in any way. What is "under the hood" is the implementor's business, as long as the correct external interface is carefully maintained.<a href="#23409"><sup>10</sup></a><p>
+<a name="15644"></a>
+The implementor can use this flexibility to tailor Java virtual machine implementations for high performance, low memory use, or portability. What makes sense in a given implementation depends on the goals of that implementation. The range of implementation options includes the following:<p>
+<ul><li>Translating Java virtual machine code at load time or during execution into the instruction set of another virtual machine.<p>
+<li>Translating Java virtual machine code at load time or during execution into the native instruction set of the host CPU (sometimes referred to as <i>just-in-time</i>, or <i>JIT</i>, code generation).
+</ul><a name="15648"></a>
+The existence of a precisely defined virtual machine and object file format need not significantly restrict the creativity of the implementor. The Java virtual machine is designed to support many different implementations, providing new and interesting solutions while retaining compatibility between implementations.<p>
+
+
+<hr>
+<sup>1</sup><a name="33623"></a>
+ The first edition of <em>The Java</em><sup><font size=-2>TM</font></sup><em> Virtual Machine Specification</em> did not consider <code>boolean</code> to be a Java virtual machine type. However, <code>boolean</code> values do have limited support in the Java virtual machine. This second edition clarifies the issue by treating <code>boolean</code> as a type.<p>
+<sup>2</sup><a name="24357"></a>
+ In Sun's JDK releases 1.0 and 1.1, and the Java 2 SDK, Standard Edition, v1.2, <code>boolean</code> arrays in the Java programming language are encoded as Java virtual machine <code>byte</code> arrays, using 8 bits per <code>boolean</code> element.<p>
+<sup>3</sup><a name="30937"></a>
+ In the first edition of this specification, the Java virtual machine stack was known as the <em>Java stack</em>.<p>
+<sup>4</sup><a name="36275"></a>
+ In Sun's implementations of the Java virtual machine in JDK releases 1.0.2 and 1.1, and the Java 2 SDK, Standard Edition, v1.2, Java virtual machine stacks are discontiguous and are independently expanded as required by the computation. Those implementations do not free memory allocated for a Java virtual machine stack until the associated thread terminates. Expansion is subject to a size limit for any one stack. The Java virtual machine stack size limit may be set on virtual machine start-up using the "<code>-oss</code>" flag. The Java virtual machine stack size limit can be used to limit memory consumption or to catch runaway recursions.<p>
+<sup>5</sup><a name="30988"></a>
+ Sun's implementations of the Java virtual machine in JDK releases 1.0.2 and 1.1, and the Java 2 SDK, Standard Edition, v1.2, dynamically expand the heap as required by the computation, but never contract the heap. The initial and maximum sizes may be specified on virtual machine start-up using the "<code>-ms</code>" and "<code>-mx</code>" flags, respectively.<p>
+<sup>6</sup><a name="31002"></a>
+ Sun's implementation of the Java virtual machine in JDK release 1.0.2 dynamically expands the method area as required by the computation, but never contracts the method area. The Java virtual machine implementations in Sun's JDK release 1.1 and the Java 2 SDK, Standard Edition, v1.2 garbage collect the method area. In neither case is user control over the initial, minimum, or maximum size of the method area provided.<p>
+<a name="30998"></a>
+ <p>
+<sup>7</sup><a name="36289"></a>
+ Sun's implementations of the Java virtual machine in JDK releases 1.0.2 and 1.1, and the Java 2 SDK, Standard Edition, v1.2, allocate fixed-size native method stacks of a single size. The size of the native method stacks may be set on virtual machine start-up using the "<code>-ss</code>" flag. The native method stack size limit can be used to limit memory consumption or to catch runaway recursions in <code>native</code> methods. Sun's implementations do <i>not</i> check for native method stack overflow.<p>
+<a name="36291"></a>
+ <p>
+<sup>8</sup><a name="31069"></a>
+ In some of Sun's implementations of the Java virtual machine, a reference to a class instance is a pointer to a <em>handle</em> that is itself a pair of pointers: one to a table containing the methods of the object and a pointer to the <code>Class</code> object that represents the type of the object, and the other to the memory allocated from the heap for the object data.<p>
+<sup>9</sup><a name="31136"></a>
+ Weak references were introduced in the Java 2 platform, v1.2.<p>
+<sup>10</sup><a name="23409"></a>
+ There are some exceptions: debuggers, profilers, and just-in-time code generators can each require access to elements of the Java virtual machine that are normally considered to be "under the hood." Where appropriate, Sun is working with other Java virtual machine implementors and tools vendors to develop common interfaces to the Java virtual machine for use by such tools, and to promote those interfaces across the industry. Information on publicly available low-level interfaces to the Java virtual machine will be made available at <code>http://java.sun.com</code>.<p>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Concepts.doc.html">Prev</a> | <a href="ClassFile.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

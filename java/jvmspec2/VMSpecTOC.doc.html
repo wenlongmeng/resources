@@ -1,0 +1,575 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td>Contents | Prev | <a href="Preface.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td>
+</tr></table>
+
+
+<hr><br><center>
+<h1>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</h1>
+<h2>Second Edition</h2>
+
+Tim Lindholm<br>
+Frank Yellin
+<p>
+</center>
+<br>
+
+
+<hr><br>
+ 
+<dl>
+<p>
+<dt><dd><a href="Preface.doc.html">
+<font size=+1><bold> Preface 	 </bold></font>
+</a>
+<p>
+<dt><dd><a href="Introduction.doc.html">
+<font size=+1><bold>	1	 Introduction	 </bold></font>
+</a>
+<dl>
+<a href="Introduction.doc.html#4560">
+<dt><dd>1.1	 A Bit of History	 
+</a><a href="Introduction.doc.html#3057">
+<dt><dd>1.2	 The Java Virtual Machine	 
+</a><a href="Introduction.doc.html#4478">
+<dt><dd>1.3	 Summary of Chapters	 
+</a><a href="Introduction.doc.html#4948">
+<dt><dd>1.4	 Notation	 
+</a></dl>
+<p>
+<dt><dd><a href="Concepts.doc.html">
+<font size=+1><bold>	2	 Java Programming Language Concepts	 </bold></font>
+</a>
+<dl>
+<a href="Concepts.doc.html#25310">
+<dt><dd>2.1	 Unicode	
+</a><a href="Concepts.doc.html#25339">
+<dt><dd>2.2	 Identifiers	 
+</a><a href="Concepts.doc.html#29967">
+<dt><dd>2.3	 Literals	 
+</a><a href="Concepts.doc.html#22930">
+<dt><dd>2.4	 Types and Values	 
+</a><dl>
+<a href="Concepts.doc.html#19511">
+<dt><dd>2.4.1	 Primitive Types and Values	 
+</a><a href="Concepts.doc.html#17876">
+<dt><dd>2.4.2	 Operators on Integral Values	 
+</a><a href="Concepts.doc.html#33377">
+<dt><dd>2.4.3	 Floating-Point Types, Value Sets, and Values	 
+</a><a href="Concepts.doc.html#33499">
+<dt><dd>2.4.4	 Operators on Floating-Point Values	 
+</a><a href="Concepts.doc.html#17937">
+<dt><dd>2.4.5	 Operators on <code>boolean</code> Values	 
+</a><a href="Concepts.doc.html#29375">
+<dt><dd>2.4.6	 Reference Types, Objects, and Reference Values	 
+</a><a href="Concepts.doc.html#27433">
+<dt><dd>2.4.7	 The Class <code>Object</code> 
+</a><a href="Concepts.doc.html#25486">
+<dt><dd>2.4.8	 The Class <code>String</code>
+</a><a href="Concepts.doc.html#17255">
+<dt><dd>2.4.9	 Operators on Objects	 
+</a></dl>
+<a href="Concepts.doc.html#17203">
+<dt><dd>2.5	 Variables	 
+</a><dl>
+<a href="Concepts.doc.html#15858">
+<dt><dd>2.5.1	 Initial Values of Variables	 
+</a><a href="Concepts.doc.html#23409">
+<dt><dd>2.5.2	 Variables Have Types, Objects Have Classes	 
+</a></dl>
+<a href="Concepts.doc.html#25611">
+<dt><dd>2.6	 Conversions and Promotions	 
+</a><dl>
+<a href="Concepts.doc.html#19691">
+<dt><dd>2.6.1	 Identity Conversions	
+</a><a href="Concepts.doc.html#23435">
+<dt><dd>2.6.2	 Widening Primitive Conversions	 
+</a><a href="Concepts.doc.html#19747">
+<dt><dd>2.6.3	 Narrowing Primitive Conversions	 
+</a><a href="Concepts.doc.html#25679">
+<dt><dd>2.6.4	 Widening Reference Conversions	 
+</a><a href="Concepts.doc.html#32879">
+<dt><dd>2.6.5	 Narrowing Reference Conversions
+</a><a href="Concepts.doc.html#32922">
+<dt><dd>2.6.6	 Value Set Conversion	 
+</a><a href="Concepts.doc.html#19674">
+<dt><dd>2.6.7	 Assignment Conversion	
+</a><a href="Concepts.doc.html#19685">
+<dt><dd>2.6.8	 Method Invocation Conversion	 
+</a><a href="Concepts.doc.html#18168">
+<dt><dd>2.6.9	 Casting Conversion	 
+</a><a href="Concepts.doc.html#16021">
+<dt><dd>2.6.10	 Numeric Promotion	
+</a>
+</dl>
+<a name="272660"></a>
+<dt><dd><a href="Concepts.doc.html#21272">2.7 Names and Packages </a>	
+<dl>
+<a href="Concepts.doc.html#21410">
+<dt><dd>2.7.1	 Simple Names and Qualified Names	 
+</a><a href="Concepts.doc.html#20319">
+<dt><dd>2.7.2	 Packages	 
+</a><a href="Concepts.doc.html#26049">
+<dt><dd>2.7.3	 Members	
+</a><a href="Concepts.doc.html#18914">
+<dt><dd>2.7.4	 Qualified Names and Access Control	 
+</a><a href="Concepts.doc.html#20207">
+<dt><dd>2.7.5	 Fully Qualified Names	 
+</a></dl>
+</dl>
+<dl>
+<a href="Concepts.doc.html#29321">
+<dt><dd>2.8	 Classes	 
+</a><dl>
+<a href="Concepts.doc.html#20389">
+<dt><dd>2.8.1	 Class Names	 
+</a><a href="Concepts.doc.html#20340">
+<dt><dd>2.8.2	 Class Modifiers
+</a><a href="Concepts.doc.html#32983">
+<dt><dd>2.8.3	 Superclasses and Subclasses	 
+</a><a href="Concepts.doc.html#18846">
+<dt><dd>2.8.4	 The Class Members	 
+</a></dl>
+<a href="Concepts.doc.html#16338">
+<dt><dd>2.9	 Fields	 
+</a><dl>
+<a href="Concepts.doc.html#29882">
+<dt><dd>2.9.1	 Field Modifiers	 
+</a><a href="Concepts.doc.html#16320">
+<dt><dd>2.9.2	 Initialization of Fields	 
+</a></dl>
+<a href="Concepts.doc.html#16317">
+<dt><dd>2.10	 Methods	 
+</a><dl>
+<a href="Concepts.doc.html#26454">
+<dt><dd>2.10.1	 Formal Parameters	 
+</a><a href="Concepts.doc.html#34442">
+<dt><dd>2.10.2	 Method Signature	
+</a><a href="Concepts.doc.html#16348">
+<dt><dd>2.10.3	 Method Modifiers
+</a></dl>
+<a href="Concepts.doc.html#32316">
+<dt><dd>2.11	 Static Initializers	 
+</a><a href="Concepts.doc.html#16411">
+<dt><dd>2.12	 Constructors	 
+</a><dl>
+<a href="Concepts.doc.html#33032">
+<dt><dd>2.12.1	 Constructor Modifiers	 
+</a></dl>
+<a href="Concepts.doc.html#16432">
+<dt><dd>2.13	 Interfaces&#32;	 
+</a><dl>
+<a href="Concepts.doc.html#18339">
+<dt><dd>2.13.1	 Interface Modifiers
+</a><a href="Concepts.doc.html#20603">
+<dt><dd>2.13.2	 Superinterfaces
+</a><a href="Concepts.doc.html#18345">
+<dt><dd>2.13.3	 Interface Members	 
+</a><a href="Concepts.doc.html#26697">
+<dt><dd>2.13.4	 Overriding, Inheritance, and Overloading in Interfaces	 
+</a></dl>
+<a href="Concepts.doc.html#33252">
+<dt><dd>2.14	 Nested Classes and Interfaces	 
+</a><a href="Concepts.doc.html#16446">
+<dt><dd>2.15	 Arrays	 
+</a><dl>
+<a href="Concepts.doc.html#21035">
+<dt><dd>2.15.1	 Array Types	 
+</a><a href="Concepts.doc.html#28011">
+<dt><dd>2.15.2	 Array Variables	 
+</a><a href="Concepts.doc.html#20775">
+<dt><dd>2.15.3	 Array Creation	 
+</a><a href="Concepts.doc.html#22854">
+<dt><dd>2.15.4	 Array Access	
+</a></dl>
+<a href="Concepts.doc.html#22727">
+<dt><dd>2.16	 Exceptions	 
+</a><dl>
+<a href="Concepts.doc.html#24614">
+<dt><dd>2.16.1	 The Causes of Exceptions	 
+</a><a href="Concepts.doc.html#22746">
+<dt><dd>2.16.2	 Handling an Exception	 
+</a><a href="Concepts.doc.html#24863">
+<dt><dd>2.16.3	 The Exception Hierarchy
+</a><a href="Concepts.doc.html#24870">
+<dt><dd>2.16.4	 The Classes Exception and RuntimeException	 
+</a></dl>
+<a href="Concepts.doc.html#16491">
+<dt><dd>2.17	 Execution	 
+</a><dl>
+<a href="Concepts.doc.html#19042">
+<dt><dd>2.17.1	 Virtual Machine Start-up	 
+</a><a href="Concepts.doc.html#19175">
+<dt><dd>2.17.2	 Loading	 
+</a><a href="Concepts.doc.html#22574">
+<dt><dd>2.17.3	 Linking: Verification, Preparation, and Resolution	 
+</a><a href="Concepts.doc.html#19075">
+<dt><dd>2.17.4	 Initialization	 
+</a><a href="Concepts.doc.html#24237">
+<dt><dd>2.17.5	 Detailed Initialization Procedure	 
+</a><a href="Concepts.doc.html#19124">
+<dt><dd>2.17.6	 Creation of New Class Instances	
+</a><a href="Concepts.doc.html#19147">
+<dt><dd>2.17.7	 Finalization of Class Instances
+</a><a href="Concepts.doc.html#32202">
+<dt><dd>2.17.8	 Unloading of Classes and Interfaces	 
+</a><a href="Concepts.doc.html#19152">
+<dt><dd>2.17.9	 Virtual Machine Exit	 
+</a></dl>
+<a href="Concepts.doc.html#24465">
+<dt><dd>2.18	 FP-strict Expressions	
+</a><a href="Concepts.doc.html#33308">
+<dt><dd>2.19	 Threads	 
+</a></dl>
+</dl>
+<dl>
+<p>
+<dt><dd><a href="Overview.doc.html">
+<font size=+1><bold>	3	 The Structure of the Java Virtual Machine	 </bold></font>
+</a>
+<dl>
+<a href="Overview.doc.html#32310">
+<dt><dd>3.1	 The <code>class</code> File Format	 
+</a><a href="Overview.doc.html#12237">
+<dt><dd>3.2	 Data Types	 
+</a><a href="Overview.doc.html#22239">
+<dt><dd>3.3	 Primitive Types and Values	 
+</a><dl>
+<a href="Overview.doc.html#31446">
+<dt><dd>3.3.1	 Integral Types and Values	 
+</a><a href="Overview.doc.html#28147">
+<dt><dd>3.3.2	 Floating-Point Types, Value Sets, and Values	 
+</a><a href="Overview.doc.html#34568">
+<dt><dd>3.3.3	 The <code>returnAddress</code> Type and Values	 
+</a><a href="Overview.doc.html#22909">
+<dt><dd>3.3.4	 The <code>boolean</code> Type	 
+</a></dl>
+<a href="Overview.doc.html#15079">
+<dt><dd>3.4	 Reference Types and Values	 
+</a><a href="Overview.doc.html#1732">
+<dt><dd>3.5	 Runtime Data Areas	 
+</a><dl>
+<a href="Overview.doc.html#6648">
+<dt><dd>3.5.1	 The <code>pc</code> Register
+</a><a href="Overview.doc.html#6654">
+<dt><dd>3.5.2	 Java Virtual Machine Stacks	 
+</a><a href="Overview.doc.html#15730">
+<dt><dd>3.5.3	 Heap	 
+</a><a href="Overview.doc.html#6656">
+<dt><dd>3.5.4	 Method Area	 
+</a><a href="Overview.doc.html#22972">
+<dt><dd>3.5.5	 Runtime Constant Pool	 
+</a><a href="Overview.doc.html#15637">
+<dt><dd>3.5.6	 Native Method Stacks	
+</a></dl>
+<a href="Overview.doc.html#17257">
+<dt><dd>3.6	 Frames	 
+</a><dl>
+<a href="Overview.doc.html#15722">
+<dt><dd>3.6.1	 Local Variables	 
+</a><a href="Overview.doc.html#28851">
+<dt><dd>3.6.2	 Operand Stacks	 
+</a><a href="Overview.doc.html#1963">
+<dt><dd>3.6.3	 Dynamic Linking	 
+</a><a href="Overview.doc.html#1973">
+<dt><dd>3.6.4	 Normal Method Invocation Completion	 
+</a><a href="Overview.doc.html#22091">
+<dt><dd>3.6.5	 Abrupt Method Invocation Completion	
+</a><a href="Overview.doc.html#22093">
+<dt><dd>3.6.6	 Additional Information	 
+</a></dl>
+<a href="Overview.doc.html#16066">
+<dt><dd>3.7	 Representation of Objects	
+</a><a href="Overview.doc.html#35253">
+<dt><dd>3.8	 Floating-Point Arithmetic
+</a><dl>
+<a href="Overview.doc.html#35254">
+<dt><dd>3.8.1	 Java Virtual Machine Floating-Point Arithmetic  and IEEE	 754	 
+</a><a href="Overview.doc.html#28905">
+<dt><dd>3.8.2	 Floating-Point Modes	 
+</a><a href="Overview.doc.html#33120">
+<dt><dd>3.8.3	 Value Set Conversion	
+</a></dl>
+<a href="Overview.doc.html#12174">
+<dt><dd>3.9	 Specially Named Initialization Methods	 
+</a><a href="Overview.doc.html#15494">
+<dt><dd>3.10	 Exceptions	 
+</a><a href="Overview.doc.html#7143">
+<dt><dd>3.11	 Instruction Set Summary	 
+</a><dl>
+<a href="Overview.doc.html#7565">
+<dt><dd>3.11.1	 Types and the Java Virtual Machine	 
+</a><a href="Overview.doc.html#6348">
+<dt><dd>3.11.2	 Load and Store Instructions	 
+</a><a href="Overview.doc.html#6410">
+<dt><dd>3.11.3	 Arithmetic Instructions	 
+</a><a href="Overview.doc.html#14620">
+<dt><dd>3.11.4	 Type Conversion Instructions	 
+</a><a href="Overview.doc.html#16535">
+<dt><dd>3.11.5	 Object Creation and Manipulation	 
+</a><a href="Overview.doc.html#16561">
+<dt><dd>3.11.6	 Operand Stack Management Instructions	 
+</a><a href="Overview.doc.html#6493">
+<dt><dd>3.11.7	 Control Transfer Instructions	 
+</a><a href="Overview.doc.html#31293">
+<dt><dd>3.11.8	 Method Invocation and Return Instructions	 
+</a><a href="Overview.doc.html#7361">
+<dt><dd>3.11.9	 Throwing Exceptions	 
+</a><a href="Overview.doc.html#16207">
+<dt><dd>3.11.10	 Implementing finally	
+</a><a href="Overview.doc.html#25390">
+<dt><dd>3.11.11	 Synchronization	 
+</a></dl>
+<a href="Overview.doc.html#15641">
+<dt><dd>3.12	 Class Libraries	
+</a><a href="Overview.doc.html#28439">
+<dt><dd>3.13	 Public Design, Private Implementation	 
+</a></dl>
+<p>
+<dt><dd><a href="ClassFile.doc.html">
+<font size=+1><bold>	4	 The <code>class</code> File Format	 </bold></font>
+</a>
+<dl>
+<a href="ClassFile.doc.html#74353">
+<dt><dd>4.1	 The <code>ClassFile</code> Structure	 
+</a><a href="ClassFile.doc.html#14757">
+<dt><dd>4.2	 The Internal Form of Fully Qualified Class and Interface Names	 
+</a><a href="ClassFile.doc.html#1169">
+<dt><dd>4.3	 Descriptors	 
+</a><dl>
+<a href="ClassFile.doc.html#13972">
+<dt><dd>4.3.1	 Grammar Notation	 
+</a><a href="ClassFile.doc.html#14152">
+<dt><dd>4.3.2	 Field Descriptors	
+</a><a href="ClassFile.doc.html#7035">
+<dt><dd>4.3.3	 Method Descriptors	 
+</a></dl>
+<a href="ClassFile.doc.html#20080">
+<dt><dd>4.4	 The Constant Pool	 
+</a><dl>
+<a href="ClassFile.doc.html#1221">
+<dt><dd>4.4.1	 The <code>CONSTANT_Class_info</code> Structure	 
+</a><a href="ClassFile.doc.html#42041">
+<dt><dd>4.4.2	 The <code>CONSTANT_Fieldref_info</code>, <code>CONSTANT_Methodref_info</code>,  and <code>CONSTANT_InterfaceMethodref_info</code> Structures		 
+</a><a href="ClassFile.doc.html#29297">
+<dt><dd>4.4.3	 The <code>CONSTANT_String_info</code> Structure	 
+</a><a href="ClassFile.doc.html#21942">
+<dt><dd>4.4.4	 The <code>CONSTANT_Integer_info</code> and <code>CONSTANT_Float_info</code>  Structures		 
+</a><a href="ClassFile.doc.html#1348">
+<dt><dd>4.4.5	 The <code>CONSTANT_Long_info</code> and <code>CONSTANT_Double_info</code>  Structures		
+</a><a href="ClassFile.doc.html#1327">
+<dt><dd>4.4.6	 The <code>CONSTANT_NameAndType_info</code> Structure	 
+</a><a href="ClassFile.doc.html#7963">
+<dt><dd>4.4.7	 The <code>CONSTANT_Utf8_info</code> Structure	 
+</a></dl>
+<a href="ClassFile.doc.html#2877">
+<dt><dd>4.5	 Fields	 
+</a><a href="ClassFile.doc.html#1513">
+<dt><dd>4.6	 Methods
+</a><a href="ClassFile.doc.html#43817">
+<dt><dd>4.7	 Attributes	 
+</a><dl>
+<a href="ClassFile.doc.html#16733">
+<dt><dd>4.7.1	 Defining and Naming New Attributes	 
+</a><a href="ClassFile.doc.html#1405">
+<dt><dd>4.7.2	 The <code>ConstantValue</code> Attribute	 
+</a><a href="ClassFile.doc.html#1546">
+<dt><dd>4.7.3	 The <code>Code</code> Attribute	 
+</a><a href="ClassFile.doc.html#3129">
+<dt><dd>4.7.4	 The <code>Exceptions</code> Attribute	 
+</a><a href="ClassFile.doc.html#79996">
+<dt><dd>4.7.5	 The <code>InnerClasses</code> Attribute	 
+</a><a href="ClassFile.doc.html#80128">
+<dt><dd>4.7.6	 The <code>Synthetic</code> Attribute	
+</a><a href="ClassFile.doc.html#79868">
+<dt><dd>4.7.7	 The <code>SourceFile</code> Attribute	 
+</a><a href="ClassFile.doc.html#22856">
+<dt><dd>4.7.8	 The <code>LineNumberTable</code> Attribute	 
+</a><a href="ClassFile.doc.html#5956">
+<dt><dd>4.7.9	 The <code>LocalVariableTable</code> Attribute	 
+</a><a href="ClassFile.doc.html#78232">
+<dt><dd>4.7.10	 The <code>Deprecated</code> Attribute	 
+</a></dl>
+<a href="ClassFile.doc.html#40222">
+<dt><dd>4.8	 Constraints on Java Virtual Machine Code	 
+</a><dl>
+<a href="ClassFile.doc.html#9279">
+<dt><dd>4.8.1	 Static Constraints	 
+</a><a href="ClassFile.doc.html#9308">
+<dt><dd>4.8.2	 Structural Constraints	 
+</a></dl>
+<a href="ClassFile.doc.html#88597">
+<dt><dd>4.9	 Verification of <code>class</code> Files	 
+</a><dl>
+<a href="ClassFile.doc.html#9766">
+<dt><dd>4.9.1	 The Verification Process	
+</a><a href="ClassFile.doc.html#9801">
+<dt><dd>4.9.2	 The Bytecode Verifier	 
+</a><a href="ClassFile.doc.html#9833">
+<dt><dd>4.9.3	 Values of Types <code>long</code> and <code>double</code>
+</a><a href="ClassFile.doc.html#9839">
+<dt><dd>4.9.4	 Instance Initialization Methods and Newly  Created Objects		 
+</a><a href="ClassFile.doc.html#9855">
+<dt><dd>4.9.5	 Exception Handlers	 
+</a><a href="ClassFile.doc.html#9862">
+<dt><dd>4.9.6	 Exceptions and finally	 
+</a></dl>
+<a href="ClassFile.doc.html#88659">
+<dt><dd>4.10	 Limitations of the Java Virtual Machine	 
+</a></dl>
+<p>
+<dt><dd><a href="ConstantPool.doc.html">
+<font size=+1><bold>	5	 Loading, Linking, and Initializing	 </bold></font>
+</a>
+<dl>
+<a href="ConstantPool.doc.html#73272">
+<dt><dd>5.1	 The Runtime Constant Pool	 
+</a><a href="ConstantPool.doc.html#51579">
+<dt><dd>5.2	 Virtual Machine Start-up	
+</a><a href="ConstantPool.doc.html#72007">
+<dt><dd>5.3	 Creation and Loading	 
+</a><dl>
+<a href="ConstantPool.doc.html#79383">
+<dt><dd>5.3.1	 Loading Using the Bootstrap Class Loader	 
+</a><a href="ConstantPool.doc.html#79441">
+<dt><dd>5.3.2	 Loading Using a User-defined Class Loader	
+</a><a href="ConstantPool.doc.html#79473">
+<dt><dd>5.3.3	 Creating Array Classes	 
+</a><a href="ConstantPool.doc.html#78621">
+<dt><dd>5.3.4	 Loading Constraints	
+</a><a href="ConstantPool.doc.html#79388">
+<dt><dd>5.3.5	 Deriving a Class from a <code>class</code> File Representation	 
+</a></dl>
+<a href="ConstantPool.doc.html#71418">
+<dt><dd>5.4	 Linking	 
+</a><dl>
+<a href="ConstantPool.doc.html#71817">
+<dt><dd>5.4.1	 Verification	 
+</a><a href="ConstantPool.doc.html#71421">
+<dt><dd>5.4.2	 Preparation	
+</a><a href="ConstantPool.doc.html#73492">
+<dt><dd>5.4.3	 Resolution	 
+</a><a href="ConstantPool.doc.html#75929">
+<dt><dd>5.4.4	 Access Control	 
+</a></dl>
+<a href="ConstantPool.doc.html#77976">
+<dt><dd>5.5	 Initialization	 
+</a><a href="ConstantPool.doc.html#74727">
+<dt><dd>5.6	 Binding Native Method Implementations	 
+</a></dl>
+<p>
+<dt><dd><a href="Instructions.doc.html">
+<font size=+1><bold>	6	 The Java Virtual Machine Instruction Set	 </bold></font>
+</a>
+<dl>
+<a href="Instructions.doc.html#67862">
+<dt><dd>6.1	 Assumptions: The Meaning of "Must"	 
+</a><a href="Instructions.doc.html#60105">
+<dt><dd>6.2	 Reserved Opcodes	 
+</a><a href="Instructions.doc.html#66654">
+<dt><dd>6.3	 Virtual Machine Errors	 
+</a><a href="Instructions.doc.html#66646">
+<dt><dd>6.4	 Format of Instruction Descriptions	 
+</a></dl>
+<p>
+<dt><dd><a href="Compiling.doc.html">
+<font size=+1><bold>	7	 Compiling for the Java Virtual Machine	 </bold></font>
+</a>
+<dl>
+<a href="Compiling.doc.html#4083">
+<dt><dd>7.1	 Format of Examples	 
+</a><a href="Compiling.doc.html#4182">
+<dt><dd>7.2	 Use of Constants, Local Variables, and Control Constructs	 
+</a><a href="Compiling.doc.html#4228">
+<dt><dd>7.3	 Arithmetic	 
+</a><a href="Compiling.doc.html#5841">
+<dt><dd>7.4	 Accessing the Runtime Constant Pool	 
+</a><a href="Compiling.doc.html#8478">
+<dt><dd>7.5	 More Control Examples	 
+</a><a href="Compiling.doc.html#8556">
+<dt><dd>7.6	 Receiving Arguments	 
+</a><a href="Compiling.doc.html#14787">
+<dt><dd>7.7	 Invoking Methods	 
+</a><a href="Compiling.doc.html#4089">
+<dt><dd>7.8	 Working with Class Instances	 
+</a><a href="Compiling.doc.html#4091">
+<dt><dd>7.9	 Arrays	 
+</a><a href="Compiling.doc.html#14942">
+<dt><dd>7.10	 Compiling Switches	 
+</a><a href="Compiling.doc.html#14892">
+<dt><dd>7.11	 Operations on the Operand Stack	 
+</a><a href="Compiling.doc.html#9934">
+<dt><dd>7.12	 Throwing and Handling Exceptions	
+</a><a href="Compiling.doc.html#13789">
+<dt><dd>7.13	 Compiling <code>finally</code>	 
+</a><a href="Compiling.doc.html#6530">
+<dt><dd>7.14	 Synchronization	
+</a><a href="Compiling.doc.html#17811">
+<dt><dd>7.15	 Compiling Nested Classes and Interfaces	 
+</a></dl>
+<p>
+<dt><dd><a href="Threads.doc.html">
+<font size=+1><bold>	8	 Threads and Locks	</bold></font>
+</a>
+<dl>
+<a href="Threads.doc.html#22197">
+<dt><dd>8.1	 Terminology and Framework	 
+</a><a href="Threads.doc.html#22214">
+<dt><dd>8.2	 Execution Order and Consistency	 
+</a><a href="Threads.doc.html#22227">
+<dt><dd>8.3	 Rules About Variables	 
+</a><a href="Threads.doc.html#22244">
+<dt><dd>8.4	 Nonatomic Treatment of <code>double</code> and <code>long</code> Variables	 
+</a><a href="Threads.doc.html#25549">
+<dt><dd>8.5	 Rules About Locks	 
+</a><a href="Threads.doc.html#22253">
+<dt><dd>8.6	 Rules About the Interaction of Locks and Variables	 
+</a><a href="Threads.doc.html#22258">
+<dt><dd>8.7	 Rules for <code>volatile</code> Variables	 
+</a><a href="Threads.doc.html#24432">
+<dt><dd>8.8	 Prescient Store Operations	 
+</a><a href="Threads.doc.html#22263">
+<dt><dd>8.9	 Discussion	 
+</a><a href="Threads.doc.html#23865">
+<dt><dd>8.10	 Example: Possible Swap	 
+</a><a href="Threads.doc.html#23974">
+<dt><dd>8.11	 Example: Out-of-Order Writes	 
+</a><a href="Threads.doc.html#22488">
+<dt><dd>8.12	 Threads	 
+</a><a href="Threads.doc.html#22500">
+<dt><dd>8.13	 Locks and Synchronization	 
+</a><a href="Threads.doc.html#24566">
+<dt><dd>8.14	 Wait Sets and Notification	
+</a></dl>
+<p>
+<dt><dd><a href="Mnemonics.doc.html">
+<font size=+1><bold>	9	 Opcode Mnemonics by Opcode	 </bold></font>
+</a>
+<p>
+<dt><dd><a href="ChangesAppendix.doc.html">
+<font size=+1><bold>	 Appendix: Summary of Clarifications and Amendments	</bold></font>
+</a>
+<p>
+<dt><dd><a href="VMSpecIX.fm.html">
+<font size=+1><bold> Index 	 </bold></font>
+</a>
+</dl>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+Contents | Prev | <a href="Preface.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

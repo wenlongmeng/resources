@@ -1,0 +1,977 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc2.html">Prev</a> | <a href="Instructions2.doc4.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="Instructions2.doc.html">A</a>
+<a href="Instructions2.doc1.html">B</a>
+<a href="Instructions2.doc2.html">C</a>
+<a href="Instructions2.doc3.html">D</a>
+<a href="Instructions2.doc4.html">F</a>
+<a href="Instructions2.doc5.html">G</a>
+<a href="Instructions2.doc6.html">I</a>
+<a href="Instructions2.doc7.html">J</a>
+<a href="Instructions2.doc8.html">L</a>
+<a href="Instructions2.doc9.html">M</a>
+<a href="Instructions2.doc10.html">N</a>
+<a href="Instructions2.doc11.html">P</a>
+<a href="Instructions2.doc12.html">R</a>
+<a href="Instructions2.doc13.html">S</a>
+<a href="Instructions2.doc14.html">T</a>
+<a href="Instructions2.doc15.html">W</a>
+
+<a name="d2f"></a>
+<hr><h2>d2f</h2>
+<a name="d2f.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67431"></a>
+Convert <code>double</code> to <code>float</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67430"></a>
+ <i>d2f</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="d2f.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67432"></a>
+<i>d2f</i> = 144 (0x90)</blockquote><p>
+<a name="d2f.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67433"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="d2f.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67434"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>double</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a> resulting in <i>value'</i>. Then <i>value'</i> is converted to a <code>float</code> <i>result</i> using IEEE 754 round to nearest mode. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="452590"></a>
+Where an <i>d2f</i> instruction is FP-strict <a href="Overview.doc.html#28905">(&#167;3.8.2)</a>, the result of the conversion is always rounded to the nearest representable value in the float value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a>.</blockquote><p>
+<blockquote><a name="452597"></a>
+Where an <i>d2f</i> instruction is not FP-strict, the result of the conversion may be taken from the float-extended-exponent value set <a href="Overview.doc.html#28147">(&#167;3.3.2)</a>; it is not necessarily rounded to the nearest representable value in the float value set.</blockquote><p>
+<blockquote><a name="67435"></a>
+A finite <i>value'</i> too small to be represented as a <code>float</code> is converted to a zero of the same sign; a finite <i>value'</i> too large to be represented as a <code>float</code> is converted to an infinity of the same sign. A <code>double</code> NaN is converted to a <code>float</code> NaN.</blockquote><p>
+<a name="d2f.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67436"></a>
+The <i>d2f</i> instruction performs a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. It may lose information about the overall magnitude of <i>value'</i> and may also lose precision.</blockquote><p>
+
+<a name="d2i"></a>
+<hr><h2>d2i</h2>
+<a name="d2i.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67449"></a>
+Convert <code>double</code> to <code>int</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67448"></a>
+ <i>d2i</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="d2i.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67450"></a>
+<i>d2i</i> = 142 (0x8e)</blockquote><p>
+<a name="d2i.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67451"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="d2i.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67452"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>double</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a> resulting in <i>value'</i>. Then <i>value' </i>is converted to an <code>int</code>. The <i>result</i> is pushed onto the operand stack: </blockquote><p>
+<ul><li>If the <i>value'</i> is NaN, the <i>result</i> of the conversion is an <code>int</code> 0. <p>
+<li>Otherwise, if the <i>value'</i> is not an infinity, it is rounded to an  integer value <i>V</i>, rounding towards zero using IEEE 754 round towards zero mode. If this integer value <i>V</i> can be represented as an <code>int</code>, then the <i>result</i> is the <code>int</code> value <em>V</em>.<p>
+<li>Otherwise, either the <i>value'</i> must be too small (a negative value of large magnitude or negative infinity), and the <i>result</i> is the smallest representable value of type <code>int</code>, or the <i>value'</i> must be too large (a positive value of large magnitude or positive infinity), and the <i>result</i> is the largest representable value of type <code>int</code>.
+</ul><a name="d2i.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67456"></a>
+The <i>d2i</i> instruction performs a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. It may lose information about the overall magnitude of <i>value'</i> and may also lose precision.</blockquote><p>
+
+<a name="d2l"></a>
+<hr><h2>d2l</h2>
+<a name="d2l.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67466"></a>
+Convert <code>double</code> to <code>long</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67465"></a>
+ <i>d2l</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="d2l.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67467"></a>
+<i>d2l</i> = 143 (0x8f)</blockquote><p>
+<a name="d2l.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67468"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="d2l.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67469"></a>
+The <i>value</i> on the top of the operand stack must be of type <code>double</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a> resulting in <i>value'</i>. Then <i>value' </i>is converted to a <code>long</code>. The <i>result</i> is pushed onto the operand stack: </blockquote><p>
+<ul><li>If the <i>value'</i> is NaN, the <i>result</i> of the conversion is a <code>long</code> 0. <p>
+<li>Otherwise, if the <i>value'</i> is not an infinity, it is rounded to an  integer value <i>V</i>, rounding towards zero using IEEE 754 round towards zero mode. If this integer value <i>V</i> can be represented  as a <code>long</code>, then the <i>result</i> is the <code>long</code> value <em>V</em>.<p>
+<li>Otherwise, either the <i>value'</i> must be too small (a negative value of large magnitude or negative infinity), and the <i>result</i> is the smallest representable value of type <code>long</code>, or the <i>value'</i> must be too large (a positive value of large magnitude or positive infinity), and the <i>result</i> is the largest representable value of type <code>long</code>.
+</ul><a name="d2l.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67473"></a>
+The <i>d2l</i> instruction performs a narrowing primitive conversion <a href="Concepts.doc.html#26142">(&#167;2.6.3)</a>. It may lose information about the overall magnitude of <i>value'</i> and may also lose precision.</blockquote><p>
+
+<a name="dadd"></a>
+<hr><h2>dadd</h2>
+<a name="dadd.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="339346"></a>
+Add <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="339343"></a>
+ <i>dadd</i>
+<td><a name="339345"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dadd.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="339349"></a>
+<i>dadd</i> = 99 (0x63)</blockquote><p>
+<a name="dadd.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67491"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="dadd.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67492"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>double</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>double</code> <i>result</i> is <i>value1'</i> + <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="67493"></a>
+The result of a <i>dadd</i> instruction is governed by the rules of IEEE arithmetic:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>The sum of two infinities of opposite sign is NaN.<p>
+<li>The sum of two infinities of the same sign is the infinity of that sign.<p>
+<li>The sum of an infinity and any finite value is equal to the infinity.<p>
+<li>The sum of two zeroes of opposite sign is positive zero.<p>
+<li>The sum of two zeroes of the same sign is the zero of that sign.<p>
+<li>The sum of a zero and a nonzero finite value is equal to the nonzero value.<p>
+<li>The sum of two nonzero finite values of the same magnitude and opposite sign is positive zero.<p>
+<li>In the remaining cases, where neither operand is an infinity, a zero, or NaN and the values have the same sign or have different magnitudes, the sum is computed and rounded to the nearest  representable value using IEEE 754 round to nearest mode. If the magnitude is too large to represent as a <code>double</code>, we say the operation overflows; the result is then an infinity of appropriate sign. If the magnitude is too small to represent as a <code>double</code>, we say the operation underflows; the result is then a zero of appropriate sign. 
+</ul><blockquote><a name="67503"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, or loss of precision may occur, execution of a <i>dadd</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="daload"></a>
+<hr><h2>daload</h2>
+<a name="daload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67513"></a>
+Load <code>double</code> from array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67512"></a>
+ <i>daload</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="daload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67514"></a>
+<i>daload</i> = 49 (0x31)</blockquote><p>
+<a name="daload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67515"></a>
+..., <i>arrayref</i>, <i>index</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="daload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67516"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>double</code>. The <i>index</i> must be of type <code>int</code>. Both <i>arrayref</i> and <i>index</i> are popped from the operand stack. The <code>double</code> <i>value</i> in the component of the array at <i>index</i> is retrieved and pushed onto the operand stack.</blockquote><p>
+<a name="daload.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="67518"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>daload</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="67519"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>daload</i> instruction throws an <code>ArrayIndexOutOfBoundsException</code>.</blockquote><p>
+
+<a name="dastore"></a>
+<hr><h2>dastore</h2>
+<a name="dastore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67532"></a>
+Store into <code>double</code> array<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67531"></a>
+ <i>dastore</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dastore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67533"></a>
+<i>dastore</i> = 82 (0x52)</blockquote><p>
+<a name="dastore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67534"></a>
+..., <i>arrayref</i>, <i>index</i>, <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="dastore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67535"></a>
+The <i>arrayref</i> must be of type <code>reference</code> and must refer to an array whose components are of type <code>double</code>. The <i>index</i> must be of type <code>int</code>, and <i>value</i> must be of type <code>double</code>. The <i>arrayref</i>, <i>index</i>, and <i>value</i> are popped from the operand stack. The <code>double</code> <i>value</i> undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>, which is stored as the component of the array indexed by <i>index</i>. </blockquote><p>
+<a name="dastore.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="67537"></a>
+If <i>arrayref</i><em> </em>is <code>null</code>, <i>dastore</i> throws a <code>NullPointerException</code>. </blockquote><p>
+<blockquote><a name="310968"></a>
+Otherwise, if <i>index</i> is not within the bounds of the array referenced by <i>arrayref</i>, the <i>dastore</i> instruction throws an <code>ArrayIndexOutOfBounds</code><code>Exception</code>.</blockquote><p>
+
+<a name="dcmpop"></a>
+<hr><h2>dcmp&lt;op&gt;</h2>
+<a name="dcmpop.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67545"></a>
+Compare <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67544"></a>
+ <i>dcmp&lt;op&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dcmpop.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67546"></a>
+<i>dcmpg</i> = 152 (0x98) <i>dcmpl</i> = 151 (0x97)</blockquote><p>
+<a name="dcmpop.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67547"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="dcmpop.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="404009"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>double</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. A floating-point comparison is performed:</blockquote><p>
+<a name="422675"></a>
+<ul><li>If <i>value1'</i> is greater than <i>value2'</i>, the <code>int</code> value <i>1</i> is pushed onto the operand stack. <p>
+<a name="422676"></a>
+<li>Otherwise, if <i>value1'</i> is equal to <i>value2'</i>, the <code>int</code> value <i>0</i> is pushed onto the operand stack.<p>
+<a name="427276"></a>
+<li>Otherwise, if <i>value1'</i> is less than <i>value2'</i>, the <code>int</code> value -<i>1</i> is pushed onto the operand stack. <p></ul>
+<a name="427277"></a>
+	&#183;	 Otherwise, at least one of <i>value1'</i> or <i>value2'</i> is NaN. The <i>dcmpg</i> instruction pushes the <code>int</code> value <i>1</i> onto the operand stack and the <i>dcmpl</i> instruction pushes the <code>int</code> value -<i>1</i> onto the operand stack.<p>
+<blockquote><a name="67549"></a>
+Floating-point comparison is performed in accordance with IEEE 754. All values other than NaN are ordered, with negative infinity less than all finite values and positive infinity greater than all finite values. Positive zero and negative zero are considered equal.</blockquote><p>
+<a name="dcmpop."></a>
+<p><b></b><br>
+
+<a name="dcmpop.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67550"></a>
+The <i>dcmpg</i> and <i>dcmpl</i> instructions differ only in their treatment of a comparison involving NaN. NaN is unordered, so any <code>double</code> comparison fails if either or both of its operands are NaN. With both <i>dcmpg</i> and <i>dcmpl</i> available, any <code>double</code> comparison may be compiled to push the same <i>result</i> onto the operand stack whether the comparison fails on non-NaN values or fails because it encountered a NaN. For more information, see <a href="Compiling.doc.html#8478">Section 7.5, "More Control Examples."</a></blockquote><p>
+
+<a name="dconst_d"></a>
+<hr><h2>dconst_&lt;d&gt;</h2>
+<a name="dconst_d.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67564"></a>
+Push <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67563"></a>
+ <i>dconst_&lt;d&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dconst_d.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67565"></a>
+<i>dconst_0</i> = 14 (0xe) <i>dconst_1</i> = 15 (0xf)</blockquote><p>
+<a name="dconst_d.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67566"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>&lt;d&gt;</i></blockquote><p>
+<a name="dconst_d.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67567"></a>
+Push the <code>double</code> constant <i>&lt;d&gt;</i> (<i>0.0 </i>or<i> 1.0</i>) onto the operand stack. </blockquote><p>
+
+<a name="ddiv"></a>
+<hr><h2>ddiv</h2>
+<a name="ddiv.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67577"></a>
+Divide <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67576"></a>
+ <i>ddiv</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="ddiv.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67578"></a>
+<i>ddiv</i> = 111 (0x6f)</blockquote><p>
+<a name="ddiv.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67579"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="ddiv.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67580"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>double</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>double</code> <i>result</i> is <i>value1'</i> / <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="67581"></a>
+The result of a <i>ddiv</i> instruction is governed by the rules of IEEE arithmetic:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>If neither <i>value1'</i> nor <i>value2'</i> is NaN, the sign of the result is  positive if both values have the same sign, negative if the values have different signs.<p>
+<li>Division of an infinity by an infinity results in NaN.<p>
+<li>Division of an infinity by a finite value results in a signed infinity, with the sign-producing rule just given.<p>
+<li>Division of a finite value by an infinity results in a signed zero, with the sign-producing rule just given.<p>
+<li>Division of a zero by a zero results in NaN; division of zero by any other finite value results in a signed zero, with the sign-producing rule just given.<p>
+<li>Division of a nonzero finite value by a zero results in a signed infinity, with the sign-producing rule just given.<p>
+<li>In the remaining cases, where neither operand is an infinity, a zero, or NaN, the quotient is computed and rounded to the nearest <code>double</code> using IEEE 754 round to nearest mode. If the magnitude is too large to represent as a <code>double</code>, we say the operation overflows; the result is then an infinity of appropriate sign. If the  magnitude is too small to represent as a <code>double</code>, we say the operation underflows; the result is then a zero of appropriate sign. 
+</ul><blockquote><a name="67590"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, division by zero, or loss of precision may occur, execution of a <i>ddiv</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="dload"></a>
+<hr><h2>dload</h2>
+<a name="dload.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67610"></a>
+Load <code>double</code> from local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67607"></a>
+ <i>dload</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="67609"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dload.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67611"></a>
+<i>dload</i> = 24 (0x18)</blockquote><p>
+<a name="dload.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67612"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="dload.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67613"></a>
+The <i>index</i> is an unsigned byte. Both <i>index</i> and <i>index </i>+ <i>1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The local variable at <i>index</i> must contain a <code>double</code>. The <i>value</i> of the local variable at <i>index</i> is pushed onto the operand stack.</blockquote><p>
+<a name="dload.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67617"></a>
+The <i>dload</i> opcode can be used in conjunction with the <i>wide</i> instruction to access a local variable using a two-byte unsigned index.</blockquote><p>
+
+<a name="dload_n"></a>
+<hr><h2>dload_&lt;n&gt;</h2>
+<a name="dload_n.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67627"></a>
+Load <code>double</code> from local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67626"></a>
+ <i>dload_&lt;n&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dload_n.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67628"></a>
+<i>dload_0</i> = 38 (0x26) <i>dload_1</i> = 39 (0x27) <i>dload_2</i> = 40 (0x28) <i>dload_3</i> = 41 (0x29)</blockquote><p>
+<a name="dload_n.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67629"></a>
+... <img src="chars/arrwdbrt.gif"> ..., <i>value</i></blockquote><p>
+<a name="dload_n.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67630"></a>
+Both <i>&lt;n&gt;</i> and <i>&lt;n&gt; </i>+ <i>1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The local variable at <i>&lt;n&gt;</i> must contain a <code>double</code>. The <i>value </i>of the local variable at <i>&lt;n&gt;</i> is pushed onto the operand stack. </blockquote><p>
+<a name="dload_n.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67634"></a>
+Each of the <i>dload_&lt;n&gt;</i> instructions is the same as <i>dload</i> with an <i>index</i> of <i>&lt;n&gt;</i>, except that the operand <i>&lt;n&gt;</i> is implicit.</blockquote><p>
+
+<a name="dmul"></a>
+<hr><h2>dmul</h2>
+<a name="dmul.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67641"></a>
+Multiply <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67640"></a>
+ <i>dmul</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dmul.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67642"></a>
+<i>dmul</i> = 107 (0x6b)</blockquote><p>
+<a name="dmul.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67643"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="dmul.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67644"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>double</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>double</code> <i>result</i> is <i>value1'</i> * <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="67645"></a>
+The result of a <i>dmul</i> instruction is governed by the rules of IEEE arithmetic:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>If neither <i>value1'</i> nor <i>value2'</i> is NaN, the sign of the result is  positive if both values have the same sign and negative if the  values have different signs.<p>
+<li>Multiplication of an infinity by a zero results in NaN.<p>
+<li>Multiplication of an infinity by a finite value results in a signed infinity, with the sign-producing rule just given.<p>
+<li>In the remaining cases, where neither an infinity nor NaN is involved, the product is computed and rounded to the nearest  representable value using IEEE 754 round to nearest mode. If the magnitude is too large to represent as a <code>double</code>, we say the operation overflows; the result is then an infinity of appropriate sign. If the magnitude is too small to represent as a <code>double</code>, we say the operation underflows; the result is then a zero of appropriate sign.
+</ul>
+<blockquote><a name="67651"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, or loss of precision may occur, execution of a <i>dmul</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="dneg"></a>
+<hr><h2>dneg</h2>
+<a name="dneg.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67661"></a>
+Negate <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67660"></a>
+ <i>dneg</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dneg.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67662"></a>
+<i>dneg</i> = 119 (0x77)</blockquote><p>
+<a name="dneg.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67663"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="dneg.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67664"></a>
+The <i>value</i> must be of type <code>double</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The <code>double</code> <i>result</i> is the arithmetic negation of <i>value'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="67665"></a>
+For <code>double</code> values, negation is not the same as subtraction from zero. If <code>x</code> is +<code>0.0</code>, then <code>0.0</code>-<code>x</code> equals +<code>0.0</code>, but -<code>x</code> equals -<code>0.0</code>. Unary minus merely inverts the sign of a <code>double</code>. </blockquote><p>
+<blockquote><a name="67666"></a>
+Special cases of interest:</blockquote><p>
+<ul><li>If the operand is NaN, the result is NaN (recall that NaN has no sign).<p>
+<li>If the operand is an infinity, the result is the infinity of opposite sign.<p>
+<li>If the operand is a zero, the result is the zero of opposite sign.
+</ul>
+<a name="drem"></a>
+<hr><h2>drem</h2>
+<a name="drem.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67676"></a>
+Remainder <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67675"></a>
+ <i>drem</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="drem.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67677"></a>
+<i>drem</i><em> </em>= 115 (0x73)</blockquote><p>
+<a name="drem.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67678"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="drem.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67679"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>double</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <i>result</i> is calculated and pushed onto the operand stack as a <code>double</code>.</blockquote><p>
+<blockquote><a name="67680"></a>
+The result of a <i>drem</i> instruction is not the same as that of the so-called remainder operation defined by IEEE 754. The IEEE 754 "remainder" operation computes the remainder from a rounding division, not a truncating division, and so its behavior is <i>not</i> analogous to that of the usual integer remainder operator. Instead, the Java virtual machine defines <i>drem</i> to behave in a manner analogous to that of the Java virtual machine integer remainder instructions (<i>irem</i> and <i>lrem</i>); this may be compared with the C library function <code>fmod</code>.</blockquote><p>
+<blockquote><a name="427340"></a>
+The result of a <i>drem</i> instruction is governed by these rules:</blockquote><p>
+<ul><li>If either <i>value1'</i> or <i>value2'</i> is NaN, the result is NaN.<p>
+<li>If neither <i>value1'</i> nor <i>value2'</i> is NaN, the sign of the result equals the sign of the dividend.<p>
+<li>If the dividend is an infinity or the divisor is a zero or both, the result is NaN.<p>
+<li>If the dividend is finite and the divisor is an infinity, the result equals the dividend.<p>
+<li>If the dividend is a zero and the divisor is finite, the result equals the dividend.<p>
+<li>In the remaining cases, where neither operand is an infinity, a zero, or NaN, the floating-point remainder <i>result</i> from a dividend <i>value1'</i> and a divisor <i>value2'</i> is defined by the mathematical  relation <i>result </i>=<i> value1' </i>-<i> </i>(<i>value2' </i>*<i> q</i>), where <i>q</i> is an integer that is negative only if <i>value1' </i>/<i> value2'</i> is negative, and positive only if <i>value1' </i>/<i> value2' </i>is positive, and whose magnitude is as large  as possible without exceeding the magnitude of the true mathematical quotient of <i>value1'</i> and <i>value2'</i>.
+</ul><blockquote><a name="67700"></a>
+Despite the fact that division by zero may occur, evaluation of a <i>drem</i> instruction never throws a runtime exception. Overflow, underflow, or loss of precision cannot occur.</blockquote><p>
+<a name="drem.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67701"></a>
+The IEEE 754 remainder operation may be computed by the library routine <code>Math.IEEEremainder</code>.</blockquote><p>
+
+<a name="dreturn"></a>
+<hr><h2>dreturn</h2>
+<a name="dreturn.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67717"></a>
+Return <code>double</code> from method<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67716"></a>
+ <i>dreturn</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dreturn.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67718"></a>
+<i>dreturn</i> = 175 (0xaf)</blockquote><p>
+<a name="dreturn.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67719"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif">  [empty]</blockquote><p>
+<a name="dreturn.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="452734"></a>
+The current method must have return type <code>double</code>. The <i>value</i> must be of type <code>double</code>. If the current method is a <code>synchronized</code> method, the monitor acquired or reentered on invocation of the method is released or exited (respectively) as if by execution of a <i>monitorexit</i> instruction. If no exception is thrown, <i>value</i> is popped from the operand stack of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a> and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The <i>value'</i> is pushed onto the operand stack of the frame of the invoker. Any other values on the operand stack of the current method are discarded.</blockquote><p>
+<blockquote><a name="67724"></a>
+The interpreter then returns control to the invoker of the method, reinstating the frame of the invoker.</blockquote><p>
+<a name="dreturn.Runtime"></a>
+<p><b>Runtime Exceptions</b><br>
+<blockquote><a name="250706"></a>
+If the current method is a <code>synchronized</code> method and the current thread is not the owner of the monitor acquired or reentered on invocation of the method, <i>dreturn</i> throws an <code>IllegalMonitorStateException</code>. This can happen, for example, if a <code>synchronized</code> method contains a <i>monitorexit</i> instruction, but no <i>monitorenter</i> instruction, on the object on which the method is synchronized.</blockquote><p>
+<blockquote><a name="250707"></a>
+Otherwise, if the virtual machine implementation enforces the rules on structured use of locks described in <a href="Threads.doc.html#22500">&#167;8.13</a> and if the first of those rules is violated during invocation of the current method, then <i>dreturn</i> throws an <code>IllegalMonitorStateException</code>.</blockquote><p>
+
+<a name="dstore"></a>
+<hr><h2>dstore</h2>
+<a name="dstore.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67733"></a>
+Store <code>double</code> into local variable<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67730"></a>
+ <i>dstore</i>
+<td><a name="87568"></a>
+ 
+
+<tr><td><a name="67732"></a>
+ <i>index</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dstore.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67734"></a>
+<i>dstore</i> = 57 (0x39)</blockquote><p>
+<a name="dstore.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67735"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="dstore.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="427239"></a>
+The <i>index</i> is an unsigned byte. Both <i>index</i> and <i>index </i>+ <i>1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The <i>value</i> on the top of the operand stack must be of type <code>double</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The local variables at <i>index</i> and <i>index</i> &#32;+ &#32;<i>1</i> are set to <i>value'</i>. </blockquote><p>
+<a name="dstore.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67740"></a>
+The <i>dstore</i> opcode can be used in conjunction with the <i>wide</i> instruction to access a local variable using a two-byte unsigned index.</blockquote><p>
+<blockquote><a name="67741"></a>
+</blockquote><p>
+
+<a name="dstore_n"></a>
+<hr><h2>dstore_&lt;n&gt;</h2>
+<a name="dstore_n.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote>Store <code>double</code> into local variable<a name="67751"></a>
+<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67750"></a>
+ <i>dstore_&lt;n&gt;</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dstore_n.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67752"></a>
+<i>dstore_0</i> = 71 (0x47) <i>dstore_1</i> = 72 (0x48) <i>dstore_2</i> = 73 (0x49) <i>dstore_3</i> = 74 (0x4a)</blockquote><p>
+<a name="dstore_n.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67753"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ...</blockquote><p>
+<a name="dstore_n.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67754"></a>
+Both <i>&lt;n&gt;</i> and <i>&lt;n&gt; + 1</i> must be indices into the local variable array of the current frame <a href="Overview.doc.html#17257">(&#167;3.6)</a>. The <i>value</i> on the top of the operand stack must be of type <code>double</code>. It is popped from the operand stack and undergoes value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value'</i>. The local variables at <i>&lt;n&gt;</i> and <i>&lt;n&gt;</i> &#32;+ &#32;<i>1</i> are set to <i>value'</i>.</blockquote><p>
+<a name="dstore_n.Notes"></a>
+<p><b>Notes</b><br>
+<blockquote><a name="67758"></a>
+Each of the <i>dstore_&lt;n&gt;</i> instructions is the same as <i>dstore</i> with an <i>index</i> of <i>&lt;n&gt;</i>, except that the operand <i>&lt;n&gt;</i> is implicit.</blockquote><p>
+
+<a name="dsub"></a>
+<hr><h2>dsub</h2>
+<a name="dsub.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67771"></a>
+Subtract <code>double</code><p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67770"></a>
+ <i>dsub</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dsub.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67772"></a>
+<i>dsub</i> = 103 (0x67)</blockquote><p>
+<a name="dsub.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67773"></a>
+..., <i>value1</i>, <i>value2</i> <img src="chars/arrwdbrt.gif"> ..., <i>result</i></blockquote><p>
+<a name="dsub.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67774"></a>
+Both <i>value1</i> and <i>value2</i> must be of type <code>double</code>. The values are popped from the operand stack and undergo value set conversion <a href="Overview.doc.html#33120">(&#167;3.8.3)</a>, resulting in <i>value1'</i> and <i>value2'</i>. The <code>double</code> <i>result</i> is <i>value1'</i> - <i>value2'</i>. The <i>result</i> is pushed onto the operand stack.</blockquote><p>
+<blockquote><a name="67775"></a>
+For <code>double</code> subtraction, it is always the case that <code>a</code>-<code>b</code> produces the same result as <code>a</code>+(-<code>b</code>). However, for the <i>dsub</i> instruction, subtraction from zero is not the same as negation, because if <code>x</code> is +<code>0.0</code>, then <code>0.0</code>-<code>x</code> equals +<code>0.0</code>, but -<code>x</code> equals -<code>0.0</code>. </blockquote><p>
+<blockquote><a name="67776"></a>
+The Java virtual machine requires support of gradual underflow as defined by IEEE 754. Despite the fact that overflow, underflow, or loss of precision may occur, execution of a <i>dsub</i> instruction never throws a runtime exception.</blockquote><p>
+
+<a name="dup"></a>
+<hr><h2>dup</h2>
+<a name="dup.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67789"></a>
+Duplicate the top operand stack value<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67788"></a>
+ <i>dup</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dup.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67790"></a>
+<i>dup</i> = 89 (0x59)</blockquote><p>
+<a name="dup.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67791"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i>, <i>value</i></blockquote><p>
+<a name="dup.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67792"></a>
+Duplicate the top value on the operand stack and push the duplicated value onto the operand stack. </blockquote><p>
+<blockquote><a name="67793"></a>
+The <i>dup</i> instruction must not be used unless <i>value</i> is a value of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+
+<a name="dup_x1"></a>
+<hr><h2>dup_x1</h2>
+<a name="dup_x1.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67804"></a>
+Duplicate the top operand stack value and insert two values down<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67803"></a>
+ <i>dup_x1</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dup_x1.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67805"></a>
+<i>dup_x1</i> = 90 (0x5a)</blockquote><p>
+<a name="dup_x1.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="87856"></a>
+..., <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value1</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<a name="dup_x1.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67807"></a>
+Duplicate the top value on the operand stack and insert the duplicated value two values down in the operand stack. </blockquote><p>
+<blockquote><a name="67808"></a>
+The <i>dup_x1</i> instruction must not be used unless both <i>value1</i> and <i>value2</i> are values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+
+<a name="dup_x2"></a>
+<hr><h2>dup_x2</h2>
+<a name="dup_x2.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67819"></a>
+Duplicate the top operand stack value and insert two or three values down<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67818"></a>
+ <i>dup_x2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dup_x2.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67820"></a>
+<i>dup_x2</i><em> </em>= 91 (0x5b)</blockquote><p>
+<a name="dup_x2.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67821"></a>
+Form 1:</blockquote><p>
+<blockquote><a name="360371"></a>
+..., <i>value3</i>, <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value1</i>, <i>value3</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="349837"></a>
+where <i>value1</i>, <i>value2</i>, and <i>value3</i> are all values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="360368"></a>
+Form 2:</blockquote><p>
+<a name="dup_x2."></a>
+<blockquote><a name="349841"></a>
+..., <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value1</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="360367"></a>
+where <i>value1</i> is a value of a category 1 computational type and <i>value2</i> is a value of a category 2 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<a name="dup_x2.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67822"></a>
+Duplicate the top value on the operand stack and insert the duplicated value two or three values down in the operand stack. </blockquote><p>
+
+<a name="dup2"></a>
+<hr><h2>dup2</h2>
+<a name="dup2.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67834"></a>
+Duplicate the top one or two operand stack values<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67833"></a>
+ <i>dup2</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dup2.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67835"></a>
+<i>dup2</i> = 92 (0x5c)</blockquote><p>
+<a name="dup2.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67836"></a>
+Form 1:</blockquote><p>
+<blockquote><a name="360424"></a>
+..., <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ..., <i>value2</i>, <i>value1</i><em>, </em><i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="360427"></a>
+where both <i>value1</i> and <i>value2</i> are values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="356577"></a>
+Form 2:</blockquote><p>
+<a name="dup2."></a>
+<blockquote><a name="349726"></a>
+..., <i>value</i> <img src="chars/arrwdbrt.gif"> ..., <i>value</i>, <i>value</i></blockquote><p>
+<blockquote><a name="360428"></a>
+where <i>value</i> is a value of a category 2 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<a name="dup2.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67837"></a>
+Duplicate the top one or two values on the operand stack and push the duplicated value or values back onto the operand stack in the original order. </blockquote><p>
+
+<a name="dup2_x1"></a>
+<hr><h2>dup2_x1</h2>
+<a name="dup2_x1.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="67852"></a>
+Duplicate the top one or two operand stack values and insert two or three values down<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="67851"></a>
+ <i>dup2_x1</i>
+<td><a name="87568"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dup2_x1.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67853"></a>
+<i>dup2_x1</i> = 93 (0x5d)</blockquote><p>
+<a name="dup2_x1.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67854"></a>
+Form 1:</blockquote><p>
+<blockquote><a name="360435"></a>
+..., <i>value3</i>, <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ..., <i>value2</i><em>, </em><i>value1</i>, <i>value3</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="360438"></a>
+where <i>value1</i>, <i>value2</i>, and <i>value3</i> are all values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="349758"></a>
+Form 2:</blockquote><p>
+<a name="dup2_x1."></a>
+<blockquote><a name="349751"></a>
+..., <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ..., <i>value1</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="360439"></a>
+where <i>value1</i> is a value of a category 2 computational type and <i>value2</i> is a value of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<a name="dup2_x1.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67855"></a>
+Duplicate the top one or two values on the operand stack and insert the duplicated values, in the original order, one value beneath the original value or values in the operand stack. </blockquote><p>
+
+<a name="dup2_x2"></a>
+<hr><h2>dup2_x2</h2>
+<a name="dup2_x2.Operation"></a>
+<p><b>Operation</b><br>
+<blockquote><a name="360406"></a>
+Duplicate the top one or two operand stack values and insert two, three, or four values down<p><Table Border="1">
+</blockquote>
+
+<p><b>Format</b><br>
+<blockquote>
+
+<tr><td><a name="360403"></a>
+ <i>dup2_x2</i>
+<td><a name="360405"></a>
+ 
+
+</Table><br></blockquote><p>
+<a name="dup2_x2.Forms"></a>
+<p><b>Forms</b><br>
+<blockquote><a name="67865"></a>
+<i>dup2_x2</i> = 94 (0x5e)</blockquote><p>
+<a name="dup2_x2.Operand"></a>
+<p><b>Operand Stack</b><br>
+<blockquote><a name="67866"></a>
+Form 1:</blockquote><p>
+<blockquote><a name="360447"></a>
+...,<em> </em><i>value4</i>, <i>value3</i>, <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value2</i>, <i>value1</i>, <i>value4</i>, <i>value3</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="364327"></a>
+where <i>value1</i>, <i>value2</i>, <i>value3</i>, and <i>value4</i> are all values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="349801"></a>
+Form 2:</blockquote><p>
+<a name="dup2_x2."></a>
+<blockquote><a name="349796"></a>
+...,<em> </em><i>value3</i>, <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value1</i>, <i>value3</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="364869"></a>
+where <i>value1</i> is a value of a category 2 computational type and <i>value2</i> and <i>value3</i> are both values of a category 1 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="349803"></a>
+Form 3:</blockquote><p>
+<a name="dup2_x2."></a>
+<blockquote><a name="349805"></a>
+...,<em> </em><i>value3</i>, <i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value2</i>, <i>value1</i>, <i>value3</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="364877"></a>
+where <i>value1</i> and <i>value2</i> are both values of a category 1 computational type and <i>value3</i> is a value of a category 2 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+<blockquote><a name="360452"></a>
+Form 4:</blockquote><p>
+<a name="dup2_x2."></a>
+<blockquote><a name="349813"></a>
+...,<em> </em><i>value2</i>, <i>value1</i> <img src="chars/arrwdbrt.gif"> ...<em>, </em><i>value1</i>, <i>value2</i>, <i>value1</i></blockquote><p>
+<blockquote><a name="488961"></a>
+where <i>value1</i> and <i>value2</i> are both values of a category 2 computational type <a href="Overview.doc.html#7565">(&#167;3.11.1)</a>.</blockquote><p>
+
+<a name="dup2_x2.Description"></a>
+<p><b>Description</b><br>
+<blockquote><a name="67867"></a>
+Duplicate the top one or two values on the operand stack and insert the duplicated values, in the original order, into the operand stack.</blockquote><p>
+
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc2.html">Prev</a> | <a href="Instructions2.doc4.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

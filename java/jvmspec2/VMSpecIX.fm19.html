@@ -1,0 +1,749 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  </title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm18.html">Prev</a> | <a href="VMSpecIX.fm20.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a href="VMSpecIX.fm.html">symbols</a>
+<a href="VMSpecIX.fm1.html">A</a>
+<a href="VMSpecIX.fm2.html">B</a>
+<a href="VMSpecIX.fm3.html">C</a>
+<a href="VMSpecIX.fm4.html">D</a>
+<a href="VMSpecIX.fm5.html">E</a>
+<a href="VMSpecIX.fm6.html">F</a>
+<a href="VMSpecIX.fm7.html">G</a>
+<a href="VMSpecIX.fm8.html">H</a>
+<a href="VMSpecIX.fm9.html">I</a>
+<a href="VMSpecIX.fm10.html">J</a>
+<a href="VMSpecIX.fm11.html">L</a>
+<a href="VMSpecIX.fm12.html">M</a>
+<a href="VMSpecIX.fm13.html">N</a>
+<a href="VMSpecIX.fm14.html">O</a>
+<a href="VMSpecIX.fm15.html">P</a>
+<a href="VMSpecIX.fm16.html">Q</a>
+<a href="VMSpecIX.fm17.html">R</a>
+<a href="VMSpecIX.fm18.html">S</a>
+<a href="VMSpecIX.fm19.html">T</a>
+<a href="VMSpecIX.fm20.html">U</a>
+<a href="VMSpecIX.fm21.html">V</a>
+<a href="VMSpecIX.fm22.html">W</a>
+<a href="VMSpecIX.fm23.html">Z</a>
+<hr>
+<a name="6961056"></a>
+<center><h1> T</h1></center>
+<dl><dt><b><strong>tables
+</strong></b><dl>
+<a name="6961059"></a>
+<dt>in class<a href="ClassFile.doc.html#74328"> file specification,&#32;93</a>
+</dl>
+<dt><b>tableswitch <strong>instruction
+</strong></b><dl>
+<a name="6961062"></a>
+<dt><em>See also</em> lookupswitch instruction
+<a name="6961064"></a>
+<dt><a href="ClassFile.doc.html#11572">code array alignment effect,&#32;121</a>
+<a name="6961066"></a>
+<dt><a href="Compiling.doc.html#14943">compilation examples, compiling switches,&#32;384</a>
+<a name="6961068"></a>
+<dt><a href="ClassFile.doc.html#9161">constraints, static,&#32;134</a>
+<a name="6961070"></a>
+<dt><a href="Instructions2.doc14.html#tableswitch">definition,&#32;358</a>
+</dl>
+<dt><b>tag <strong>item
+</strong></b><dl>
+<a name="6961073"></a>
+<dt>(CONSTANT_Class_info<a href="ClassFile.doc.html#1229"> structure),&#32;104</a>
+<a name="6961075"></a>
+<dt>(CONSTANT_Double_info<a href="ClassFile.doc.html#7313"> structure),&#32;109</a>
+<a name="6961077"></a>
+<dt>(CONSTANT_Fieldref_info<a href="ClassFile.doc.html#6690"> structure),&#32;105</a>
+<a name="6961079"></a>
+<dt>(CONSTANT_Integer_info<a href="ClassFile.doc.html#21652"> structure),&#32;107</a>
+<a name="6961081"></a>
+<dt>(CONSTANT_InterfaceMethodref_info<a href="ClassFile.doc.html#6701"> structure),&#32;105</a>
+<a name="6961083"></a>
+<dt>(CONSTANT_Long_info<a href="ClassFile.doc.html#7310"> structure),&#32;109</a>
+<a name="6961085"></a>
+<dt>(CONSTANT_Methodref_info<a href="ClassFile.doc.html#6698"> structure),&#32;105</a>
+<a name="6961087"></a>
+<dt>(CONSTANT_NameAndType_info<a href="ClassFile.doc.html#1335"> structure),&#32;110</a>
+<a name="6961089"></a>
+<dt>(CONSTANT_String_info<a href="ClassFile.doc.html#21647"> structure),&#32;106</a>
+<a name="6961091"></a>
+<dt>(CONSTANT_Utf8_info<a href="ClassFile.doc.html#1311"> structure),&#32;112</a>
+</dl>
+<dt><b><strong>term definitions
+</strong></b><dl>
+<a name="6961094"></a>
+<dt><a href="Overview.doc.html#22092">abrupt completion,&#32;74</a>
+<a name="6961096"></a>
+<dt>abstract
+<dl>
+<a name="6961097"></a>
+<dt><a href="Concepts.doc.html#35615">class,&#32;28</a>
+<a name="6961099"></a>
+<dt><a href="Concepts.doc.html#16355">method,&#32;32</a>
+</dl>
+<a name="6961101"></a>
+<dt><a href="Concepts.doc.html#16463">array,&#32;38</a>
+<dl>
+<a name="6961103"></a>
+<dt><a href="Concepts.doc.html#22853">access expression,&#32;39</a>
+<a name="6961105"></a>
+<dt><a href="Concepts.doc.html#16467">component,&#32;38</a>
+<a name="6961107"></a>
+<dt><a href="Concepts.doc.html#16468">component type,&#32;38</a>
+<a name="6961109"></a>
+<dt><a href="Concepts.doc.html#17995">component, as kind of variable,&#32;13</a>
+<a name="6961111"></a>
+<dt><a href="Concepts.doc.html#25388">creation expression,&#32;12</a>, <a href="Concepts.doc.html#20776">39</a>
+<a name="6961114"></a>
+<dt><a href="Concepts.doc.html#16469">element,&#32;38</a>
+<a name="6961116"></a>
+<dt><a href="Concepts.doc.html#16469">element type,&#32;38</a>
+<a name="6961118"></a>
+<dt><a href="Concepts.doc.html#16467">empty,&#32;38</a>
+<a name="6961120"></a>
+<dt><a href="Concepts.doc.html#20776">initializer,&#32;39</a>
+<a name="6961122"></a>
+<dt><a href="Concepts.doc.html#16467">length of,&#32;38</a>
+<a name="6961124"></a>
+<dt><a href="Concepts.doc.html#25380">type,&#32;11</a>
+<a name="6961126"></a>
+<dt><a href="Concepts.doc.html#16467">variable,&#32;38</a>
+</dl>
+<a name="6961128"></a>
+<dt><a href="Concepts.doc.html#23148">ASCII,&#32;6</a>
+<a name="6961130"></a>
+<dt><a href="Threads.doc.html#22206">assign, as thread action,&#32;398</a>
+<a name="6961132"></a>
+<dt><a href="Concepts.doc.html#19829">assignable,&#32;21</a>
+<a name="6961134"></a>
+<dt>assignment
+<dl>
+<a name="6961135"></a>
+<dt><a href="Concepts.doc.html#17290">compatible,&#32;13</a>, <a href="Concepts.doc.html#19829">21</a>
+</dl>
+<a name="6961138"></a>
+<dt><a href="ConstantPool.doc.html#74730">binding, of native methods,&#32;170</a>
+<a name="6961140"></a>
+<dt><a href="ConstantPool.doc.html#74504">bootstrap class loader,&#32;158</a>
+<a name="6961142"></a>
+<dt><a href="Introduction.doc.html#3087">bytecode,&#32;2</a>
+<a name="6961144"></a>
+<dt><a href="Concepts.doc.html#24704">caller,&#32;41</a>
+<a name="6961146"></a>
+<dt>catch<a href="Concepts.doc.html#28948"> clause,&#32;40</a>
+<a name="6961148"></a>
+<dt><a href="Concepts.doc.html#24580">caught,&#32;40</a>
+<a name="6961150"></a>
+<dt>class
+<dl>
+<a name="6961151"></a>
+<dt>abstract<a href="Concepts.doc.html#35615">,&#32;28</a>
+<a name="6961153"></a>
+<dt><a href="ConstantPool.doc.html#72012">creation,&#32;158</a>
+<a name="6961155"></a>
+<dt><a href="Overview.doc.html#15582">current,&#32;72</a>
+<a name="6961157"></a>
+<dt><a href="Concepts.doc.html#29324">declaration,&#32;28</a>
+<a name="6961159"></a>
+<dt>final<a href="Concepts.doc.html#20342">,&#32;28</a>
+<a name="6961161"></a>
+<dt><a href="Concepts.doc.html#29397">initial,&#32;46</a>, <a href="ConstantPool.doc.html#72012">158</a>
+<a name="6962550"></a>
+<a name="6961164"></a>
+<dt><a href="Concepts.doc.html#25388">instance,&#32;12</a>
+<a name="6961166"></a>
+<dt><a href="Concepts.doc.html#25388">instance creation expression,&#32;12</a>
+<a name="6961168"></a>
+<dt><a href="Concepts.doc.html#26498">method,&#32;33</a>
+<a name="6961170"></a>
+<dt><a href="Concepts.doc.html#20346">modifier,&#32;28</a>
+<a name="6961172"></a>
+<dt>public<a href="Concepts.doc.html#20346">,&#32;28</a>
+<a name="6961174"></a>
+<dt>strictfp<a href="Concepts.doc.html#32968">,&#32;28</a>
+<a name="6961176"></a>
+<dt><a href="Concepts.doc.html#25380">type,&#32;11</a>
+<a name="6961178"></a>
+<dt><a href="Concepts.doc.html#17990">variable,&#32;13</a>
+</dl>
+<a name="6961180"></a>
+<dt>class loader
+<dl>
+<a name="6961181"></a>
+<dt><a href="ConstantPool.doc.html#74504">bootstrap,&#32;158</a>, <a href="ConstantPool.doc.html#79383">160</a>
+<a name="6961184"></a>
+<dt><a href="ConstantPool.doc.html#77474">defining,&#32;159</a>
+<a name="6961186"></a>
+<dt><a href="ConstantPool.doc.html#77493">delegating,&#32;159</a>
+<a name="6961188"></a>
+<dt><a href="ConstantPool.doc.html#77493">initiating,&#32;159</a>
+<a name="6961190"></a>
+<dt><a href="ConstantPool.doc.html#74504">user-defined,&#32;158</a>, <a href="ConstantPool.doc.html#79441">160</a>
+</dl>
+<a name="6961193"></a>
+<dt><a href="Concepts.doc.html#17290">compile-time type,&#32;13</a>
+<a name="6961195"></a>
+<dt><a href="Concepts.doc.html#24580">complete abruptly,&#32;40</a>
+<a name="6961197"></a>
+<dt><a href="Concepts.doc.html#24222">constant field,&#32;52</a>
+<a name="6961199"></a>
+<dt>constant pool
+<dl>
+<a name="6961200"></a>
+<dt>class<a href="ClassFile.doc.html#9597"> file format,&#32;103</a>
+<a name="6961202"></a>
+<dt><a href="Overview.doc.html#22973">runtime,&#32;70</a>
+</dl>
+<a name="6961204"></a>
+<dt><a href="Concepts.doc.html#16407">constructor,&#32;34</a>
+<dl>
+<a name="6961206"></a>
+<dt><a href="Concepts.doc.html#20504">default,&#32;34</a>
+<a name="6961208"></a>
+<dt><a href="Concepts.doc.html#23360">parameter, as kind of variable,&#32;14</a>
+</dl>
+<a name="6961210"></a>
+<dt>conversion
+<dl>
+<a name="6961211"></a>
+<dt><a href="Concepts.doc.html#25744">assignment,&#32;21</a>
+<a name="6961213"></a>
+<dt><a href="Concepts.doc.html#28838">binary numeric promotion,&#32;23</a>
+<a name="6961215"></a>
+<dt><a href="Concepts.doc.html#19492">casting,&#32;23</a>
+<a name="6961217"></a>
+<dt><a href="Concepts.doc.html#23424">context,&#32;16</a>
+<a name="6961219"></a>
+<dt><a href="Concepts.doc.html#25833">method invocation,&#32;22</a>
+<a name="6961221"></a>
+<dt><a href="Concepts.doc.html#19766">narrowing primitive,&#32;18</a>
+<a name="6961223"></a>
+<dt><a href="Concepts.doc.html#32879">narrowing reference,&#32;19</a>
+<a name="6961225"></a>
+<dt><a href="Concepts.doc.html#28838">unary numeric promotion,&#32;23</a>
+<a name="6961227"></a>
+<dt><a href="Concepts.doc.html#19693">widening primitive,&#32;17</a>
+<a name="6961229"></a>
+<dt><a href="Concepts.doc.html#25680">widening reference,&#32;19</a>
+</dl>
+<a name="6961231"></a>
+<dt><a href="Overview.doc.html#15582">current frame,&#32;71</a>
+<a name="6961233"></a>
+<dt><a href="Concepts.doc.html#15863">default value,&#32;14</a>
+<a name="6961235"></a>
+<dt><a href="Concepts.doc.html#23051">denormalized,&#32;11</a>
+<dl>
+<a name="6961237"></a>
+<dt><a href="Overview.doc.html#14562">floating-point number,&#32;85</a>
+</dl>
+<a name="6961239"></a>
+<dt><a href="ClassFile.doc.html#1170">descriptor,&#32;99</a>
+<a name="6961241"></a>
+<dt>direct
+<dl>
+<a name="6961242"></a>
+<dt><a href="Concepts.doc.html#20581">directly implement,&#32;35</a>
+<a name="6961244"></a>
+<dt><a href="Concepts.doc.html#26594">extension,&#32;35</a>
+<a name="6961246"></a>
+<dt><a href="Concepts.doc.html#20344">subclass,&#32;29</a>
+<a name="6961248"></a>
+<dt><a href="Concepts.doc.html#20344">superclass,&#32;29</a>
+<a name="6961250"></a>
+<dt><a href="Concepts.doc.html#26623">superinterface,&#32;36</a>
+</dl>
+<a name="6961252"></a>
+<dt><a href="Concepts.doc.html#24702">dynamically enclosed,&#32;41</a>
+<a name="6961254"></a>
+<dt><a href="Concepts.doc.html#24580">exception,&#32;39</a>
+<dl>
+<a name="6961256"></a>
+<dt><a href="Concepts.doc.html#24645">class,&#32;41</a>
+<a name="6961258"></a>
+<dt><a href="Concepts.doc.html#17997">handler parameter, as kind of variable,&#32;14</a>
+</dl>
+<a name="6961260"></a>
+<dt>extends<a href="Concepts.doc.html#20344"> clause,&#32;29</a>
+<a name="6961262"></a>
+<dt><a href="Concepts.doc.html#16338">field,&#32;29</a>
+<dl>
+<a name="6961264"></a>
+<dt>final<a href="Concepts.doc.html#29863">,&#32;30</a>
+<a name="6961266"></a>
+<dt>private<a href="Concepts.doc.html#29888">,&#32;30</a>
+<a name="6961268"></a>
+<dt>protected<a href="Concepts.doc.html#29888">,&#32;30</a>
+<a name="6961270"></a>
+<dt>public<a href="Concepts.doc.html#29888">,&#32;30</a>
+<a name="6961272"></a>
+<dt>static<a href="Concepts.doc.html#29890">,&#32;30</a>
+<a name="6961274"></a>
+<dt>transient<a href="Concepts.doc.html#18858">,&#32;30</a>
+<a name="6961276"></a>
+<dt>volatile<a href="Concepts.doc.html#37311">,&#32;31</a>
+</dl>
+<a name="6961278"></a>
+<dt>final
+<dl>
+<a name="6961279"></a>
+<dt><a href="Concepts.doc.html#20342">class,&#32;28</a>
+<a name="6961281"></a>
+<dt><a href="Concepts.doc.html#29863">field,&#32;30</a>
+<a name="6961283"></a>
+<dt><a href="Concepts.doc.html#16359">method,&#32;33</a>
+</dl>
+<a name="6961285"></a>
+<dt><a href="Concepts.doc.html#24383">finalizer,&#32;56</a>
+<a name="6961287"></a>
+<dt><a href="Overview.doc.html#3560">floating-point type,&#32;62</a>, <a href="Overview.doc.html#22892">63</a>
+<a name="6961290"></a>
+<dt><a href="Concepts.doc.html#34437">formal parameter,&#32;32</a>
+<a name="6961292"></a>
+<dt><a href="Concepts.doc.html#25388">garbage collection,&#32;12</a>
+<a name="6961294"></a>
+<dt><a href="Concepts.doc.html#23051">gradual underflow,&#32;11</a>
+<a name="6961296"></a>
+<dt><a href="Concepts.doc.html#24698">handle,&#32;41</a>, <a href="Overview.doc.html#31069">75</a>
+<a name="6961299"></a>
+<dt><a href="Overview.doc.html#6655">heap,&#32;68</a>
+<a name="6961301"></a>
+<dt><a href="Concepts.doc.html#29539">hiding,&#32;30</a>
+<a name="6961303"></a>
+<dt><a href="Concepts.doc.html#28702">identifier,&#32;6</a>
+<a name="6961305"></a>
+<dt><a href="Concepts.doc.html#20604">implement,&#32;36</a>
+<a name="6961307"></a>
+<dt><a href="Concepts.doc.html#20425">inheritance,&#32;29</a>
+<a name="6961309"></a>
+<dt><a href="ConstantPool.doc.html#72012">initial class,&#32;158</a>
+<a name="6961311"></a>
+<dt><a href="Concepts.doc.html#19011">initialization,&#32;51</a>, <a href="ConstantPool.doc.html#77978">170</a>
+<a name="6961314"></a>
+<dt>instance
+<dl>
+<a name="6961315"></a>
+<dt><a href="Concepts.doc.html#26500">method,&#32;33</a>
+<a name="6961317"></a>
+<dt><a href="Concepts.doc.html#17982">variable,&#32;13</a>
+</dl>
+<a name="6961319"></a>
+<dt><a href="Concepts.doc.html#16436">interface,&#32;35</a>
+<dl>
+<a name="6961321"></a>
+<dt><a href="Concepts.doc.html#25380">type,&#32;11</a>
+</dl>
+<a name="6961323"></a>
+<dt><a href="ClassFile.doc.html#41600">item,&#32;93</a>
+<a name="6961325"></a>
+<dt><a href="Overview.doc.html#30934">Java virtual machine stack,&#32;67</a>
+<a name="6961327"></a>
+<dt><a href="Compiling.doc.html#15152">JIT (just-in-time) code generation,&#32;363</a>
+<a name="6961329"></a>
+<dt><a href="Concepts.doc.html#24132">lazy resolution,&#32;49</a>
+<a name="6961331"></a>
+<dt><a href="ConstantPool.doc.html#71814">linking,&#32;164</a>
+<a name="6961333"></a>
+<dt><a href="Concepts.doc.html#29967">literal,&#32;6</a>
+<dl>
+<a name="6961335"></a>
+<dt>false<a href="Concepts.doc.html#27355">,&#32;6</a>
+<a name="6961337"></a>
+<dt>null<a href="Concepts.doc.html#27355">,&#32;6</a>
+<a name="6961339"></a>
+<dt>true<a href="Concepts.doc.html#27355">,&#32;6</a>
+</dl>
+<a name="6961341"></a>
+<dt><a href="ConstantPool.doc.html#75047">loading, class or interface,&#32;158</a>
+<a name="6961343"></a>
+<dt><a href="Concepts.doc.html#18000">local variable,&#32;14</a>, <a href="Overview.doc.html#31542">72</a>
+<a name="6961346"></a>
+<dt><a href="Concepts.doc.html#25393">lock,&#32;12</a>, <a href="Concepts.doc.html#24501">59</a>, <a href="Threads.doc.html#22200">397</a>
+<a name="6962578"></a>
+<dl>
+<a name="6961350"></a>
+<dt><a href="Threads.doc.html#22211">lock action, by main memory subsystem,&#32;399</a>
+<a name="6961352"></a>
+<dt><a href="Threads.doc.html#22213">operation, action by thread,&#32;399</a>
+<a name="6961354"></a>
+<dt><a href="Threads.doc.html#22212">unlock action, by main memory subsystem,&#32;399</a>
+</dl>
+<a name="6961356"></a>
+<dt><a href="Threads.doc.html#24912">master copy,&#32;397</a>
+<a name="6961358"></a>
+<dt><a href="Instructions.doc.html#67862">meaning of "must" in instruction descriptions,&#32;171</a>
+<a name="6961360"></a>
+<dt><a href="Concepts.doc.html#26053">member,&#32;25</a>
+<dl>
+<a name="6961362"></a>
+<dt><a href="Concepts.doc.html#32976">class,&#32;28</a>
+</dl>
+<a name="6961364"></a>
+<dt>memory
+<dl>
+<a name="6961365"></a>
+<dt><a href="Threads.doc.html#24908">main,&#32;397</a>
+<a name="6961367"></a>
+<dt><a href="Threads.doc.html#24912">working,&#32;397</a>
+</dl>
+<a name="6961369"></a>
+<dt><a href="Concepts.doc.html#17564">method,&#32;31</a>
+<dl>
+<a name="6961371"></a>
+<dt>abstract<a href="Concepts.doc.html#16355">,&#32;32</a>
+<a name="6961373"></a>
+<dt><a href="Overview.doc.html#6657">area,&#32;69</a>
+<a name="6961375"></a>
+<dt><a href="Overview.doc.html#15582">current,&#32;71</a>
+<a name="6961377"></a>
+<dt>final<a href="Concepts.doc.html#16359">,&#32;33</a>
+<a name="6961379"></a>
+<dt><a href="ConstantPool.doc.html#72012">main,&#32;158</a>
+<a name="6961381"></a>
+<dt>main<a href="Concepts.doc.html#29387">,&#32;46</a>
+<a name="6961383"></a>
+<dt>native<a href="Concepts.doc.html#16355">,&#32;33</a>
+<a name="6961385"></a>
+<dt><a href="Concepts.doc.html#17996">parameter, as kind of variable,&#32;13</a>
+<a name="6961387"></a>
+<dt>private<a href="Concepts.doc.html#16359">,&#32;33</a>
+<a name="6961389"></a>
+<dt>protected<a href="Concepts.doc.html#18311">,&#32;32</a>
+<a name="6961391"></a>
+<dt>public<a href="Concepts.doc.html#18311">,&#32;32</a>
+<a name="6961393"></a>
+<dt>static<a href="Concepts.doc.html#16355">,&#32;33</a>
+<a name="6961395"></a>
+<dt>strictfp<a href="Concepts.doc.html#16355">,&#32;33</a>
+<a name="6961397"></a>
+<dt>synchronized<a href="Concepts.doc.html#16355">,&#32;33</a>
+</dl>
+<a name="6961399"></a>
+<dt><a href="Concepts.doc.html#24501">monitor,&#32;59</a>
+<a name="6961401"></a>
+<dt>name
+<dl>
+<a name="6961402"></a>
+<dt><a href="Concepts.doc.html#20389">class,&#32;28</a>
+<a name="6961404"></a>
+<dt><a href="Concepts.doc.html#29689">qualified,&#32;24</a>
+<a name="6961406"></a>
+<dt><a href="Concepts.doc.html#29689">simple,&#32;24</a>
+</dl>
+<a name="6961408"></a>
+<dt>native<a href="Concepts.doc.html#16355"> method,&#32;33</a>
+<a name="6961410"></a>
+<dt><a href="Overview.doc.html#25597">native method stack,&#32;70</a>
+<a name="6961412"></a>
+<dt><a href="Overview.doc.html#1920">normal completion,&#32;74</a>
+<a name="6961414"></a>
+<dt><a href="Overview.doc.html#15127">null reference,&#32;66</a>
+<a name="6961416"></a>
+<dt>numeric
+<dl>
+<a name="6961417"></a>
+<dt><a href="Concepts.doc.html#25645">promotion,&#32;16</a>
+<a name="6961419"></a>
+<dt><a href="Overview.doc.html#3560">types,&#32;62</a>
+</dl>
+<a name="6961421"></a>
+<dt><a href="Concepts.doc.html#25380">object,&#32;11</a>, <a href="Overview.doc.html#15118">62</a>
+<a name="6961424"></a>
+<dt><a href="Overview.doc.html#16703">opcode,&#32;80</a>
+<a name="6961426"></a>
+<dt><a href="Overview.doc.html#2111">operand,&#32;80</a>
+<dl>
+<a name="6961428"></a>
+<dt><a href="Overview.doc.html#31560">stack,&#32;73</a>
+</dl>
+<a name="6961430"></a>
+<dt><a href="Concepts.doc.html#26073">overloading,&#32;26</a>
+<dl>
+<a name="6961432"></a>
+<dt><a href="Concepts.doc.html#26708">in interfaces,&#32;37</a>
+</dl>
+<a name="6961434"></a>
+<dt><a href="Concepts.doc.html#26073">overriding,&#32;26</a>
+<dl>
+<a name="6961436"></a>
+<dt><a href="Concepts.doc.html#26698">in interfaces,&#32;37</a>
+</dl>
+<a name="6961438"></a>
+<dt><a href="Concepts.doc.html#37331">package,&#32;24</a>
+<a name="6961440"></a>
+<dt>pc<a href="Overview.doc.html#25816"> register,&#32;67</a>
+<a name="6961442"></a>
+<dt><a href="Concepts.doc.html#25380">pointer,&#32;12</a>
+<a name="6961444"></a>
+<dt><a href="Concepts.doc.html#24856">precise exception,&#32;43</a>
+<a name="6961446"></a>
+<dt><a href="Concepts.doc.html#29058">preparation,&#32;50</a>, <a href="ConstantPool.doc.html#71814">164</a>
+<a name="6961449"></a>
+<dt>primitive
+<dl>
+<a name="6961450"></a>
+<dt><a href="Concepts.doc.html#27843">type,&#32;7</a>
+<a name="6961452"></a>
+<dt><a href="Overview.doc.html#3560">types,&#32;62</a>
+<a name="6961454"></a>
+<dt><a href="Concepts.doc.html#27843">value,&#32;7</a>
+<a name="6961456"></a>
+<dt><a href="Overview.doc.html#3560">values,&#32;62</a>
+</dl>
+<a name="6961458"></a>
+<dt>private
+<dl>
+<a name="6961459"></a>
+<dt><a href="Concepts.doc.html#29888">field,&#32;30</a>
+<a name="6961461"></a>
+<dt><a href="Concepts.doc.html#18311">method,&#32;32</a>
+</dl>
+<a name="6961463"></a>
+<dt>protected<a href="Concepts.doc.html#18311"> method,&#32;32</a>
+<a name="6961465"></a>
+<dt>public
+<dl>
+<a name="6961466"></a>
+<dt><a href="Concepts.doc.html#32976">class,&#32;28</a>
+<a name="6961468"></a>
+<dt><a href="Concepts.doc.html#29888">field,&#32;30</a>
+<a name="6961470"></a>
+<dt><a href="Concepts.doc.html#18311">method,&#32;32</a>
+</dl>
+<a name="6961472"></a>
+<dt><a href="Concepts.doc.html#28883">qualified access,&#32;26</a>
+<a name="6961474"></a>
+<dt><a href="Threads.doc.html#22207">read action by thread,&#32;398</a>
+<a name="6961476"></a>
+<dt>reference
+<dl>
+<a name="6961477"></a>
+<dt><a href="Concepts.doc.html#25380">type,&#32;11</a>, <a href="Overview.doc.html#15127">66</a>
+<a name="6961480"></a>
+<dt><a href="Concepts.doc.html#25380">value,&#32;12</a>
+</dl>
+<a name="6961482"></a>
+<dt><a href="Concepts.doc.html#24171">resolution,&#32;50</a>, <a href="ConstantPool.doc.html#74024">165</a>
+<a name="6961485"></a>
+<dt>returnAddress<a href="Overview.doc.html#3560"> type,&#32;62</a>
+<a name="6961487"></a>
+<dt><a href="Concepts.doc.html#17932">round to nearest,&#32;11</a>, <a href="Overview.doc.html#14548">85</a>
+<a name="6961490"></a>
+<dt><a href="Concepts.doc.html#17933">round towards zero,&#32;11</a>, <a href="Overview.doc.html#24715">85</a>
+<a name="6961493"></a>
+<dt><a href="Overview.doc.html#22973">runtime constant pool,&#32;70</a>
+<a name="6961495"></a>
+<dt><a href="Concepts.doc.html#18291">signature,&#32;32</a>
+<a name="6961497"></a>
+<dt>static
+<dl>
+<a name="6961498"></a>
+<dt><a href="Concepts.doc.html#32319">initializer,&#32;33</a>
+<a name="6961500"></a>
+<dt><a href="Concepts.doc.html#24132">resolution,&#32;49</a>
+</dl>
+<a name="6961502"></a>
+<dt>static
+<dl>
+<a name="6961503"></a>
+<dt><a href="Concepts.doc.html#29890">field,&#32;30</a>
+<a name="6961505"></a>
+<dt><a href="Concepts.doc.html#26498">method,&#32;33</a>
+</dl>
+<a name="6961507"></a>
+<dt><a href="Threads.doc.html#22209">store action by thread,&#32;399</a>
+<a name="6961509"></a>
+<dt>strictfp
+<dl>
+<a name="6961510"></a>
+<dt><a href="Concepts.doc.html#32968">class,&#32;28</a>
+<a name="6961512"></a>
+<dt><a href="Concepts.doc.html#33004">method,&#32;33</a>
+</dl>
+<a name="6961514"></a>
+<dt><a href="Concepts.doc.html#29971">string,&#32;6</a>
+<a name="6961516"></a>
+<dt><a href="Concepts.doc.html#20359">subclass,&#32;29</a>
+<a name="6961518"></a>
+<dt>super<a href="Concepts.doc.html#18321"> method,&#32;34</a>
+<a name="6961520"></a>
+<dt><a href="Concepts.doc.html#20359">superclass,&#32;29</a>
+<a name="6961522"></a>
+<dt><a href="Concepts.doc.html#20603">superinterface,&#32;36</a>
+<a name="6961524"></a>
+<dt><a href="ConstantPool.doc.html#73367">symbolic reference,&#32;156</a>
+<a name="6961526"></a>
+<dt>synchronized<a href="Concepts.doc.html#16355"> method,&#32;33</a>
+<a name="6961528"></a>
+<dt><a href="Concepts.doc.html#24501">synchronizing,&#32;58</a>
+<a name="6961530"></a>
+<dt>this<a href="Concepts.doc.html#16386"> object,&#32;33</a>
+<a name="6961532"></a>
+<dt><a href="Concepts.doc.html#26745">thrown,&#32;39</a>
+<a name="6961534"></a>
+<dt>transient<a href="Concepts.doc.html#18858"> field,&#32;30</a>
+<a name="6961536"></a>
+<dt>try<a href="Concepts.doc.html#28948"> statement,&#32;40</a>
+<a name="6961538"></a>
+<dt><a href="Concepts.doc.html#32203">unloading, class or interface,&#32;57</a>
+<a name="6961540"></a>
+<dt><a href="Threads.doc.html#22212">unlock action by thread,&#32;399</a>
+<a name="6961542"></a>
+<dt>use
+<dl>
+<a name="6961543"></a>
+<dt><a href="Threads.doc.html#22205">actions by threads,&#32;398</a>
+<a name="6961545"></a>
+<dt><a href="Concepts.doc.html#22136">of values, by thread,&#32;59</a>
+</dl>
+<a name="6961547"></a>
+<dt><a href="ConstantPool.doc.html#74504">user-defined class loader,&#32;158</a>, <a href="ConstantPool.doc.html#79586">160</a>
+<a name="6961550"></a>
+<dt><a href="Concepts.doc.html#17290">variable,&#32;13</a>, <a href="Threads.doc.html#24908">397</a>
+<dl>
+<a name="6961553"></a>
+<dt><a href="Concepts.doc.html#29890">class,&#32;30</a>
+<a name="6961555"></a>
+<dt><a href="Concepts.doc.html#26398">instance,&#32;30</a>
+<a name="6961557"></a>
+<dt>transient<a href="Concepts.doc.html#18858">,&#32;30</a>
+</dl>
+<a name="6961559"></a>
+<dt><a href="ConstantPool.doc.html#71568">verification,&#32;164</a>
+<a name="6961561"></a>
+<dt><a href="ClassFile.doc.html#17902">version skew,&#32;140</a>
+<a name="6961563"></a>
+<dt>volatile<a href="Concepts.doc.html#37311"> field,&#32;31</a>
+<a name="6961565"></a>
+<dt><a href="Threads.doc.html#24566">wait set,&#32;413</a>
+<a name="6961567"></a>
+<dt><a href="Threads.doc.html#24912">working copy,&#32;397</a>
+<a name="6961569"></a>
+<dt><a href="Threads.doc.html#22210">write action by thread,&#32;399</a>
+</dl>
+<dt><b><strong>terminal symbols
+</strong></b><dl>
+<a name="6961572"></a>
+<dt><a href="ClassFile.doc.html#14150">descriptors grammar notation,&#32;99</a>
+</dl>
+<dt><b>this_class <strong>item
+</strong></b><dl>
+<a name="6961575"></a>
+<dt>(ClassFile<a href="ClassFile.doc.html#2115"> structure),&#32;97</a>
+</dl>
+<dt><b>this <strong>object
+</strong></b><dl>
+<a name="6961578"></a>
+<dt><a href="Concepts.doc.html#16386">definition,&#32;33</a>
+<a name="6961580"></a>
+<dt><a href="Concepts.doc.html#24343">instance creation role,&#32;55</a>
+<a name="6961582"></a>
+<dt><a href="Concepts.doc.html#16386">locks use with,&#32;33</a>
+</dl>
+<dt><b><strong>threads
+</strong></b><dl>
+<a name="6961585"></a>
+<dt><em>See also</em> synchronization
+<a name="6961587"></a>
+<dt><a href="Threads.doc.html#21294">(chapter),&#32;397</a>
+<a name="6961589"></a>
+<dt><a href="Threads.doc.html#22197">actions,&#32;397</a>
+<a name="6961591"></a>
+<dt><a href="Threads.doc.html#22215">constraints on relationships among  actions of,&#32;399</a>
+<a name="6961593"></a>
+<dt><a href="Threads.doc.html#22492">creation,&#32;412</a>
+<a name="6961595"></a>
+<dt><a href="Concepts.doc.html#33308">definition,&#32;58</a>
+<a name="6961597"></a>
+<dt><a href="Overview.doc.html#15581">frames use with,&#32;71</a>
+<a name="6961599"></a>
+<dt><a href="Overview.doc.html#30934">Java virtual machine stack,&#32;67</a>
+<a name="6961601"></a>
+<dt><a href="Concepts.doc.html#22139">memory interaction with, ordering rules,&#32;60</a>
+<a name="6961603"></a>
+<dt><a href="Overview.doc.html#25597">native method stacks,&#32;70</a>
+<a name="6961605"></a>
+<dt>pc<a href="Overview.doc.html#25816"> register,&#32;67</a>
+<a name="6961607"></a>
+<dt>shared
+<dl>
+<a name="6961608"></a>
+<dt><a href="Overview.doc.html#6655">data areas, heap,&#32;68</a>
+<a name="6961610"></a>
+<dt><a href="Overview.doc.html#6657">data areas, method area,&#32;69</a>
+<a name="6962604"></a>
+<a name="6961612"></a>
+<dt><a href="Concepts.doc.html#18279">variables, mechanisms for handling,&#32;31</a>
+</dl>
+<a name="6961614"></a>
+<dt><a href="Concepts.doc.html#24240">synchronization issues during initialization,&#32;52</a>
+</dl>
+<dt><b>Throwable <strong>class
+</strong></b><dl>
+<a name="6961617"></a>
+<dt><a href="Concepts.doc.html#28948">exceptions as instances or  subclasses of,&#32;40</a>
+</dl>
+<dt><b><strong>throwing
+</strong></b><dl>
+<a name="6961620"></a>
+<dt>exceptions, athrow<a href="Instructions2.doc.html#athrow">,&#32;186</a>
+<a name="6961622"></a>
+<dt>throw<a href="Concepts.doc.html#24638"> statement, as exception cause,&#32;41</a>
+<a name="6961624"></a>
+<dt>Throwable<a href="Concepts.doc.html#24864"> as exception hierarchy root,&#32;43</a>
+<a name="6961626"></a>
+<dt>Throwable<a href="Concepts.doc.html#28948"> exceptions as instances  or subclasses,&#32;40</a>
+</dl>
+<dt><b><strong>timing
+</strong></b><dl>
+<a name="6961629"></a>
+<dt><a href="Concepts.doc.html#22136">dependencies, in concurrent programming,&#32;59</a>
+</dl>
+<dt><b>transient <strong>modifier
+</strong></b><dl>
+<a name="6961632"></a>
+<dt><em>See also</em> ACC_TRANSIENT flag
+<a name="6961634"></a>
+<dt><a href="Concepts.doc.html#18858">definition,&#32;30</a>
+</dl>
+<dt><b>try-catch-finally <strong>statement
+</strong></b><dl>
+<a name="6961637"></a>
+<dt><em>See also</em> exceptions
+<a name="6961639"></a>
+<dt><a href="Overview.doc.html#25062">as exception handling statement,&#32;79</a>
+<a name="6961641"></a>
+<dt><a href="Concepts.doc.html#24728">exception handling use of,&#32;42</a>
+</dl>
+<dt><b>try-finally <strong>statement
+</strong></b><dl>
+<a name="6961644"></a>
+<dt><em>See also</em> exceptions
+<a name="6961646"></a>
+<dt><a href="Concepts.doc.html#24728">exception handling use of,&#32;42</a>
+<a name="6961648"></a>
+<dt><a href="ClassFile.doc.html#9867">Sun's Java compiler output characteristics,&#32;149</a>
+</dl>
+</dl>
+
+<hr>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="VMSpecIX.fm18.html">Prev</a> | <a href="VMSpecIX.fm20.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on April 06, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

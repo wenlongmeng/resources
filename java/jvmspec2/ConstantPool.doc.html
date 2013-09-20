@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  Loading, Linking,  and Initializing</title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="ClassFile.doc.html">Prev</a> | <a href="Instructions.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="67960"></a>
+<p><strong>CHAPTER 5 </strong></p>
+<a name="67962"></a>
+<h1>Loading, Linking,  and Initializing</h1>
+<hr><p>
+<a name="86731"></a>
+The Java virtual machine dynamically loads <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>, links <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a>, and initializes
+<a href="Concepts.doc.html#19075">(&#167;2.17.4)</a> classes and interfaces. Loading is the process of finding the binary representation
+of a class or interface type with a particular name and <i>creating</i> a class or 
+interface from that binary representation. Linking is the process of taking a class or 
+interface and combining it into the runtime state of the Java virtual machine so that it 
+can be executed. Initialization of a class or interface consists of executing the class or 
+interface initialization method <code>&lt;clinit&gt;</code> <a href="Overview.doc.html#12174">(&#167;3.9)</a>.
+<p><a name="86744"></a>
+In this chapter, <a href="ConstantPool.doc.html#73272">Section 5.1</a> describes how the Java virtual machine derives symbolic references from the binary representation of a class or interface. <a href="ConstantPool.doc.html#51579">Section 5.2</a> explains how the processes of loading, linking, and initialization are first initiated by the Java virtual machine. <a href="ConstantPool.doc.html#72007">Section 5.3</a> specifies how binary representations of classes and interfaces are loaded by class loaders and how classes and interfaces are created. Linking is described in <a href="ConstantPool.doc.html#71418">Section 5.4</a>. <a href="ConstantPool.doc.html#77976">Section 5.5</a> details how classes and interfaces are initialized. Finally, <a href="ConstantPool.doc.html#74727">Section 5.6</a> introduces the notion of binding native methods.<p>
+<a name="73272"></a>
+<hr><h2>5.1    The Runtime Constant Pool</h2>
+<a name="73342"></a>
+The Java virtual machine maintains a per-type constant pool <a href="Overview.doc.html#22972">(&#167;3.5.5)</a>, a runtime data 
+structure that serves many of the purposes of the symbol table of a conventional programming
+language implementation. 
+<p><a name="73367"></a>
+The <code>constant_pool</code> table <a href="ClassFile.doc.html#20080">(&#167;4.4)</a> in the binary representation of a class or interface is used to construct the runtime constant pool upon class or interface creation <a href="ConstantPool.doc.html#72007">(&#167;5.3)</a>. All references in the runtime constant pool are initially symbolic. The symbolic references in the runtime constant pool are derived from structures in the binary representation of the class or interface as follows:<p>
+<ul><li>A symbolic reference to a class or interface is derived from a <code>CONSTANT_Class_info</code> structure <a href="ClassFile.doc.html#1221">(&#167;4.4.1)</a> in the binary representation of a class or interface. Such a reference gives the name of the class or interface in the form returned by the <code>Class.getName</code> method, that is:<p>
+<ul>
+<li>For a nonarray class or an interface, the name is the fully qualified name of the class or interface.<p>
+<li>For an array class of M dimensions, the name begins with M occurrences of the ASCII "[" character followed by a representation of the element type:<p>
+<ul>
+<li>If the element type is a primitive type, it is represented by the corresponding field descriptor <a href="ClassFile.doc.html#14152">(&#167;4.3.2)</a>.<p>
+<li>Otherwise, if the element type is a reference type, it is represented by the ASCII "L" character followed by the fully qualified name of the element type followed by the ASCII ";" character.<p>
+</ul></ul><li>Whenever this chapter refers to the name of a class or interface, it should be understood to be in the form returned by the <code>Class.getName</code> method.<p>
+<li>A symbolic reference to a field of a class <a href="Concepts.doc.html#16338">(&#167;2.9)</a> or an interface <a href="Concepts.doc.html#18349">(&#167;2.13.3.1)</a> is derived from a <code>CONSTANT_Fieldref_info</code> structure <a href="ClassFile.doc.html#42041">(&#167;4.4.2)</a> in the binary representation of a class or interface. Such a reference gives the name and descriptor of the field, as well as a symbolic reference to the class or interface in which the field is to be found.<p>
+<li>A symbolic reference to a method of a class <a href="Concepts.doc.html#16317">(&#167;2.10)</a> is derived from a <code>CONSTANT_Methodref_info</code> structure <a href="ClassFile.doc.html#42041">(&#167;4.4.2)</a> in the binary representation of a class or interface. Such a reference gives the name and descriptor of the method, as well as a symbolic reference to the class in which the method is to be found.<p>
+<li>A symbolic reference to a method of an interface <a href="Concepts.doc.html#16432">(&#167;2.13)</a> is derived from a <code>CONSTANT_InterfaceMethodref_info</code> structure <a href="ClassFile.doc.html#42041">(&#167;4.4.2)</a> in the binary  representation of a class or interface. Such a reference gives the name and descriptor of the interface method, as well as a symbolic reference to the interface in which the method is to be found.
+</ul><a name="80027"></a>
+In addition, certain nonreference runtime values are derived from items found in the <code>constant_pool</code> table:<p>
+<ul><li>A string literal <a href="Concepts.doc.html#20359">(&#167;2.3)</a> is derived from a <code>CONSTANT_String_info</code> structure <a href="ClassFile.doc.html#29297">(&#167;4.4.3)</a> in the binary representation of a class or interface. The <code>CONSTANT_String_info</code> structure gives the sequence of Unicode characters constituting the string literal.<p>
+<li>The Java programming language requires that identical string literals (that is, literals that contain the same sequence of characters) must refer to the same instance of class <code>String</code>. In addition, if the method <code>String.intern</code> is called on any string, the result is a reference to the same class instance that would be returned if that string appeared as a literal. Thus,
+<pre>&nbsp;&nbsp;&nbsp;&nbsp;<code>(</code>"<code>a</code>" + "<code>b</code>" + "<code>c</code>"<code>).intern()</code> == "<code>abc</code>"
+</pre>	must have the value <code>true</code>.<p>
+<li>To derive a string literal, the Java virtual machine examines the sequence of characters given by the <code>CONSTANT_String_info</code> structure. <p>
+<ul><li>If the method <code>String.intern</code> has previously been called on an instance of class <code>String</code> containing a sequence of Unicode characters identical to that given by the <code>CONSTANT_String_info</code> structure, then the result of string  literal derivation is a reference to that same instance of class <code>String</code>.<p>
+<li>Otherwise, a new instance of class <code>String</code> is created containing the sequence of Unicode characters given by the <code>CONSTANT_String_info</code> structure; that class instance is the result of string literal derivation. Finally, the <code>intern</code> method of the new <code>String</code> instance is invoked.<p>
+</ul>
+<li>Runtime constant values are derived from <code>CONSTANT_Integer_info</code>, <code>CONSTANT_Float_info</code>, <code>CONSTANT_Long_info</code>, or <code>CONSTANT_Double_info </code>structures (<a href="ClassFile.doc.html#21942">&#167;4.4.4</a>, <a href="ClassFile.doc.html#1348">&#167;4.4.5)</a> in the binary representation of a class or interface. Note that <code>CONSTANT_Float_info</code> structures represent values in IEEE 754  single format and <code>CONSTANT_Double_info</code> structures represent values in IEEE 754 double format (<a href="ClassFile.doc.html#21942">&#167;4.4.4</a>, <a href="ClassFile.doc.html#1348">&#167;4.4.5)</a>. The runtime constant values derived from these structures must thus be values that can be represented using IEEE 754 single and double formats, respectively.
+</ul><a name="75097"></a>
+The remaining structures in the <code>constant_pool</code> table of the binary representation of a class or interface, the <code>CONSTANT_NameAndType_info</code> <a href="ClassFile.doc.html#1327">(&#167;4.4.6)</a> and <code>CONSTANT_Utf8_info</code> <a href="ClassFile.doc.html#7963">(&#167;4.4.7)</a> structures are only used indirectly when deriving symbolic references to classes, interfaces, methods, and fields, and when deriving string literals.<p>
+<a name="51579"></a>
+<hr><h2>5.2    Virtual Machine Start-up</h2>
+<a name="72012"></a>
+The Java virtual machine starts up by creating an initial class, which is specified in 
+an implementation-dependent manner, using the bootstrap class loader <a href="ConstantPool.doc.html#79383">(&#167;5.3.1)</a>. The 
+Java virtual machine then links the initial class, initializes it, and invokes its <code>public</code> 
+class method <code>void</code> <code>main(String[])</code>. The invocation of this method drives all further
+execution. Execution of the Java virtual machine instructions constituting the 
+<code>main</code> method may cause linking (and consequently creation) of additional classes 
+and interfaces, as well as invocation of additional methods.
+<p><a name="80548"></a>
+In some implementations of the Java virtual machine the initial class could be provided as a command line argument, as in JDK releases 1.0 and 1.1. Alternatively, the initial class could be provided by the implementation. In this case the initial class might set up a class loader that would in turn load an application, as in the Java 2 SDK, Standard Edition, v1.2. Other choices of the initial class are possible so long as they are consistent with the specification given in the previous paragraph.<p>
+<a name="72007"></a>
+<hr><h2>5.3    Creation and Loading</h2>
+<a name="75047"></a>
+Creation of a class or interface C denoted by the name N consists of the construction
+in the method area of the Java virtual machine <a href="Overview.doc.html#6656">(&#167;3.5.4)</a> of an implementation-specific internal representation of C. Class or interface creation is triggered by 
+another class or interface D, which references C through its runtime constant pool. 
+Class or interface creation may also be triggered by D invoking methods in certain 
+Java class libraries <a href="Overview.doc.html#15641">(&#167;3.12)</a> such as reflection.
+<p><a name="76328"></a>
+If C is not an array class, it is created by loading a binary representation of C (see <a href="ClassFile.doc.html#80961">Chapter 4, "The class File Format"</a>) using a class loader <a href="Concepts.doc.html#19175">(&#167;2.17.2)</a>. Array classes do not have an external binary representation; they are created by the Java virtual machine rather than by a class loader. <p>
+<a name="74504"></a>
+There are two types of class loaders: user-defined class loaders and the bootstrap class loader supplied by the Java virtual machine. Every user-defined class loader is an instance of a subclass of the abstract class <code>ClassLoader</code>. Applications employ class loaders in order to extend the manner in which the Java virtual machine dynamically loads and thereby creates classes. User-defined class loaders can be used to create classes that originate from user-defined sources. For example, a class could be downloaded across a network, generated on the fly, or extracted from an encrypted file.<p>
+<a name="77474"></a>
+A class loader L may create C by defining it directly or by delegating to another class loader. If L creates C directly, we say that L <i>defines</i> C or, equivalently, that L is the <i>defining loader</i> of C. <p>
+<a name="77493"></a>
+When one class loader delegates to another class loader, the loader that initiates the loading is not necessarily the same loader that completes the loading and defines the class. If L creates C, either by defining it directly or by delegation, we say that L <i>initiates</i> loading of C or, equivalently, that L is an <i>initiating loader</i> of C. <p>
+<a name="77925"></a>
+At run time, a class or interface is determined not by its name alone, but by a pair: its fully qualified name and its defining class loader. Each such class or interface belongs to a single <em>runtime package</em>. The runtime package of a class or interface is determined by the package name and defining class loader of the class or interface.<p>
+<a name="74513"></a>
+The Java virtual machine uses one of three procedures to create class or interface C &#32;denoted by N:<p>
+<ul><li>If N denotes a nonarray class or an interface, one of the two following methods is used to load and thereby create C &#32;:<p>
+<ul><li>If D was defined by the bootstrap class loader, then the bootstrap class loader initiates loading of C <a href="ConstantPool.doc.html#79383">(&#167;5.3.1)</a>.<p>
+<li>If D was defined by a user-defined class loader, then that same user-defined class loader initiates loading of C <a href="ConstantPool.doc.html#79441">(&#167;5.3.2)</a>. <p>
+</ul>
+<li>Otherwise N denotes an array class. An array class is created directly by the Java virtual machine <a href="ConstantPool.doc.html#79473">(&#167;5.3.3)</a>, not by a class loader. However, the defining class loader of D is used in the process of creating array class C.
+</ul><a name="82266"></a>
+We will sometimes represent a class or interface using the notation &lt;N, L<sub>d</sub> &#32;&gt;, where N denotes the name of the class or interface and L<sub>d</sub> denotes the defining loader of the class or interface. We will also represent a class or interface using the notation N<sup>L<sub>i</sub></sup>, where N denotes the name of the class or interface and L<sub>i</sub> denotes an initiating loader of the class or interface.<p>
+<a name="79383"></a>
+<h3>5.3.1    Loading Using the Bootstrap Class Loader</h3>
+<a name="77261"></a>
+The following steps are used to load and thereby create the nonarray class or interface
+C denoted by N  &#32;using the bootstrap class loader.
+<p><a name="71463"></a>
+First, the Java virtual machine determines whether the bootstrap class loader has already been recorded as an initiating loader of a class or interface denoted by N. If so, this class or interface is C, and no class creation is necessary. <p>
+<a name="76654"></a>
+Otherwise, the Java virtual machine performs one of the following two operations in order to load C:<p>
+<ol>
+<a name="71464"></a>
+<li>The Java virtual machine searches for a purported representation of C in a platform-dependent manner. Note that there is no guarantee that a purported representation found is valid or is a representation of C.
+<p>Typically, a class or interface will be represented using a file in a hierarchical file system. The name of the class or interface will usually be encoded in the pathname of the file. 
+<p>This phase of loading must detect the following error:
+<p>
+<ul><li>If no purported representation of C  &#32;is found, loading throws an instance of <code>NoClassDefFoundError</code> or an instance of one of its subclasses.
+</ul><p>Then the Java virtual machine attempts to derive a class denoted by N  &#32;using the bootstrap class loader from the purported representation using the algorithm found in <a href="ConstantPool.doc.html#79388">Section 5.3.5</a>. That class is C. 
+<p>
+<li>The bootstrap class loader can delegate the loading of C to some user-defined class loader L &#32;by passing N  &#32;to an invocation of a <code>loadClass</code> method on L. The result of the invocation is C. The Java virtual machine then records that the bootstrap loader is an initiating loader of C <a href="ConstantPool.doc.html#78621">(&#167;5.3.4)</a>.
+</ol>
+<a name="79441"></a>
+<h3>5.3.2    Loading Using a User-defined Class Loader</h3>
+<a name="79586"></a>
+The following steps are used to load and thereby create the nonarray class or interface
+C denoted by N &#32; &#32;using a user-defined class loader L.
+<p><a name="79589"></a>
+First, the Java virtual machine determines whether L has already been recorded as an initiating loader of a class or interface denoted by N. If so, this class or interface is C, and no class creation is necessary. <p>
+<a name="79449"></a>
+Otherwise the Java virtual machine invokes <code>loadClass(</code>N &#32;<code>)</code> on L.<a href="#79448"><sup>1</sup></a> The value returned by the invocation is the created class or interface C. The Java virtual machine then records that L is an initiating loader of C <a href="ConstantPool.doc.html#78621">(&#167;5.3.4)</a>. The remainder of this section describes this process in more detail. <p>
+<a name="79453"></a>
+When the <code>loadClass</code> method of the class loader L is invoked with the name N of a class or interface C to be loaded, L must perform one of the following two operations in order to load C &#32;:<p>
+<ol>
+<a name="85947"></a>
+<li>The class loader L can create an array of bytes representing C as the bytes of a <code>ClassFile</code> structure <a href="ClassFile.doc.html#74353">(&#167;4.1)</a>; it then must invoke the method <code>defineClass</code> of class <code>ClassLoader</code>. Invoking <code>defineClass</code> causes the Java virtual machine to derive a class or interface denoted by N &#32; &#32;using L from the array of bytes using the algorithm found in <a href="ConstantPool.doc.html#79388">Section 5.3.5</a>.<p>
+<a name="85957"></a>
+<li>The class loader L can delegate the loading of C to some other class loader L<i>'</i>. This is accomplished by passing the argument N  &#32;directly or indirectly to an invocation of a method on L<i>'</i> (typically the <code>loadClass</code> method). The result of the invocation is C. 
+</ol>
+<a name="79473"></a>
+<h3>5.3.3    Creating Array Classes</h3>
+<a name="79474"></a>
+The following steps are used to create the array class C denoted by N using class 
+loader L. Class loader L may be either the bootstrap class loader or a user-defined 
+class loader.
+<p><a name="79898"></a>
+If L has already been recorded as an initiating loader of an array class with the same component type as N, that class is C, and no array class creation is necessary. Otherwise, the following steps are performed to create C:<p>
+<ol>
+<a name="79479"></a>
+<li>If the component type is a reference type, the algorithm of this section <a href="ConstantPool.doc.html#72007">(&#167;5.3)</a> is applied recursively using class loader L in order to load and thereby create the component type of C. <p>
+<a name="79480"></a>
+<li>The Java virtual machine creates a new array class with the indicated component type and number of dimensions. If the component type is a reference type, C is marked as having been defined by the defining class loader of the component type. Otherwise, C is marked as having been defined by the bootstrap class loader. In any case, the Java virtual machine then records that L is an initiating loader for C <a href="ConstantPool.doc.html#78621">(&#167;5.3.4)</a>. If the component type is a reference type, the accessibility of the array class is determined by the accessibility of its component type. Otherwise, the accessibility of the array class is <code>public</code>.
+</ol>
+<a name="78621"></a>
+<h3>5.3.4    Loading Constraints</h3>
+<a name="78364"></a>
+Ensuring type safe linkage in the presence of class loaders requires special care. It is 
+possible that when two different class loaders initiate loading of a class or interface 
+denoted by N, the name N may denote a different class or interface in each loader.
+<p><a name="78431"></a>
+When a class or interface C = &lt;N1, L1&gt; makes a symbolic reference to a field or method of another class or interface D = &lt;N2, L2&gt; , the symbolic reference includes a descriptor specifying the type of the field, or the return and argument types of the method. It is essential that any type name N mentioned in the field or method descriptor denote the same class or interface when loaded by L1 and when loaded by L2.<p>
+<a name="85649"></a>
+To ensure this, the Java virtual machine imposes <i>loading constraints</i> of the form N<sup>L1</sup> = N<sup>L2</sup> during preparation <a href="ConstantPool.doc.html#71421">(&#167;5.4.2)</a> and resolution <a href="ConstantPool.doc.html#73492">(&#167;5.4.3)</a>. To enforce these constraints, the Java virtual machine will, at certain prescribed times (see <a href="ConstantPool.doc.html#79383">&#167;5.3.1</a>, <a href="ConstantPool.doc.html#79441">&#167;5.3.2</a>, <a href="ConstantPool.doc.html#79473">&#167;5.3.3</a>, and <a href="ConstantPool.doc.html#79388">&#167;5.3.5</a>), record that a particular loader is an initiating loader of a particular class. After recording that a loader is an initiating loader of a class, the Java virtual machine must immediately check to see if any loading constraints are violated. If so, the record is retracted, the Java virtual machine throws a <code>LinkageError</code>, and the loading operation that caused the recording to take place fails.<p>
+<a name="85674"></a>
+Similarly, after imposing a loading constraint (see <a href="ConstantPool.doc.html#71421">&#167;5.4.2</a>, <a href="ConstantPool.doc.html#71685">&#167;5.4.3.2</a>, <a href="ConstantPool.doc.html#86899">&#167;5.4.3.3</a>, and <a href="ConstantPool.doc.html#71722">&#167;5.4.3.4</a>), the Java virtual machine must immediately check to see if any loading constraints are violated. If so, the newly imposed loading constraint is retracted, the Java virtual machine throws a <code>LinkageError</code>, and the operation that caused the constraint to be imposed (either resolution or preparation, as the case may be) fails.<p>
+<a name="85676"></a>
+The situations described here are the only times at which the Java virtual machine checks whether any loading constraints have been violated. A loading constraint is <em>violated</em> if, and only if, all the following four conditions hold:<p>
+<ul><li>There exists a loader L such that L has been recorded by the Java virtual machine as an initiating loader of a class C named N.<p>
+<li>There exists a loader L<i>'</i> such that L<i>'</i> has been recorded by the Java virtual machine as an initiating loader of a class C<i>'</i> named N.<p>
+<li>The equivalence relation defined by the (transitive closure of the) set of imposed constraints implies N <sup>L</sup> = N <sup>L'</sup>.<p>
+<li>C <img src="chars/notequal.gif"> C &#32;<i>'</i>.
+</ul><a name="85310"></a>
+A full discussion of class loaders and type safety is beyond the scope of this specification. For a more comprehensive discussion, readers are referred to <i>Dynamic Class Loading in the Java Virtual Machine</i> by Sheng Liang and Gilad Bracha (Proceedings of the 1998 ACM SIGPLAN Conference on Object-Oriented Programming Systems, Languages and Applications).<p>
+<a name="79388"></a>
+<h3>5.3.5    Deriving a Class from a <code>class</code> File Representation</h3>
+<a name="79389"></a>
+The following steps are used to derive the nonarray class or interface C denoted by N 
+ &#32;using loader L from a purported representation in <code>class</code> file format.
+<p><ol>
+<a name="79390"></a>
+<li>First, the Java virtual machine determines whether it has already recorded that L is an initiating loader of a class or interface denoted by N. If so, this creation attempt is invalid and loading throws a <code>LinkageError</code>.<p>
+<a name="79391"></a>
+<li>Otherwise, the Java virtual machine attempts to parse the purported representation. However, the purported representation may not in fact be a valid representation of C. 
+<p>
+This phase of loading must detect the following errors:
+<p>
+<ul>
+<li>If the purported representation is not in <code>class</code> file format (<a href="ClassFile.doc.html#74353">&#167;4.1</a>, pass 1 of <a href="ClassFile.doc.html#9766">&#167;4.9.1</a>), loading throws an instance of <code>ClassFormatError</code>.<p>
+<li>Otherwise, if the purported representation is not of a supported major or minor version (<a href="ClassFile.doc.html#74353">&#167;4.1)</a>, loading throws an instance of <code>UnsupportedClassVersionError</code>.<a href="#81526"><sup>2</sup></a><p>
+<li>Otherwise, if the purported representation does not actually represent a class named N, loading throws an instance of <code>NoClassDefFoundError</code> or an instance of one of its subclasses.
+</ul><p>
+<a name="79410"></a>
+<li>If C has a direct superclass, the symbolic reference from C to its direct superclass is resolved using the algorithm of <a href="ConstantPool.doc.html#71636">Section 5.4.3.1</a>. Note that if C is an interface it must have <code>Object</code> as its direct superclass, which must already have been loaded. Only <code>Object</code> has no direct superclass.
+<p>Any exceptions that can be thrown due to class or interface resolution can be thrown as a result of this phase of loading. In addition, this phase of loading must detect the following errors:
+<p><ul><li>If the class or interface named as the direct superclass of C is in fact an interface, loading throws an <code>IncompatibleClassChangeError</code>.<p>
+<li>Otherwise, if any of the superclasses of C is C itself, loading throws a <code>ClassCircularityError</code>.
+</ul><p>
+<a name="79420"></a>
+<li>If C has any direct superinterfaces, the symbolic references from C to its direct superinterfaces are resolved using the algorithm of <a href="ConstantPool.doc.html#71636">Section 5.4.3.1</a>.
+<p>
+Any exceptions that can be thrown due to class or interface resolution can be thrown as a result of this phase of loading. In addition, this phase of loading must detect the following errors:
+<p>
+<ul><li>If any of the classes or interfaces named as direct superinterfaces of C is not in fact an interface, loading throws an <code>IncompatibleClassChangeError</code>.<p>
+<li>Otherwise, if any of the superinterfaces of C is C itself, loading throws a <code>ClassCircularityError</code>.
+</ul><p>
+<a name="80174"></a>
+<li>The Java virtual machine marks C as having L as its defining class loader and records that L is an initiating loader of C <a href="ConstantPool.doc.html#78621">(&#167;5.3.4)</a>.
+</ol>
+<a name="71418"></a>
+<hr><h2>5.4    Linking</h2>
+<a name="71814"></a>
+Linking a class or interface <a href="Concepts.doc.html#22574">(&#167;2.17.3)</a> involves verifying and preparing that class or 
+interface, its direct superclass, its direct superinterfaces, and its element type (if it is 
+an array type), if necessary. Resolution of symbolic references in the class or interface
+is an optional part of linking.
+<p><a name="71817"></a>
+<h3>5.4.1    Verification</h3>
+<a name="71568"></a>
+The representation of a class or interface is <i>verified</i> <a href="ClassFile.doc.html#88597">(&#167;4.9)</a> to ensure that its binary 
+representation is structurally valid (passes 2 and 3 of <a href="ClassFile.doc.html#9766">&#167;4.9.1</a>). Verification may 
+cause additional classes and interfaces to be loaded <a href="ConstantPool.doc.html#72007">(&#167;5.3)</a> but need not cause them 
+to be prepared or verified.
+<p><a name="73849"></a>
+<p>
+<a name="87759"></a>
+Verification must detect the following error:<p>
+<ul><li>If the representation of the class or interface does not satisfy the static or  structural constraints listed in <a href="ClassFile.doc.html#40222">Section 4.8, "Constraints on Java Virtual Machine Code,"</a> verification throws a <code>VerifyError</code>.
+</ul><a name="76208"></a>
+A class or interface must be successfully verified before it is initialized. Any attempt to initialize a class or interface that has not been successfully verified must be preceded by verification. Repeated verification of a class or interface that the Java virtual machine has previously unsuccessfully attempted to verify always fails with the same error that was thrown as a result of the initial verification attempt.<p>
+<a name="71421"></a>
+<h3>5.4.2    Preparation</h3>
+<a name="73485"></a>
+<i>Preparation</i> involves creating the static fields for the class or interface and initializing
+those fields to their standard default values <a href="Concepts.doc.html#15858">(&#167;2.5.1)</a>. Preparation should not be 
+confused with the execution of static initializers <a href="Concepts.doc.html#32316">(&#167;2.11)</a>; unlike execution of static 
+initializers, preparation does not require the execution of any Java virtual machine 
+code. 
+<p><a name="79142"></a>
+During preparation of a class or interface C, the Java virtual machine also imposes loading constraints (<a href="ConstantPool.doc.html#78621">&#167;5.3.4</a>). Let L<sub>1</sub> be the defining loader of C. For each method <i>m</i> declared in C that overrides a method declared in a superclass or superinterface <D, L2 &#32;\>, the Java virtual machine imposes the following loading constraints: Let T<sub>0</sub> be the name of the type returned by <i>m</i>, and let T<sub>1</sub>, ..., T<sub>n</sub> be the names of the argument types of <i>m</i>. Then T<sub>i</sub><sup>L1</sup>=T<sub>i</sub><sup>L2</sup> for <i>i = 0</i> to<i> n</i> <a href="ConstantPool.doc.html#78621">(&#167;5.3.4)</a>.<p>
+<a name="73540"></a>
+Preparation may occur at any time following creation but must be completed prior to initialization.<p>
+<a name="73492"></a>
+<h3>5.4.3    Resolution</h3>
+<a name="74024"></a>
+The process of dynamically determining concrete values from symbolic references 
+in the runtime constant pool is known as <i>resolution</i>. 
+<p><a name="74943"></a>
+Resolution can be attempted on a symbolic reference that has already been resolved. An attempt to resolve a symbolic reference that has already successfully been resolved always succeeds trivially and always results in the same entity produced by the initial resolution of that reference.<p>
+<a name="75906"></a>
+Subsequent attempts to resolve a symbolic reference that the Java virtual machine has previously unsuccessfully attempted to resolve always fails with the same error that was thrown as a result of the initial resolution attempt.<p>
+<a name="74944"></a>
+Certain Java virtual machine instructions require specific linking checks when resolving symbolic references. For instance, in order for a <i>getfield</i> instruction to successfully resolve the symbolic reference to the field on which it operates it must complete the field resolution steps given in <a href="ConstantPool.doc.html#71685">Section 5.4.3.2</a>. In addition, it must also check that the field is not <code>static</code>. If it is a <code>static</code> field, a linking exception must be thrown. <p>
+<a name="73906"></a>
+Linking exceptions generated by checks that are specific to the execution of a particular Java virtual machine instruction are given in the description of that instruction and are not covered in this general discussion of resolution. Note that such exceptions, although described as part of the execution of Java virtual machine instructions rather than resolution, are still properly considered failure of resolution.<p>
+<a name="73526"></a>
+The Java virtual machine instructions <i>anewarray</i>, <i>checkcast</i>, <i>getfield</i>, <i>getstatic</i>, <i>instanceof</i>, <i>invokeinterface</i>, <i>invokespecial</i>, <i>invokestatic</i>, <i>invokevirtual</i>, <i>multianewarray</i>, <i>new</i>, <i>putfield</i>, and <i>putstatic</i> make symbolic references to the runtime constant pool. Execution of any of these instructions requires resolution of its symbolic reference. <p>
+<a name="74202"></a>
+The following sections describe the process of resolving a symbolic reference in the runtime constant pool <a href="ConstantPool.doc.html#73272">(&#167;5.1)</a> of a class or interface D. Details of resolution differ with the kind of symbolic reference to be resolved. <p>
+<a name="71636"></a>
+<h4>5.4.3.1    Class and Interface Resolution</h4>
+<a name="71647"></a>
+To resolve an unresolved symbolic reference from D to a class or interface C 
+denoted by N, the following steps are performed:
+<p><ol>
+<a name="71648"></a>
+<li>The defining class loader of D is used to create a class or interface denoted by N. This class or interface is C. Any exception that can be thrown as a result of failure of class or interface creation can thus be thrown as a result of failure of class and interface resolution. The details of the process are given in <a href="ConstantPool.doc.html#72007">Section 5.3</a>. <p>
+<a name="71665"></a>
+<li>If C is an array class and its element type is a reference type, then the symbolic reference to the class or interface representing the element type is resolved by invoking the algorithm in <a href="ConstantPool.doc.html#71636">Section 5.4.3.1</a> recursively.<p>
+<a name="72502"></a>
+<li>Finally, access permissions to C are checked:<p>
+<ul><li>If C is not accessible <a href="ConstantPool.doc.html#75929">(&#167;5.4.4)</a> to D, class or interface resolution throws an <code>IllegalAccessError</code>. 
+</ul>
+<a name="77677"></a>
+<p>This condition can occur, for example, if C is a class that was originally declared to be <code>public</code> but was changed to be non-<code>public</code> after D &#32;was compiled.
+</ol>
+<a name="77678"></a>
+If steps 1 and 2 succeed but step 3 fails, C is still valid and usable. Nevertheless, resolution
+fails, and D is prohibited from accessing C.
+<p><a name="71685"></a>
+<h4>5.4.3.2    Field Resolution</h4>
+<a name="73232"></a>
+To resolve an unresolved symbolic reference from D to a field in a class or interface 
+C, the symbolic reference to C given by the field reference must first be resolved 
+<a href="ConstantPool.doc.html#71636">(&#167;5.4.3.1)</a>. Therefore, any exception that can be thrown as a result of failure of resolution
+of a class or interface reference can be thrown as a result of failure of field resolution.
+If the reference to C can be successfully resolved, an exception relating to 
+the failure of resolution of the field reference itself can be thrown. 
+<p><a name="80823"></a>
+When resolving a field reference, field resolution first attempts to look up the referenced field in C and its superclasses:<p>
+<ol>
+<a name="81200"></a>
+<li>If C declares a field with the name and descriptor specified by the field reference, field lookup succeeds. The declared field is the result of the field lookup.<p>
+<a name="83781"></a>
+<li>Otherwise, field lookup is applied recursively to the direct superinterfaces of the specified class or interface C.<p>
+<a name="81203"></a>
+<li>Otherwise, if C has a superclass S, field lookup is applied recursively to S. <p>
+<a name="81225"></a>
+<li>Otherwise, field lookup fails.
+</ol>
+<a name="80871"></a>
+If field lookup fails, field resolution throws a <code>NoSuchFieldError</code>. Otherwise, if field lookup succeeds but the referenced field is not accessible <a href="ConstantPool.doc.html#75929">(&#167;5.4.4)</a> to D, field resolution throws an <code>IllegalAccessError</code>.<p>
+<a name="86894"></a>
+Otherwise, let &lt;E, L1&gt; be the class or interface in which the referenced field is actually declared and let L2 be the defining loader of D. Let T be the name of the type of the referenced field. The Java virtual machine must impose the loading constraint that T<sup>L1</sup>=T<sup>L2</sup>(<a href="ConstantPool.doc.html#78621">&#167;5.3.4</a>). <p>
+<a name="86899"></a>
+<h4>5.4.3.3    Method Resolution</h4>
+<a name="73131"></a>
+To resolve an unresolved symbolic reference from D to a method in a class C, the 
+symbolic reference to C given by the method reference is first resolved <a href="ConstantPool.doc.html#71636">(&#167;5.4.3.1)</a>. 
+Therefore, any exceptions that can be thrown due to resolution of a class reference 
+can be thrown as a result of method resolution. If the reference to C can be successfully
+resolved, exceptions relating to the resolution of the method reference itself 
+can be thrown. 
+<p><a name="73062"></a>
+When resolving a method reference:<p>
+<ol>
+<a name="73191"></a>
+<li>Method resolution checks whether C is a class or an interface.<p>
+<ul><li>If C is an interface, method resolution throws an <code>IncompatibleClassChangeError</code>.
+</ul><p>
+<a name="74255"></a>
+<li>Method resolution attempts to look up the referenced method in C and its superclasses:<p>
+<ul><li>If C declares a method with the name and descriptor specified by the method reference, method lookup succeeds.<p>
+<li>Otherwise, if C has a superclass, step 2 of method lookup is recursively invoked on the direct superclass of C.
+</ul><p>
+<a name="71717"></a>
+<li>Otherwise, method lookup attempts to locate the referenced method in any of the superinterfaces of the specified class C.<p>
+<ul><li>If any superinterface of C declares a method with the name and descriptor specified by the method reference, method lookup succeeds.<p>
+<li>Otherwise, method lookup fails.
+</ul><a name="75187"></a>
+</ol>
+If method lookup fails, method resolution throws a <code>NoSuchMethodError</code>. If method lookup succeeds and the method is <code>abstract</code>, but C is not <code>abstract</code>, method resolution throws an <code>AbstractMethodError</code>. Otherwise, if the referenced method is not accessible <a href="ConstantPool.doc.html#75929">(&#167;5.4.4)</a> to D, method resolution throws an <code>IllegalAccessError</code>.<p>
+<a name="77326"></a>
+Otherwise, let &lt;E, L1&gt; be the class or interface in which the referenced method is actually declared and let L2 be the defining loader of D. Let T0 be the name of the type returned by the referenced method, and let T1, ..., Tn be the names of the argument types of the referenced method. The Java virtual machine must impose the loading constraints Ti<sup>L1</sup>=Ti<sup>L2</sup> for i = 0 to n<em> </em>(<a href="ConstantPool.doc.html#78621">&#167;5.3.4</a>).<p>
+<a name="71722"></a>
+<h4>5.4.3.4    Interface Method Resolution</h4>
+<a name="72841"></a>
+To resolve an unresolved symbolic reference from D to an interface method in an 
+interface C, the symbolic reference to C given by the interface method reference is 
+first resolved <a href="ConstantPool.doc.html#71636">(&#167;5.4.3.1)</a>. Therefore, any exceptions that can be thrown as a result of 
+failure of resolution of an interface reference can be thrown as a result of failure of 
+interface method resolution. If the reference to C can be successfully resolved, 
+exceptions relating to the resolution of the interface method reference itself can be 
+thrown.
+<p><a name="73943"></a>
+When resolving an interface method reference:<p>
+<ul><li>If C is not an interface, interface method resolution throws an <code>IncompatibleClassChangeError</code>.<p>
+<li>Otherwise, if the referenced method does not have the same name and descriptor as a method in C or in one of the superinterfaces of C, or in class <code>Object</code>, interface method resolution throws a <code>NoSuchMethodError</code>.
+</ul><a name="77335"></a>
+Otherwise, let &lt;E, L1&gt; be the interface in which the referenced interface method is actually declared and let L2 be the defining loader of D. Let T0 be the name of the type returned by the referenced method, and let T1, ..., Tn be the names of the argument types of the referenced method. The Java virtual machine must impose the loading constraints Ti<sup>L1</sup> = Ti<sup>L2</sup> for i = 0 to n<em> </em>(<a href="ConstantPool.doc.html#78621">&#167;5.3.4</a>).<p>
+<a name="75929"></a>
+<h3>5.4.4    Access Control</h3>
+<a name="75931"></a>
+A class or interface C is <em>accessible</em> to a class or interface D if and only if either of the 
+following conditions are true:
+<p><ul><li>C is <code>public</code>.<p>
+<li>C and D are members of the same runtime package <a href="ConstantPool.doc.html#72007">(&#167;5.3)</a>.
+</ul><a name="75934"></a>
+A field or method R is <em>accessible</em> to a class or interface D if and only if any of the 
+following conditions is true:
+<p><ul><li>R is <code>public</code>.<p>
+<li>R is <code>protected</code> and is declared in a class C, and D is either a subclass of C  or C itself.<p>
+<li>R is either <code>protected</code> or package private (that is, neither <code>public</code> nor  <code>protected</code> nor <code>private</code>), and is declared by a class in the same runtime  package as D.<p>
+<li>R is <code>private</code> and is declared in D.
+</ul><a name="78241"></a>
+This discussion of access control omits a related restriction on the target of a <code>protected</code> field access or method invocation (the target must be of class D or a subtype of D). That requirement is checked as part of the verification process <a href="ConstantPool.doc.html#71817">(&#167;5.4.1)</a>; it is not part of link-time access control.<p>
+<a name="77976"></a>
+<hr><h2>5.5    Initialization</h2>
+<a name="77978"></a>
+<i>Initialization</i> of a class or interface consists of invoking its static initializers 
+<a href="Concepts.doc.html#32316">(&#167;2.11)</a> and the initializers for static fields <a href="Concepts.doc.html#16320">(&#167;2.9.2)</a> declared in the class. This process
+is described in more detail in <a href="Concepts.doc.html#19075">&#167;2.17.4</a> and <a href="Concepts.doc.html#24237">&#167;2.17.5</a>.
+<p><a name="74300"></a>
+A class or interface may be initialized only as a result of:<p>
+<ul><li>The execution of any one of the Java virtual machine instructions <i>new</i>,  <i>getstatic</i>, <i>putstatic</i>, or <i>invokestatic</i> that references the class or interface. Each of these instructions corresponds to one of the conditions in <a href="Concepts.doc.html#19075">&#167;2.17.4</a>. All of the previously listed instructions reference a class directly or indirectly through either a field reference or a method reference. Upon execution of a <i>new</i>  instruction, the referenced class or interface is initialized if it has not been  initialized already. Upon execution of a <i>getstatic, putstatic, </i>or <i>invokestatic</i> instruction, the class or interface that declared the resolved field or method is initialized if it has not been initialized already.<p>
+<li>Invocation of certain reflective methods in the class library (<a href="Overview.doc.html#15641">&#167;3.12</a>), for  example, in class <code>Class </code>or in package <code>java.lang.reflect</code>. <p>
+<li>The initialization of one of its subclasses.<p>
+<li>Its designation as the initial class at Java virtual machine start-up <a href="ConstantPool.doc.html#51579">(&#167;5.2)</a>.
+</ul><a name="74305"></a>
+Prior to initialization a class or interface must be linked, that is, verified, prepared, 
+and optionally resolved.
+<p><a name="74727"></a>
+<hr><h2>5.6    Binding Native Method Implementations</h2>
+<a name="74730"></a>
+<i>Binding</i> is the process by which a function written in a language other than the Java 
+programming language and implementing a <code>native</code> method is integrated into the 
+Java virtual machine so that it can be executed. Although this process is traditionally 
+referred to as linking, the term binding is used in the specification to avoid confusion 
+with linking of classes or interfaces by the Java virtual machine.
+<p>
+
+<hr>
+<sup>1</sup><a name="79448"></a>
+ 	Since JDK release 1.1 the Java virtual machine invokes the <code>loadClass</code> method of a class loader in order to cause it to load a class or interface. The argument to <code>loadClass</code> is the name of the class or interface to be loaded. There is also a two-argument version of the <code>loadClass</code> method. The second argument is a <code>boolean</code> that indicates whether the class or interface is to be linked or not. Only the two-argument version was supplied in JDK release 1.0.2, and the Java virtual machine relied on it to link the loaded class or interface. From JDK release 1.1 onward, the Java virtual machine links the class or interface directly, without relying on the class loader.<p>
+<sup>2</sup><a name="81526"></a>
+ <code>UnsupportedClassVersionError</code> was introduced in the Java 2 platform, Standard Edition, v1.2. In earlier versions of the platform an instance of <code>NoClassDefFoundError</code> or <code>ClassFormatError</code> was thrown in case of an unsupported version depending on whether the class was being loaded by the system class loader or a user-defined class loader.<p>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="ClassFile.doc.html">Prev</a> | <a href="Instructions.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 30, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>

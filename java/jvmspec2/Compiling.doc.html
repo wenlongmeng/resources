@@ -1,0 +1,1012 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+<title>VM Spec  Compiling for the  Java Virtual Machine</title>
+</head>
+<body BGCOLOR=#eeeeff text=#000000 LINK=#0000ff VLINK=#000077 ALINK=#ff0000>
+<table width=100%><tr>
+<td><a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc.html">Prev</a> | <a href="Threads.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a></td><td align=right><i><i>The Java<sup><font size=-2>TM</font></sup> Virtual Machine Specification</i></i></td>
+</tr></table>
+
+
+<hr><br>
+ 
+<a name="2839"></a>
+<p><strong>CHAPTER 7 </strong></p>
+<a name="2989"></a>
+<h1>Compiling for the  Java Virtual Machine</h1>
+<hr><p>
+<a name="6043"></a>
+<p>
+The Java virtual machine is designed to support the Java programming language. 
+Sun's JDK releases and Java 2 SDK contain both a compiler from source code written
+in the Java programming language to the instruction set of the Java virtual 
+machine, and a runtime system that implements the Java virtual machine itself. 
+Understanding how one compiler utilizes the Java virtual machine is useful to the 
+prospective compiler writer, as well as to one trying to understand the Java virtual 
+machine itself.
+<p><a name="4054"></a>
+Although this chapter concentrates on compiling source code written in the Java programming language, the Java virtual machine does not assume that the instructions it executes were generated from such code. While there have been a number of efforts aimed at compiling other languages to the Java virtual machine, the current version of the Java virtual machine was not designed to support a wide range of languages. Some languages may be hosted fairly directly by the Java virtual machine. Other languages may be implemented only inefficiently. <p>
+<a name="15152"></a>
+Note that the term "compiler" is sometimes used when referring to a translator from the instruction set of a Java virtual machine to the instruction set of a specific CPU. One example of such a translator is a just-in-time (JIT) code generator, which generates platform-specific instructions only after Java virtual machine code has been loaded. This chapter does not address issues associated with code generation, only those associated with compiling source code written in the Java programming language to Java virtual machine instructions.<p>
+<a name="4083"></a>
+<hr><h2>7.1    Format of Examples</h2>
+This chapter consists mainly of examples of source code together with annotated 
+listings of the Java virtual machine code that the <code>javac</code> compiler in Sun's JDK 
+release 1.0.2 generates for the examples. The Java virtual machine code is written in 
+the informal "virtual machine assembly language" output by Sun's <code>javap</code> utility, 
+distributed with the JDK software and the Java 2 SDK. You can use <code>javap</code> to generate
+additional examples of compiled methods.
+<p><a name="15144"></a>
+The format of the examples should be familiar to anyone who has read assembly code. Each instruction takes the form<p>
+<blockquote><pre>&lt;index&gt; &lt;opcode&gt; [&lt;operand1&gt; [&lt;operand2&gt;...]] [&lt;comment&gt;]
+</pre></blockquote>The &lt;index&gt; is the index of the opcode of the instruction in the array that contains 
+the bytes of Java virtual machine code for this method. Alternatively, the &lt;index&gt; 
+may be thought of as a byte offset from the beginning of the method. The &lt;opcode&gt; 
+is the mnemonic for the instruction's opcode, and the zero or more &lt;operandN&gt; are 
+the operands of the instruction. The optional &lt;comment&gt; is given in end-of-line 
+comment syntax:
+<p><blockquote><pre>8 	bipush 100		// Push <code>int</code> constant <code>100
+</code></pre></blockquote>Some of the material in the comments is emitted by <code>javap</code>; the rest is supplied by 
+the authors. The &lt;index&gt; prefacing each instruction may be used as the target of a 
+control transfer instruction. For instance, a goto 8 instruction transfers control to the 
+instruction at index 8. Note that the actual operands of Java virtual machine control 
+transfer instructions are offsets from the addresses of the opcodes of those instructions;
+these operands are displayed by <code>javap</code> (and are shown in this chapter) as 
+more easily read offsets into their methods.
+<p><a name="8695"></a>
+We preface an operand representing a runtime constant pool index with a hash sign and follow the instruction by a comment identifying the runtime constant pool item referenced, as in<p>
+<blockquote><pre>  10   ldc #1 			// Push <code>float</code> constant <code>100.0</code>	
+</pre></blockquote>or
+<p><blockquote><pre>   9   invokevirtual #4		// Method <code>Example.addTwo(II)I
+</code></pre></blockquote>For the purposes of this chapter, we do not worry about specifying details such as 
+operand sizes.
+<p><a name="4182"></a>
+<hr><h2>7.2    Use of Constants, Local Variables, and Control Constructs</h2>
+Java virtual machine code exhibits a set of general characteristics imposed by the 
+Java virtual machine's design and use of types. In the first example we encounter 
+many of these, and we consider them in some detail.
+<p><a name="4154"></a>
+The <code>spin</code> method simply spins around an empty <code>for</code> loop 100 times:<p>
+<blockquote><pre><code>void spin() {
+</code><code>    int i;
+</code><code>    for (i = 0; i &lt; 100; i++) {
+</code><code>     	;			// Loop body is empty
+</code><code>    }
+</code><code>}
+</code></pre></blockquote><a name="4112"></a>
+A compiler might compile <code>spin</code> to<p>
+<blockquote><pre>Method <code>void</code> <code>spin()
+</code>   0	iconst_0		// Push <code>int</code> constant <code>0
+</code>   1 	istore_1		// Store into local variable 1 (<code>i</code>=<code>0</code>)
+   2	goto 8			// First time through don't increment
+   5	iinc 1 1		// Increment local variable 1 by 1 (<code>i++</code>)
+   8	iload_1			// Push local variable 1 (<code>i</code>)
+   9	bipush 100		// Push <code>int</code> constant <code>100
+</code>  11	if_icmplt 5		// Compare and loop if less than (<code>i</code> < <code>100</code>)
+  14	return			// Return <code>void</code> when done
+</pre></blockquote><a name="10105"></a>
+The Java virtual machine is stack-oriented, with most operations taking one or more operands from the operand stack of the Java virtual machine's current frame or pushing results back onto the operand stack. A new frame is created each time a method is invoked, and with it is created a new operand stack and set of local variables for use by that method (see <a href="Overview.doc.html#17257">Section 3.6, "Frames"</a>). At any one point of the computation, there are thus likely to be many frames and equally many operand stacks per thread of control, corresponding to many nested method invocations. Only the operand stack in the current frame is active. <p>
+<a name="4169"></a>
+The instruction set of the Java virtual machine distinguishes operand types by using distinct bytecodes for operations on its various data types. The method <code>spin</code> operates only on values of type <code>int</code>. The instructions in its compiled code chosen to operate on typed data (iconst_0, istore_1, iinc, iload_1, if_icmplt) are all specialized for type <code>int</code>.<p>
+<a name="4172"></a>
+The two constants in <code>spin</code>, <code>0</code> and <code>100</code>, are pushed onto the operand stack using two different instructions. The <code>0</code> is pushed using an iconst_0 instruction, one of the family of iconst_&lt;i&gt; instructions. The <code>100</code> is pushed using a bipush instruction, which fetches the value it pushes as an immediate operand.<p>
+<a name="14767"></a>
+The Java virtual machine frequently takes advantage of the likelihood of certain operands (<code>int</code> constants -1, 0, 1, 2, 3, 4 and 5 in the case of the iconst_&lt;i&gt; instructions) by making those operands implicit in the opcode. Because the iconst_0 instruction knows it is going to push an <code>int</code> <code>0</code>, iconst_0 does not need to store an operand to tell it what value to push, nor does it need to fetch or decode an operand. Compiling the push of <code>0</code> as bipush 0 would have been correct, but would have made the compiled code for <code>spin</code> one byte longer. A simple virtual machine would have also spent additional time fetching and decoding the explicit operand each time around the loop. Use of implicit operands makes compiled code more compact and efficient. <p>
+<a name="15090"></a>
+The <code>int</code> <code>i</code> in <code>spin</code> is stored as Java virtual machine local variable 1. Because most Java virtual machine instructions operate on values popped from the operand stack rather than directly on local variables, instructions that transfer values between local variables and the operand stack are common in code compiled for the Java virtual machine. These operations also have special support in the instruction set. In <code>spin</code>, values are transferred to and from local variables using the istore_1 and iload_1 instructions, each of which implicitly operates on local variable 1. The istore_1 instruction pops an <code>int</code> from the operand stack and stores it in local variable 1. The iload_1 instruction pushes the value in local variable 1 onto the operand stack.<p>
+<a name="4941"></a>
+The use (and reuse) of local variables is the responsibility of the compiler writer. The specialized load and store instructions should encourage the compiler writer to reuse local variables as much as is feasible. The resulting code is faster, more compact, and uses less space in the frame.<p>
+<a name="15074"></a>
+Certain very frequent operations on local variables are catered to specially by the Java virtual machine. The iinc instruction increments the contents of a local variable by a one-byte signed value. The iinc instruction in <code>spin</code> increments the first local variable (its first operand) by 1 (its second operand). The iinc instruction is very handy when implementing looping constructs. <p>
+<a name="12225"></a>
+The <code>for</code> loop of <code>spin</code> is accomplished mainly by these instructions:<p>
+<blockquote><pre>   5	iinc 1 1		// Increment local 1 by 1 (<code>i++</code>)
+   8	iload_1			// Push local variable 1 (<code>i</code>)
+   9	bipush 100		// Push <code>int</code> constant <code>100
+</code>  11	if_icmplt 5		// Compare and loop if less than (<code>i</code> < <code>100</code>)
+</pre></blockquote>The bipush instruction pushes the value 100 onto the operand stack as an <code>int</code>, then 
+the if_icmplt instruction pops that value off the operand stack and compares it 
+against i. If the comparison succeeds (the variable <code>i</code> is less than <code>100</code>), control is 
+transferred to index 5 and the next iteration of the <code>for</code> loop begins. Otherwise, control
+passes to the instruction following the if_icmplt.
+<p><a name="4229"></a>
+If the <code>spin</code> example had used a data type other than <code>int</code> for the loop counter, the compiled code would necessarily change to reflect the different data type. For instance, if instead of an <code>int</code> the <code>spin</code> example uses a <code>double</code>, as shown,<p>
+<blockquote><pre><code>void dspin() {
+</code><code>    double i;
+</code><code>    for (i = 0.0; i &lt; 100.0; i++) {
+</code><code>        ;			// Loop body is empty
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>the compiled code is
+<p><blockquote><pre>Method <code>void</code> d<code>spin()
+</code>   0 	dconst_0		// Push <code>double</code> constant <code>0.0
+</code>   1 	dstore_1		// Store into local variables 1 and 2
+   2 	goto 9			// First time through don't increment
+   5 	dload_1			// Push local variables 1 and 2 
+   6 	dconst_1		// Push <code>double</code> constant <code>1.0</code> 
+   7 	dadd			// Add; there is no dinc instruction
+   8 	dstore_1		// Store result in local variables 1 and 2
+   9 	dload_1			// Push local variables 1 and 2 
+  10 	ldc2_w #4 		// Push <code>double</code> constant <code>100.0</code> 
+  13 	dcmpg			// There is no if_dcmplt instruction
+  14 	iflt 5			// Compare and loop if less than (<code>i</code> < <code>100.0</code>)
+  17 	return			// Return <code>void</code> when done
+</pre></blockquote>The instructions that operate on typed data are now specialized for type <code>double</code>. 
+(The ldc2_w instruction will be discussed later in this chapter.)
+<p><a name="10228"></a>
+Recall that <code>double</code> values occupy two local variables, although they are only accessed using the lesser index of the two local variables. This is also the case for values of type <code>long</code>. Again for example,<p>
+<blockquote><pre><code>double doubleLocals(double d1, double d2) {
+</code><code>    return d1 + d2;
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>double</code> <code>doubleLocals(double,double)
+</code>   0 	dload_1			// First argument in local variables 1 and 2
+   1 	dload_3			// Second argument in local variables 3 and 4
+   2 	dadd			
+   3 	dreturn
+</pre></blockquote><a name="16197"></a>
+Note that local variables of the local variable pairs used to store <code>double</code> values in <code>doubleLocals</code> must never be manipulated individually.<p>
+<a name="16186"></a>
+The Java virtual machine's opcode size of 1 byte results in its compiled code being very compact. However, 1-byte opcodes also mean that the Java virtual machine instruction set must stay small. As a compromise, the Java virtual machine does not provide equal support for all data types: it is not completely orthogonal (see <a href="Overview.doc.html#37356">Table 3.2, "Type support in the Java virtual machine instruction set"</a>). <p>
+<a name="17566"></a>
+For example, the comparison of values of type <code>int</code> in the <code>for</code> statement of example <code>spin</code> can be implemented using a single if_icmplt instruction; however, there is no single instruction in the Java virtual machine instruction set that performs a conditional branch on values of type <code>double</code>. Thus, <code>dspin</code> must implement its comparison of values of type <code>double</code> using a dcmpg instruction followed by an iflt instruction.<p>
+<a name="4595"></a>
+The Java virtual machine provides the most direct support for data of type <code>int</code>. This is partly in anticipation of efficient implementations of the Java virtual machine's operand stacks and local variable arrays. It is also motivated by the frequency of <code>int</code> data in typical programs. Other integral types have less direct support. There are no <code>byte</code>, <code>char</code>, or <code>short</code> versions of the store, load, or add instructions, for instance. Here is the <code>spin</code> example written using a <code>short</code>:<p>
+<blockquote><pre><code>void sspin() {
+</code><code>    short i;
+</code><code>    for (i = 0; i &lt; 100; i++) {
+</code><code>        ;			// Loop body is empty
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>It must be compiled for the Java virtual machine, as follows, using instructions 
+operating on another type, most likely <code>int</code>, converting between <code>short</code> and <code>int</code> 
+values as necessary to ensure that the results of operations on <code>short</code> data stay 
+within the appropriate range:
+<p><blockquote><pre>Method <code>void</code> <code>sspin()
+</code>   0 	iconst_0
+   1 	istore_1
+   2 	goto 10
+   5 	iload_1			// The <code>short</code> is treated as though an <code>int
+</code>   6 	iconst_1
+   7	iadd
+   8 	i2s		 	// Truncate <code>int</code> to <code>short
+</code>   9 	istore_1
+  10 	iload_1
+  11 	bipush 100
+  13 	if_icmplt 5
+  16 	return
+</pre></blockquote>The lack of direct support for <code>byte</code>, <code>char</code>, and <code>short</code> types in the Java virtual 
+machine is not particularly painful, because values of those types are internally promoted
+to <code>int</code> (<code>byte</code> and <code>short</code> are sign-extended to <code>int</code>, <code>char</code> is zero-extended). 
+Operations on <code>byte</code>, <code>char</code>, and <code>short</code> data can thus be done using <code>int</code> instructions. 
+The only additional cost is that of truncating the values of <code>int</code> operations to valid 
+ranges. 
+<p><a name="5831"></a>
+The <code>long</code> and floating-point types have an intermediate level of support in the Java virtual machine, lacking only the full complement of conditional control transfer instructions. <p>
+<a name="4228"></a>
+<hr><h2>7.3    Arithmetic</h2>
+The Java virtual machine generally does arithmetic on its operand stack. (The 
+exception is the iinc instruction, which directly increments the value of a local variable
+.) For instance, the <code>align2grain</code> method aligns an <code>int</code> value to a given power 
+of 2:
+<p><blockquote><pre><code>int align2grain(int i, int grain) {
+</code><code>    return ((i + grain-1) &amp; ~(grain-1));
+</code><code>}
+</code></pre></blockquote><a name="15003"></a>
+Operands for arithmetic operations are popped from the operand stack, and the results of operations are pushed back onto the operand stack. Results of arithmetic subcomputations can thus be made available as operands of their nesting computation. For instance, the calculation of <code>~(grain</code>-<code>1)</code> is handled by these instructions:<p>
+<blockquote><pre>   5 	iload_2			// Push <code>grain</code> 
+   6 	iconst_1		// Push <code>int</code> constant <code>1</code> 
+   7 	isub			// Subtract; push result 
+   8 	iconst_m1		// Push <code>int</code> constant -<code>1</code> 
+   9 	ixor			// Do XOR; push result 
+</pre></blockquote>First <code>grain</code> &#32;- &#32;<code>1</code> is calculated using the contents of local variable 2 and an immediate
+<code>int</code> value <code>1</code>. These operands are popped from the operand stack and their 
+difference pushed back onto the operand stack. The difference is thus immediately
+available for use as one operand of the ixor instruction. (Recall that ~<code>x</code> == 
+-<code>1^x</code>.) Similarly, the result of the ixor instruction becomes an operand for the 
+subsequent iand instruction.
+<p><a name="9759"></a>
+The code for the entire method follows:<p>
+<blockquote><pre>Method <code>int</code> <code>align2grain(int,int)
+</code>   0 	iload_1
+   1 	iload_2
+   2 	iadd
+   3 	iconst_1
+   4 	isub
+   5 	iload_2
+   6 	iconst_1
+   7 	isub
+   8 	iconst_m1
+   9 	ixor
+  10	iand
+  11	ireturn
+</pre></blockquote><a name="5841"></a>
+<hr><h2>7.4    Accessing the Runtime Constant Pool</h2>
+Many numeric constants, as well as objects, fields, and methods, are accessed via 
+the runtime constant pool of the current class. Object access is considered later 
+<a href="Compiling.doc.html#4089">(&#167;7.8)</a>. Data of types <code>int</code>, <code>long</code>, <code>float</code>, and <code>double</code>, as well as references to 
+instances of class <code>String</code>, are managed using the ldc, ldc_w, and ldc2_w instructions.
+
+<p><a name="6072"></a>
+The ldc and ldc_w instructions are used to access values in the runtime constant pool (including instances of class <code>String</code>) of types other than <code>double</code> and <code>long</code>. The ldc_w instruction is used in place of ldc only when there is a large number of runtime constant pool items and a larger index is needed to access an item. The ldc2_w instruction is used to access all values of types <code>double</code> and <code>long</code>; there is no non-wide variant.<p>
+<a name="6073"></a>
+Integral constants of types <code>byte</code>, <code>char</code>, or <code>short</code>, as well as small <code>int</code> values, may be compiled using the bipush, sipush, or iconst_&lt;i&gt; instructions, as seen earlier <a href="Compiling.doc.html#4182">(&#167;7.2)</a>. Certain small floating-point constants may be compiled using the fconst_&lt;f&gt; and dconst_&lt;d&gt; instructions. <p>
+<a name="10300"></a>
+In all of these cases, compilation is straightforward. For instance, the constants for<p>
+<blockquote><pre><code>void useManyNumeric() {
+</code><code>    int i = 100;
+</code><code>    int j = 1000000;
+</code><code>    long l1 = 1;
+</code><code>    long l2 = 0xffffffff;
+</code><code>    double d = 2.2;
+</code><code>    ...do some calculations...
+</code><code>}
+</code></pre></blockquote>are set up as follows:
+<p><blockquote><pre>Method <code>void</code> <code>useManyNumeric()
+</code>   0	bipush 100		// Push a small <code>int</code> with bipush
+   2	istore_1
+   3 	ldc #1 			// Push <code>int</code> constant <code>1000000</code>; a larger <code>int
+</code>				// value uses ldc
+   5 	istore_2
+   6 	lconst_1		// A tiny <code>long</code> value uses short, fast lconst_1
+   7 	lstore_3
+   8	ldc2_w #6 		// Push <code>long</code> <code>0xffffffff</code> (that is, an <code>int</code> -<code>1</code>); any
+				// <code>long</code> constant value can be pushed using ldc2_w
+  11	lstore 5
+  13 	ldc2_w #8 		// Push <code>double</code> constant <code>2.200000</code>; uncommon
+				// <code>double</code> values are also pushed using ldc2_w
+  16 	dstore 7
+...do those calculations...
+</pre></blockquote><a name="8478"></a>
+<hr><h2>7.5    More Control Examples</h2>
+Compilation of <code>for</code> statements was shown in an earlier section <a href="Compiling.doc.html#4182">(&#167;7.2)</a>. Most of the Java 
+programming language's other control constructs (<code>if-then-else</code>, <code>do</code>, <code>while</code>, 
+<code>break</code>, and <code>continue</code>) are also compiled in the obvious ways. The compilation of 
+<code>switch</code> statements is handled in a separate section (<a href="Compiling.doc.html#14942">Section 7.10, "Compiling 
+Switches"</a>), as are the compilation of exceptions (<a href="Compiling.doc.html#9934">Section 7.12, "Throwing and Handling
+Exceptions"</a>) and the compilation of <code>finally</code> clauses (<a href="Compiling.doc.html#13789">Section 7.13, "Compiling 
+<sub>finally</sub>
+"</a>).
+<p><a name="14987"></a>
+As a further example, a <code>while</code> loop is compiled in an obvious way, although the specific control transfer instructions made available by the Java virtual machine vary by data type. As usual, there is more support for data of type <code>int</code>, for example:<p>
+<blockquote><pre><code>void whileInt() {
+</code><code>    int i = 0;
+</code><code>    while (i &lt; 100) {
+</code><code>        i++;
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>is compiled to
+<p><blockquote><pre>Method <code>void</code> <code>whileInt()
+</code>   0 	iconst_0
+   1 	istore_1
+   2 	goto 8
+   5 	iinc 1 1
+   8 	iload_1
+   9 	bipush 100
+  11 	if_icmplt 5
+  14 	return
+</pre></blockquote><a name="8508"></a>
+Note that the test of the <code>while</code> statement (implemented using the if_icmplt instruction) is at the bottom of the Java virtual machine code for the loop. (This was also the case in the <code>spin</code> examples earlier.) The test being at the bottom of the loop forces the use of a goto instruction to get to the test prior to the first iteration of the loop. If that test fails, and the loop body is never entered, this extra instruction is wasted. However, <code>while</code> loops are typically used when their body is expected to be run, often for many iterations. For subsequent iterations, putting the test at the bottom of the loop saves a Java virtual machine instruction each time around the loop: if the test were at the top of the loop, the loop body would need a trailing goto instruction to get back to the top.<p>
+<a name="8700"></a>
+Control constructs involving other data types are compiled in similar ways, but must use the instructions available for those data types. This leads to somewhat less efficient code because more Java virtual machine instructions are needed, for example:<p>
+<blockquote><pre><code>void whileDouble() {
+</code><code>    double i = 0.0;
+</code><code>    while (i &lt; 100.1) {
+</code><code>        i++;
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>is compiled to
+<p><blockquote><pre>Method <code>void</code> <code>whileDouble()
+</code>   0 	dconst_0
+   1 	dstore_1
+   2 	goto 9
+   5 	dload_1
+   6 	dconst_1
+   7 	dadd
+   8 	dstore_1
+   9 	dload_1
+  10 	ldc2_w #4 		// Push <code>double</code> constant <code>100.1
+</code>  13 	dcmpg			// To do the compare and branch we have to use...
+  14 	iflt 5			// ...two instructions
+  17 	return
+</pre></blockquote><a name="8555"></a>
+Each floating-point type has two comparison instructions: fcmpl and fcmpg for type <code>float</code>, and dcmpl and dcmpg for type <code>double</code>. The variants differ only in their treatment of NaN. NaN is unordered, so all floating-point comparisons fail if either of their operands is NaN. The compiler chooses the variant of the comparison instruction for the appropriate type that produces the same result whether the comparison fails on non-NaN values or encounters a NaN. <p>
+<a name="18373"></a>
+For instance:<p>
+<blockquote><pre><code>int lessThan100(double d) {
+</code><code>    if (d &lt; 100.0) {
+</code><code>        return 1;				
+</code><code>    } else {
+</code><code>        return -1;				
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>compiles to
+<p><blockquote><pre>Method <code>int</code> <code>lessThan100(double)
+</code>   0 	dload_1
+   1 	ldc2_w #4 		// Push <code>double</code> constant <code>100.0
+</code>   4 	dcmpg			// Push 1 if <code>d</code> is NaN or <code>d</code> \> <code>100.0</code>;
+				// push 0 if <code>d</code> == <code>100.0
+</code>   5 	ifge 10			// Branch on 0 or 1
+   8 	iconst_1
+   9 	ireturn
+  10 	iconst_m1
+  11 	ireturn
+</pre></blockquote>If <code>d</code> is not NaN and is less than <code>100.0</code>, the dcmpg instruction pushes an <code>int</code> -1 onto 
+the operand stack, and the ifge instruction does not branch. Whether <code>d</code> is greater than 
+<code>100.0</code> or is NaN, the dcmpg instruction pushes an <code>int</code> 1 onto the operand stack, 
+and the ifge branches. If <code>d</code> is equal to <code>100.0</code>, the dcmpg instruction pushes an <code>int</code> 0 
+onto the operand stack, and the ifge branches.
+<p><a name="10361"></a>
+The dcmpl instruction achieves the same effect if the comparison is reversed:<p>
+<blockquote><pre><code>int greaterThan100(double d) {
+</code><code>    if (d &gt; 100.0) {
+</code><code>        return 1;			
+</code><code>    } else {
+</code><code>        return -1;			
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>int</code> <code>greaterThan100(double)
+</code>   0 	dload_1
+   1 	ldc2_w #4 		// Push <code>double</code> constant <code>100.0
+</code>   4 	dcmpl			// Push -1 if <code>d</code> is Nan or <code>d</code> <<code> 100.0</code>;
+				// push 0 if <code>d</code> == <code>100.0
+</code>   5 	ifle 10			// Branch on 0 or -1
+   8 	iconst_1
+   9 	ireturn
+  10 	iconst_m1
+  11 	ireturn
+</pre></blockquote>Once again, whether the comparison fails on a non-NaN value or because it is 
+passed a NaN, the dcmpl instruction pushes an <code>int</code> value onto the operand stack 
+that causes the ifle to branch. If both of the dcmp instructions did not exist, one of 
+the example methods would have had to do more work to detect NaN.
+<p><a name="8556"></a>
+<hr><h2>7.6    Receiving Arguments</h2>
+If <em>n</em> arguments are passed to an instance method, they are received, by convention, in 
+the local variables numbered 1 through n of the frame created for the new method 
+invocation. The arguments are received in the order they were passed. For example:
+<p><blockquote><pre><code>int addTwo(int i, int j) {
+</code><code>    return i + j;
+</code><code>}
+</code></pre></blockquote>compiles to
+<p><blockquote><pre>Method <code>int</code> <code>addTwo(int,int)
+</code>   0	iload_1			// Push value of local variable 1 (<code>i</code>)
+   1	iload_2			// Push value of local variable 2 (<code>j</code>)
+   2	iadd			// Add; leave <code>int</code> result on operand stack
+   3 	ireturn			// Return <code>int</code> result
+</pre></blockquote><a name="9840"></a>
+By convention, an instance method is passed a <code>reference</code> to its instance in local variable 0. In the Java programming language the instance is accessible via the <code>this</code> keyword. <p>
+<a name="9846"></a>
+Class (<code>static</code>) methods do not have an instance, so for them this use of local variable zero is unnecessary. A class method starts using local variables at index zero. If the <code>addTwo</code> method were a class method, its arguments would be passed in a similar way to the first version:<p>
+<blockquote><pre><code>static int addTwoStatic(int i, int j) {
+</code><code>    return i + j;
+</code><code>}
+</code></pre></blockquote>compiles to
+<p><blockquote><pre>Method <code>int</code> <code>addTwoStatic(int,int)
+</code>   0 	iload_0
+   1	iload_1
+   2 	iadd
+   3 	ireturn
+</pre></blockquote>The only difference is that the method arguments appear starting in local variable 0 
+rather than 1.
+<p><a name="14787"></a>
+<hr><h2>7.7    Invoking Methods</h2>
+The normal method invocation for a instance method dispatches on the runtime type 
+of the object. (They are virtual, in C++ terms.) Such an invocation is implemented 
+using the invokevirtual instruction, which takes as its argument an index to a runtime
+constant pool entry giving the fully qualified name of the class type of the 
+object, the name of the method to invoke, and that method's descriptor <a href="ClassFile.doc.html#7035">(&#167;4.3.3)</a>. To 
+invoke the <code>addTwo</code> method, defined earlier as an instance method, we might write
+<p><blockquote><pre><code>int add12and13() {
+</code><code>    return addTwo(12, 13);
+</code><code>}
+</code></pre></blockquote>This compiles to
+<p><blockquote><pre>Method <code>int</code> <code>add12and13()
+</code>   0 	aload_0			 	// Push local variable 0 (<code>this</code>)
+   1 	bipush 12			// Push <code>int</code> constant <code>12
+</code>   3 	bipush 13			// Push <code>int</code> constant <code>13
+</code>   5 	invokevirtual #4		// Method <code>Example.addtwo(II)I
+</code>   8	ireturn			 	// Return <code>int</code> on top of operand stack; it is
+				 	// the <code>int</code> result of <code>addTwo()
+</code></pre></blockquote><a name="4399"></a>
+The invocation is set up by first pushing a <code>reference</code> to the current instance, <code>this</code>, onto the operand stack. The method invocation's arguments, <code>int</code> values <code>12</code> and <code>13</code>, are then pushed. When the frame for the <code>addTwo</code> method is created, the arguments passed to the method become the initial values of the new frame's local variables. That is, the <code>reference</code> for <code>this</code> and the two arguments, pushed onto the operand stack by the invoker, will become the initial values of local variables 0, 1, and 2 of the invoked method. <p>
+<a name="5962"></a>
+Finally, <code>addTwo</code> is invoked. When it returns, its <code>int</code> return value is pushed onto the operand stack of the frame of the invoker, the <code>add12and13</code> method. The return value is thus put in place to be immediately returned to the invoker of <code>add12and13</code>. <p>
+<a name="10439"></a>
+The return from <code>add12and13</code> is handled by the ireturn instruction of <code>add12and13</code>. The ireturn instruction takes the <code>int</code> value returned by <code>addTwo</code>, on the operand stack of the current frame, and pushes it onto the operand stack of the frame of the invoker. It then returns control to the invoker, making the invoker's frame current. The Java virtual machine provides distinct return instructions for many of its numeric and <code>reference</code> data types, as well as a return instruction for methods with no return value. The same set of return instructions is used for all varieties of method invocations.<p>
+<a name="10497"></a>
+The operand of the invokevirtual instruction (in the example, the runtime constant pool index #4) is not the offset of the method in the class instance. The compiler does not know the internal layout of a class instance. Instead, it generates symbolic references to the methods of an instance, which are stored in the runtime constant pool. Those runtime constant pool items are resolved at run time to determine the actual method location. The same is true for all other Java virtual machine instructions that access class instances.<p>
+<a name="6012"></a>
+Invoking <code>addTwoStatic</code>, a class (<code>static</code>) variant of <code>addTwo</code>, is similar, as shown:<p>
+<blockquote><pre><code>int add12and13() {
+</code><code>    return addTwoStatic(12, 13);
+</code><code>}
+</code></pre></blockquote>although a different Java virtual machine method invocation instruction is used:
+<p><blockquote><pre>Method <code>int add12and13()
+</code>   0 	bipush 12
+   2 	bipush 13
+   4 	invokestatic #3 		// Method <code>Example.addTwoStatic(II)I
+</code>   7 	ireturn
+</pre></blockquote>Compiling an invocation of a class (<code>static</code>) method is very much like compiling an 
+invocation of an instance method, except <code>this</code> is not passed by the invoker. The 
+method arguments will thus be received beginning with local variable 0 (see <a href="Compiling.doc.html#8556">Section 
+7.6, "Receiving Arguments"</a>). The invokestatic instruction is always used to invoke 
+class methods.
+<p><a name="9398"></a>
+The invokespecial instruction must be used to invoke instance initialization methods (see <a href="Compiling.doc.html#4089">Section 7.8, "Working with Class Instances"</a>). It is also used when invoking methods in the superclass (<code>super</code>) and when invoking <code>private</code> methods. For instance, given classes <code>Near</code> and <code>Far</code> declared as<p>
+<blockquote><pre><code>class Near {
+</code><code>    int it;
+</code><code>    public int getItNear() {
+</code><code>        return getIt();
+</code><code>    }
+</code><code>    private int getIt() {
+</code><code>        return it;
+</code><code>    }
+</code>}
+<code>class Far extends Near {
+</code><code>    int getItFar() {
+</code><code>        return super.getItNear();
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>the method <code>Near.getItNear</code> (which invokes a <code>private</code> method) becomes
+<p><blockquote><pre>Method <code>int</code> <code>getItNear()
+</code>   0 	aload_0
+   1 	invokespecial #5 		// Method <code>Near.getIt()I
+</code>   4 	ireturn
+</pre></blockquote>The method <code>Far.getItFar</code> (which invokes a superclass method) becomes
+<p><blockquote><pre>Method <code>int</code> <code>getItFar()
+</code>   0 	aload_0
+   1 	invokespecial #4		// Method <code>Near.getItNear()I
+</code>   4	ireturn
+</pre></blockquote>Note that methods called using the invokespecial instruction always pass <code>this</code> to 
+the invoked method as its first argument. As usual, it is received in local variable 0.
+<p><a name="4089"></a>
+<hr><h2>7.8    Working with Class Instances</h2>
+Java virtual machine class instances are created using the Java virtual machine's 
+new instruction. Recall that at the level of the Java virtual machine, a constructor 
+appears as a method with the compiler-supplied name <code>&lt;init&gt;</code>. This specially 
+named method is known as the instance initialization method <a href="Overview.doc.html#12174">(&#167;3.9)</a>. Multiple 
+instance initialization methods, corresponding to multiple constructors, may exist 
+for a given class. Once the class instance has been created and its instance variables, 
+including those of the class and all of its superclasses, have been initialized to their 
+default values, an instance initialization method of the new class instance is invoked. 
+For example:
+<p><blockquote><pre><code>Object create() {
+</code><code>    return new Object();
+</code><code>}
+</code></pre></blockquote>compiles to
+<p><blockquote><pre>Method <code>java.lang.Object</code> <code>create()
+</code>   0 	new #1 				// Class <code>java.lang.Object
+</code>   3 	dup
+   4 	invokespecial #4 		// Method <code>java.lang.Object.&lt;init&gt;()V
+</code>   7 	areturn
+</pre></blockquote><a name="14907"></a>
+Class instances are passed and returned (as <code>reference</code> types) very much like numeric values, although type <code>reference</code> has its own complement of instructions, for example:<p>
+<blockquote><pre><code>int i;					// An instance variable
+</code><code>MyObj example() {
+</code><code>    MyObj o = new MyObj();
+</code><code>    return silly(o);
+</code><code>}
+</code><code>MyObj silly(MyObj o) {
+</code><code>    if (o != null) {
+</code><code>        return o;
+</code><code>    } else {
+</code><code>        return o;
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>MyObj</code> <code>example()
+</code>   0 	new #2 				// Class <code>MyObj
+</code>   3 	dup
+   4 	invokespecial #5 		// Method <code>MyObj.&lt;init&gt;()V
+</code>   7 	astore_1
+   8 	aload_0
+   9 	aload_1
+  10 	invokevirtual #4 				
+		// Method <code>Example.silly(LMyObj;)LMyObj;
+</code>  13 	areturn
+Method <code>MyObj</code> <code>silly(MyObj)
+</code>   0 	aload_1
+   1 	ifnull 6
+   4	aload_1
+   5 	areturn
+   6 	aload_1
+   7 	areturn
+</pre></blockquote><a name="4716"></a>
+The fields of a class instance (instance variables) are accessed using the getfield and putfield instructions. If <code>i</code> is an instance variable of type <code>int</code>, the methods <code>setIt</code> and <code>getIt,</code> defined as<p>
+<blockquote><pre><code>void setIt(int value) {
+</code><code>    i = value;
+</code><code>}
+</code><code>int getIt() {
+</code><code>    return i;
+</code><code>}
+</code></pre></blockquote>become
+<p><blockquote><pre>Method <code>void</code> <code>setIt(int)
+</code>   0 	aload_0
+   1 	iload_1
+   2 	putfield #4 			// Field <code>Example.i I
+</code>   5	return
+Method <code>int</code> <code>getIt()
+</code>   0 	aload_0
+   1 	getfield #4 			// Field <code>Example.i I
+</code>   4	ireturn
+</pre></blockquote>As with the operands of method invocation instructions, the operands of the putfield 
+and getfield instructions (the runtime constant pool index #4) are not the offsets of 
+the fields in the class instance. The compiler generates symbolic references to the 
+fields of an instance, which are stored in the runtime constant pool. Those runtime 
+constant pool items are resolved at run time to determine the location of the field 
+within the referenced object.
+<p><a name="4091"></a>
+<hr><h2>7.9    Arrays</h2>
+Java virtual machine arrays are also objects. Arrays are created and manipulated 
+using a distinct set of instructions. The newarray instruction is used to create an 
+array of a numeric type. The &#32;code
+<p><blockquote><pre><code>void createBuffer() {
+</code><code>    int buffer[];
+</code><code>    int bufsz = 100;
+</code><code>    int value = 12;
+</code><code>    buffer = new int[bufsz];
+</code><code>    buffer[10] = value;
+</code><code>    value = buffer[11];
+</code><code>}
+</code></pre></blockquote>might be compiled to
+<p><blockquote><pre>Method <code>void</code> <code>createBuffer()
+</code>   0 	bipush 100		// Push <code>int</code> constant 100 (<code>bufsz</code>)
+   2 	istore_2		// Store <code>bufsz</code> in local variable 2
+   3 	bipush 12		// Push <code>int</code> constant 12 (<code>value</code>)
+   5 	istore_3		// Store <code>value</code> in local variable 3
+   6	iload_2			// Push <code>bufsz</code>...
+   7	newarray <code>int</code>		// ...and create new array of <code>int</code> of that length
+   9 	astore_1		// Store new array in <code>buffer
+</code>  10 	aload_1			// Push <code>buffer
+</code>  11 	bipush 10		// Push <code>int</code> constant <code>10
+</code>  13 	iload_3			// Push <code>value
+</code>  14 	iastore			// Store value at <code>buffer[10]
+</code>  15 	aload_1			// Push <code>buffer
+</code>  16 	bipush 11		// Push <code>int</code> constant <code>11
+</code>  18 	iaload			// Push value at <code>buffer[11]</code>...
+ &#32; 19 	istore_3		// ...and store it in <code>value
+</code>  20	return
+</pre></blockquote><a name="6189"></a>
+The anewarray instruction is used to create a one-dimensional array of object references, for example:<p>
+<blockquote><pre><code>void createThreadArray() {
+</code><code>    Thread threads[];
+</code><code>    int count = 10;
+</code><code>    threads = new Thread[count];
+</code><code>    threads[0] = new Thread();
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>void createThreadArray()
+</code>   0 	bipush 10			// Push <code>int</code> constant <code>10
+</code>   2 	istore_2			// Initialize <code>count</code> to that
+   3 	iload_2				// Push <code>count</code>, used by anewarray
+   4 	anewarray class #1 		// Create new array of class <code>Thread
+</code>   7 	astore_1			// Store new array in <code>threads
+</code>   8 	aload_1				// Push value of <code>threads
+</code>   9 	iconst_0			// Push <code>int</code> constant <code>0
+</code>  10 	new #1 				// Create instance of class <code>Thread
+</code>  13 	dup				// Make duplicate reference...
+  14 	invokespecial #5 		// ...to pass to instance initialization method
+					// Method <code>java.lang.Thread.&lt;init&gt;()V
+</code>  17 	aastore				// Store new <code>Thread</code> in array at <code>0
+</code>  18 	return
+</pre></blockquote><a name="5674"></a>
+The anewarray instruction can also be used to create the first dimension of a multidimensional array. Alternatively, the multianewarray instruction can be used to create several dimensions at once. For example, the three-dimensional array:<p>
+<blockquote><pre><code>int[][][] create3DArray() {
+</code><code>    int grid[][][];
+</code><code>    grid = new int[10][5][];
+</code><code>    return grid;
+</code><code>}
+</code></pre></blockquote>is created by
+<p><blockquote><pre>Method <code>int</code> <code>create3DArray()[][][]
+</code>   0 	bipush 10			// Push <code>int</code> <code>10</code> (dimension one)
+   2 	iconst_5			// Push <code>int</code> <code>5</code> (dimension two)
+   3 	multianewarray #1 dim #2 	// Class <code>[[[I</code>, a three
+					// dimensional <code>int</code> array;
+					// only create first two 
+					// dimensions
+   7 	astore_1			// Store new array...
+   8 	aload_1				// ...then prepare to return it
+   9 	areturn
+</pre></blockquote>The first operand of the multianewarray instruction is the runtime constant pool index 
+to the array class type to be created. The second is the number of dimensions of that 
+array type to actually create. The multianewarray instruction can be used to create all 
+the dimensions of the type, as the code for <code>create3DArray</code> shows. Note that the multidimensional
+array is just an object and so is loaded and returned by an aload_1 and 
+areturn instruction, respectively. For information about array class names, see <a href="ClassFile.doc.html#1221">Section 
+4.4.1</a>.
+<p><a name="14939"></a>
+All arrays have associated lengths, which are accessed via the arraylength instruction.<p>
+<a name="14942"></a>
+<hr><h2>7.10    Compiling Switches</h2>
+Compilation of <code>switch</code> statements uses the tableswitch and lookupswitch instructions.
+The tableswitch instruction is used when the cases of the <code>switch</code> can be efficiently
+represented as indices into a table of target offsets. The <code>default</code> target of 
+the <code>switch</code> is used if the value of the expression of the <code>switch</code> falls outside the 
+range of valid indices. For instance,
+<p><blockquote><pre><code>int chooseNear(int i) {
+</code><code>    switch (i) {
+</code><code>        case 0:  return 0;
+</code><code>        case 1:  return 1;
+</code><code>        case 2:  return 2;
+</code><code>        default: return -1;
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>compiles to
+<p><blockquote><pre>Method <code>int</code> <code>chooseNear(int)
+</code>   0	iload_1				// Push local variable 1 (argument <code>i</code>)
+   1 	tableswitch 0 to 2: 		// Valid indices are 0 through 2
+		0: 28			// If <code>i</code> is <code>0</code>, continue at 28
+	 	1: 30			// If <code>i</code> is <code>1</code>, continue at 30
+	 	2: 32			// If <code>i</code> is <code>2</code>, continue at 32
+		default:34		// Otherwise, continue at 34
+  28 	iconst_0			// <code>i</code> was <code>0</code>; push <code>int</code> constant <code>0</code>...
+  29 	ireturn				// ...and return it
+  30 	iconst_1			// <code>i</code> was <code>1</code>; push <code>int</code> constant <code>1</code>...
+  31 	ireturn				// ...and return it
+  32 	iconst_2			// <code>i</code> was <code>2</code>; push <code>int</code> constant <code>2</code>...
+  33 	ireturn				// ...and return it
+  34 	iconst_m1			// otherwise push <code>int</code> constant -<code>1</code>...
+  35 	ireturn				// ...and return it
+</pre></blockquote><a name="7459"></a>
+The Java virtual machine's tableswitch and lookupswitch instructions operate only on <code>int</code> data. Because operations on <code>byte</code>, <code>char</code>, or <code>short</code> values are internally promoted to <code>int</code>, a <code>switch</code> whose expression evaluates to one of those types is compiled as though it evaluated to type <code>int</code>. If the <code>chooseNear</code> method had been written using type <code>short</code>, the same Java virtual machine instructions would have been generated as when using type <code>int</code>. Other numeric types must be narrowed to type <code>int</code> for use in a <code>switch</code>.<p>
+<a name="7490"></a>
+Where the cases of the <code>switch</code> are sparse, the table representation of the tableswitch instruction becomes inefficient in terms of space. The lookupswitch instruction may be used instead. The lookupswitch instruction pairs <code>int</code> keys (the values of the <code>case</code> labels) with target offsets in a table. When a lookupswitch instruction is executed, the value of the expression of the <code>switch</code> is compared against the keys in the table. If one of the keys matches the value of the expression, execution continues at the associated target offset. If no key matches, execution continues at the <code>default</code> target. For instance, the compiled code for<p>
+<blockquote><pre><code>int chooseFar(int i) {
+</code><code>    switch (i) {
+</code><code>        case -100: return -1;
+</code><code>        case 0:	   return 0;
+</code><code>        case 100:  return 1;
+</code><code>        default:   return -1;
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>looks just like the code for <code>chooseNear</code>, except for the use of the lookupswitch 
+instruction:
+<p><blockquote><pre>Method <code>int</code> <code>chooseFar(int)
+</code>   0 	iload_1
+   1 	lookupswitch 3: 
+	 	-100: 36
+	 	0: 38
+	 	100: 40
+	 	default:42
+  36 	iconst_m1
+  37 	ireturn
+  38 	iconst_0
+  39 	ireturn
+  40 	iconst_1
+  41	ireturn
+  42 	iconst_m1
+  43 	ireturn
+</pre></blockquote><a name="14885"></a>
+The Java virtual machine specifies that the table of the lookupswitch instruction must be sorted by key so that implementations may use searches more efficient than a linear scan. Even so, the lookupswitch instruction must search its keys for a match rather than simply perform a bounds check and index into a table like tableswitch. Thus, a tableswitch instruction is probably more efficient than a lookupswitch where space considerations permit a choice. <p>
+<a name="14892"></a>
+<hr><h2>7.11    Operations on the Operand Stack</h2>
+The Java virtual machine has a large complement of instructions that manipulate the 
+contents of the operand stack as untyped values. These are useful because of the 
+Java virtual machine's reliance on deft manipulation of its operand stack. For 
+instance,
+<p><blockquote><pre><code>public long nextIndex() { 
+</code><code>    return index++;
+</code><code>}
+</code><code>private long index = 0;
+</code></pre></blockquote>is compiled to
+<p><blockquote><pre>Method <code>long nextIndex()
+</code>   0 	aload_0			// Push <code>this
+</code>   1 	dup			// Make a copy of it
+   2 	getfield #4 		// One of the copies of <code>this</code> is consumed
+				// pushing <code>long</code> field <code>index</code>,
+				// above the original <code>this
+</code>   5 	dup2_x1			// The <code>long</code> on top of the operand stack is 
+				// inserted into the operand stack below the 
+				// original <code>this
+</code>   6 	lconst_1		// Push <code>long</code> constant 1 
+   7 	ladd			// The index value is incremented...
+   8 	putfield #4 		// ...and the result stored back in the field
+  11 	lreturn			// The original value of <code>index</code> is left on
+				// top of the operand stack, ready to be returned
+</pre></blockquote>Note that the Java virtual machine never allows its operand stack manipulation 
+instructions to modify or break up individual values on the operand stack.
+<p><a name="9934"></a>
+<hr><h2>7.12    Throwing and Handling Exceptions</h2>
+Exceptions&#32;are thrown from programs using the <code>throw</code> keyword. Its compilation is 
+simple:
+<p><blockquote><pre><code>void cantBeZero(int i) throws TestExc {
+</code><code>    if (i == 0) {
+</code><code>        throw new TestExc();
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>void</code> <code>cantBeZero(int)
+</code>   0 	iload_1				// Push argument 1 (<code>i</code>)
+   1	ifne 12				// If <code>i==0</code>, allocate instance and throw
+   4	new #1 				// Create instance of <code>TestExc
+</code>   7 	dup				// One reference goes to the constructor
+   8 	invokespecial #7 		// Method <code>TestExc.&lt;init&gt;()V
+</code>  11 	athrow				// Second reference is thrown
+  12 	return				// Never get here if we threw <code>TestExc
+</code></pre></blockquote><a name="7996"></a>
+Compilation of <code>try</code>-<code>catch</code> constructs is straightforward. For example,<p>
+<blockquote><pre><code>void catchOne() {
+</code><code>    try {
+</code><code>        tryItOut();
+</code><code>    } catch (TestExc e) {
+</code><code>        handleExc(e);
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>is compiled as
+<p><blockquote><pre>Method <code>void</code> <code>catchOne()
+</code>   0 	aload_0				// Beginning of <code>try</code> block
+   1 	invokevirtual #6 		// Method <code>Example.tryItOut()V
+</code>   4 	return				// End of <code>try</code> block; normal return
+   5 	astore_1			// Store thrown value in local variable 1
+   6 	aload_0				// Push <code>this
+</code>   7 	aload_1				// Push thrown value
+   8 	invokevirtual #5 		// Invoke handler method: 
+					// <code>Example.handleExc(LTestExc;)V
+</code>  11 	return				// Return after handling <code>TestExc
+</code>Exception table:
+   	From 	To 	Target 		Type
+     	0     	4     	5 		Class <code>TestExc
+</code></pre></blockquote>Looking more closely, the <code>try</code> block is compiled just as it would be if the <code>try</code> were 
+not present:
+<p><blockquote><pre>Method <code>void</code> <code>catchOne()
+</code>   0	aload_0				// Beginning of <code>try</code> block
+   1 	invokevirtual #4 		// Method <code>Example.tryItOut()V
+</code>   4 	return				// End of <code>try</code> block; normal return
+</pre></blockquote>If no exception is thrown during the execution of the <code>try</code> block, it behaves as though 
+the <code>try</code> were not there: <code>tryItOut</code> is invoked and <code>catchOne</code> returns. 
+<p><a name="8894"></a>
+Following the <code>try</code> block is the Java virtual machine code that implements the single <code>catch</code> clause:<p>
+<blockquote><pre>   5 	astore_1			// Store thrown value in local variable 1
+   6 	aload_0				// Push <code>this</code> 
+   7 	aload_1				// Push thrown value
+   8 	invokevirtual #5 		// Invoke handler method: 
+					// <code>Example.handleExc(LTestExc;)V
+</code>  11 	return				// Return after handling <code>TestExc
+</code>Exception table:
+   	From 	To 	Target 		Type
+     	0     	4     	5 		Class <code>TestExc
+</code></pre></blockquote>The invocation of <code>handleExc</code>, the contents of the <code>catch</code> clause, is also compiled 
+like a normal method invocation. However, the presence of a <code>catch</code> clause causes 
+the compiler to generate an exception table entry. The exception table for the 
+<code>catchOne</code> method has one entry corresponding to the one argument (an instance of 
+class <code>TestExc</code>) that the <code>catch</code> clause of <code>catchOne</code> can handle. If some value that is 
+an instance of <code>TestExc</code> is thrown during execution of the instructions between indices 0 and 4 in <code>catchOne</code>, control is transferred to the Java virtual machine code at 
+index 5, which implements the block of the <code>catch</code> clause. If the value that is thrown 
+is not an instance of <code>TestExc</code>, the <code>catch</code> clause of <code>catchOne</code> cannot handle it. 
+Instead, the value is rethrown to the invoker of <code>catchOne</code>.
+<p><a name="8030"></a>
+A <code>try</code> may have multiple <code>catch</code> clauses:<p>
+<blockquote><pre><code>void catchTwo() {
+</code><code>    try {
+</code><code>        tryItOut();
+</code><code>    } catch (TestExc1 e) {
+</code><code>        handleExc(e);
+</code><code>    } catch (TestExc2 e) {
+</code><code>        handleExc(e);
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>Multiple <code>catch</code> clauses of a given <code>try</code> statement are compiled by simply appending 
+the Java virtual machine code for each <code>catch</code> clause one after the other and adding 
+entries to the exception table, as shown:
+<p><blockquote><pre>Method <code>void catchTwo()
+</code>   0 	aload_0				// Begin <code>try</code> block
+   1 	invokevirtual #5 		// Method <code>Example.tryItOut()V
+</code>   4 	return				// End of <code>try</code> block; normal return
+   5 	astore_1			// Beginning of handler for <code>TestExc1</code>;
+					// Store thrown value in local variable 1
+   6 	aload_0				// Push <code>this
+</code>   7 	aload_1				// Push thrown value
+   8 	invokevirtual #7 		// Invoke handler method:
+					// <code>Example.handleExc(LTestExc1;)V
+</code>  11 	return				// Return after handling <code>TestExc1
+</code>  12 	astore_1			// Beginning of handler for <code>TestExc2</code>;
+					// Store thrown value in local variable 1
+  13 	aload_0				// Push <code>this
+</code>  14 	aload_1				// Push thrown value
+  15 	invokevirtual #7		// Invoke handler method:
+					// <code>Example.handleExc(LTestExc2;)V
+</code>  18 	return				// Return after handling <code>TestExc2
+</code>Exception table:
+	From 	To 	Target 		Type
+     	0     	4     	5   		Class <code>TestExc1
+</code>     	0     	4    	12   		Class <code>TestExc2
+</code></pre></blockquote>If during the execution of the <code>try</code> clause (between indices 0 and 4) a value is thrown 
+that matches the parameter of one or more of the <code>catch</code> clauses (the value is an 
+instance of one or more of the parameters), the first (innermost) such <code>catch</code> clause 
+is selected. Control is transferred to the Java virtual machine code for the block of 
+that <code>catch</code> clause. If the value thrown does not match the parameter of any of the 
+<code>catch</code> clauses of <code>catchTwo</code>, the Java virtual machine rethrows the value without 
+invoking code in any <code>catch</code> clause of <code>catchTwo</code>.
+<p><a name="8134"></a>
+Nested <code>try</code>-<code>catch</code> statements are compiled very much like a <code>try</code> statement with multiple <code>catch</code> clauses:<p>
+<blockquote><pre><code>void nestedCatch() {
+</code><code>    try {
+</code><code>        try {
+</code><code>            tryItOut();
+</code><code>        } catch (TestExc1 e) {
+</code><code>            handleExc1(e);
+</code><code>        }
+</code><code>    } catch (TestExc2 e) {
+</code><code>        handleExc2(e);
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>void nestedCatch()
+</code>   0 	aload_0				// Begin <code>try</code> block
+   1 	invokevirtual #8 		// Method <code>Example.tryItOut()V
+</code>   4 	return				// End of <code>try</code> block; normal return
+   5 	astore_1			// Beginning of handler for <code>TestExc1</code>;
+					// Store thrown value in local variable 1
+   6 	aload_0				// Push <code>this
+</code>   7 	aload_1				// Push thrown value
+   8 	invokevirtual #7 		// Invoke handler method: 
+					// <code>Example.handleExc1(LTestExc1;)V
+</code>  11 	return				// Return after handling <code>TestExc1
+</code>  12 	astore_1			// Beginning of handler for <code>TestExc2</code>;
+					// Store thrown value in local variable 1
+  13 	aload_0				// Push <code>this
+</code>  14 	aload_1				// Push thrown value
+  15 	invokevirtual #6 		// Invoke handler method:
+					// <code>Example.handleExc2(LTestExc2;)V
+</code>  18 	return				// Return after handling <code>TestExc2
+</code>Exception table:
+   	From 	To 	Target 		Type
+     	0     	4     	5 		Class <code>TestExc1
+</code>     	0    	12    	12 		Class <code>TestExc2
+</code></pre></blockquote>The nesting of <code>catch</code> clauses is represented only in the exception table. When an 
+exception is thrown, the first (innermost) catch clause that contains the site of the 
+exception and with a matching parameter is selected to handle it. For instance, if the 
+invocation of <code>tryItOut</code> (at index 1) threw an instance of <code>TestExc1</code>, it would be 
+handled by the <code>catch</code> clause that invokes <code>handleExc1</code>. This is so even though the 
+exception occurs within the bounds of the outer <code>catch</code> clause (catching <code>TestExc2</code>) 
+and even though that outer <code>catch</code> clause might otherwise have been able to handle 
+the thrown value.
+<p><a name="13784"></a>
+As a subtle point, note that the range of a <code>catch</code> clause is inclusive on the "from" end and exclusive on the "to" end (<a href="ClassFile.doc.html#1546">&#167;4.7.3</a>). Thus, the exception table entry for the <code>catch</code> clause catching <code>TestExc1</code> does not cover the return instruction at offset 4. However, the exception table entry for the <code>catch</code> clause catching <code>TestExc2</code> does cover the return instruction at offset 11. Return instructions within nested <code>catch</code> clauses are included in the range of instructions covered by nesting <code>catch</code> clauses.<p>
+<a name="13789"></a>
+<hr><h2>7.13    Compiling <code>finally</code></h2>
+Compilation of a <code>try</code>-<code>finally</code> statement is similar to that of <code>try-catch</code>. Prior to 
+transferring control outside the <code>try</code> statement, whether that transfer is normal or 
+abrupt, because an exception has been thrown, the <code>finally</code> clause must first be executed.
+For this simple example
+<p><blockquote><pre><code>void tryFinally() {
+</code><code>    try {
+</code><code>        tryItOut();
+</code><code>    } finally {
+</code><code>        wrapItUp();
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>the compiled code is
+<p><blockquote><pre>Method <code>void tryFinally()
+</code>   0 	aload_0				// Beginning of <code>try</code> block
+   1	invokevirtual #6 		// Method <code>Example.tryItOut()V
+</code>   4 	jsr 14				// Call <code>finally</code> block
+   7 	return				// End of <code>try</code> block
+   8 	astore_1			// Beginning of handler for any throw
+   9 	jsr 14				// Call <code>finally</code> block
+  12 	aload_1				// Push thrown value
+  13 	athrow				// ...and rethrow the value to the invoker
+  14 	astore_2			// Beginning of <code>finally</code> block
+  15 	aload_0				// Push <code>this
+</code>  16 	invokevirtual #5 		// Method <code>Example.wrapItUp()V
+</code>  19 	ret 2				// Return from <code>finally</code> block
+Exception table:
+   	From 	To 	Target 		Type
+	0    	4    	8   		any
+</pre></blockquote>There are four ways for control to pass outside of the <code>try</code> statement: by falling 
+through the bottom of that block, by returning, by executing a <code>break</code> or <code>continue</code> 
+statement, or by raising an exception. If <code>tryItOut</code> returns without raising an exception,
+control is transferred to the <code>finally</code> block using a jsr instruction. The jsr 14 
+instruction at index 4 makes a "subroutine call" to the code for the <code>finally</code> block at 
+index 14 (the <code>finally</code> block is compiled as an embedded subroutine). When the 
+<code>finally</code> block completes, the ret 2 instruction returns control to the instruction following
+the jsr instruction at index 4. 
+<p><a name="9060"></a>
+In more detail, the subroutine call works as follows: The jsr instruction pushes the address of the following instruction (return at index 7) onto the operand stack before jumping. The astore_2 instruction that is the jump target stores the address on the operand stack into local variable 2. The code for the <code>finally</code> block (in this case the aload_0 and invokevirtual instructions) is run. Assuming execution of that code completes normally, the ret instruction retrieves the address from local variable 2 and resumes execution at that address. The return instruction is executed, and <code>tryFinally</code> returns normally.<p>
+<a name="9071"></a>
+A <code>try</code> statement with a <code>finally</code> clause is compiled to have a special exception handler, one that can handle any exception thrown within the <code>try</code> statement. If <code>tryItOut</code> throws an exception, the exception table for <code>tryFinally</code> is searched for an appropriate exception handler. The special handler is found, causing execution to continue at index 8. The astore_1 instruction at index 8 stores the thrown value into local variable 1. The following jsr instruction does a subroutine call to the code for the <code>finally</code> block. Assuming that code returns normally, the aload_1 instruction at index 12 pushes the thrown value back onto the operand stack, and the following athrow instruction rethrows the value.<p>
+<a name="9089"></a>
+Compiling a <code>try</code> statement with both a <code>catch</code> clause and a <code>finally</code> clause is more complex:<p>
+<blockquote><pre><code>void tryCatchFinally() {
+</code><code>    try {
+</code><code>        tryItOut();
+</code><code>    } catch (TestExc e) {
+</code><code>        handleExc(e);
+</code><code>    } finally {
+</code><code>        wrapItUp();
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>becomes
+<p><blockquote><pre>Method <code>void</code> <code>tryCatchFinally()
+</code>   0 	aload_0				// Beginning of <code>try</code> block
+   1 	invokevirtual #4 		// Method <code>Example.tryItOut()V
+</code>   4 	goto 16				// Jump to <code>finally</code> block
+   7 	astore_3			// Beginning of handler for <code>TestExc</code>;
+					// Store thrown value in local variable 3
+   8 	aload_0				// Push <code>this
+</code>   9 	aload_3				// Push thrown value
+  10 	invokevirtual #6 		// Invoke handler method:
+					// <code>Example.handleExc(LTestExc;)V
+</code>  13 	goto 16				// Huh???<a href="#13842"><sup>1</sup></a>
+  16 	jsr 26				// Call <code>finally</code> block
+  19 	return				// Return after handling <code>TestExc
+</code>  20 	astore_1			// Beginning of handler for exceptions
+					// other than <code>TestExc</code>, or exceptions
+					// thrown while handling <code>TestExc
+</code>  21 	jsr 26				// Call <code>finally</code> block
+  24 	aload_1				// Push thrown value...
+  25 	athrow				// ...and rethrow the value to the invoker
+  26 	astore_2			// Beginning of <code>finally</code> block
+  27 	aload_0				// Push <code>this
+</code>  28 	invokevirtual #5 		// Method <code>Example.wrapItUp()V
+</code>  31 	ret 2				// Return from <code>finally</code> block
+Exception table:
+   	From 	To 	Target 		Type
+     	0     	4     	7 		Class <code>TestExc
+</code>     	0   	16    	20   		any
+</pre></blockquote><a name="9112"></a>
+If the <code>try</code> statement completes normally, the goto instruction at index 4 jumps to the subroutine call for the <code>finally</code> block at index 16. The <code>finally</code> block at index 26 is executed, control returns to the return instruction at index 19, and <code>tryCatchFinally</code> returns normally.<p>
+<a name="9220"></a>
+If <code>tryItOut</code> throws an instance of <code>TestExc</code>, the first (innermost) applicable exception handler in the exception table is chosen to handle the exception. The code for that exception handler, beginning at index 7, passes the thrown value to <code>handleExc</code> and on its return makes the same subroutine call to the <code>finally</code> block at index 26 as in the normal case. If an exception is not thrown by <code>handleExc</code>, <code>tryCatchFinally</code> returns normally.<p>
+<a name="9221"></a>
+If <code>tryItOut</code> throws a value that is not an instance of <code>TestExc</code> or if <code>handleExc</code> itself throws an exception, the condition is handled by the second entry in the exception table, which handles any value thrown between indices 0 and 16. That exception handler transfers control to index 20, where the thrown value is first stored in local variable 1. The code for the <code>finally</code> block at index 26 is called as a subroutine. If it returns, the thrown value is retrieved from local variable 1 and rethrown using the athrow instruction. If a new value is thrown during execution of the <code>finally</code> clause, the <code>finally</code> clause aborts, and <code>tryCatchFinally</code> returns abruptly, throwing the new value to its invoker.<p>
+<a name="6530"></a>
+<hr><h2>7.14    Synchronization</h2>
+The Java virtual machine provides explicit support for synchronization through its 
+monitorenter and monitorexit instructions. For code written in the Java programming
+language, however, perhaps the most common form of synchronization is the 
+<code>synchronized</code> method. 
+<p><a name="17817"></a>
+A <code>synchronized</code> method is not normally implemented using monitorenter and monitorexit. Rather, it is simply distinguished in the runtime constant pool by the <code>ACC_SYNCHRONIZED</code> flag, which is checked by the method invocation instructions. When invoking a method for which <code>ACC_SYNCHRONIZED</code> is set, the current thread acquires a monitor, invokes the method itself, and releases the monitor whether the method invocation completes normally or abruptly. During the time the executing thread owns the monitor, no other thread may acquire it. If an exception is thrown during invocation of the <code>synchronized</code> method and the <code>synchronized</code> method does not handle the exception, the monitor for the method is automatically released before the exception is rethrown out of the <code>synchronized</code> method.<p>
+<a name="13808"></a>
+The monitorenter and monitorexit instructions exist to support <code>synchronized</code> statements. For example:<p>
+<blockquote><pre><code>void onlyMe(Foo f) {
+</code><code>    synchronized(f) {
+</code><code>        doSomething();
+</code><code>    }
+</code><code>}
+</code></pre></blockquote>is compiled to
+<p><blockquote><pre>Method <code>void onlyMe(Foo)
+</code>   0 	aload_1				// Push <code>f</code>	
+   1 	astore_2			// Store it in local variable 2
+   2 	aload_2				// Push local variable 2 (<code>f</code>)
+   3 	monitorenter			// Enter the monitor associated with <code>f
+</code>   4 	aload_0				// Holding the monitor, pass <code>this</code> and...
+   5 	invokevirtual #5 		// ...call <code>Example.doSomething()V
+</code>   8	aload_2				// Push local variable 2 (<code>f</code>)
+   9	monitorexit			// Exit the monitor associated with <code>f
+</code>  10	return				// Return normally
+  11 	aload_2				// In case of any throw, end up here
+  12 	monitorexit			// Be sure to exit monitor...
+  13 	athrow				// ...then rethrow the value to the invoker
+Exception table:
+   	From	To 	Target 		Type
+     	4     	8    	11   		any
+</pre></blockquote><a name="17811"></a>
+<hr><h2>7.15    Compiling Nested Classes and Interfaces</h2>
+JDK release 1.1 added <i>nested classes and interfaces</i> to the Java programming 
+language. Nested classes and interfaces are sometimes referred to as <i>inner 
+classes and interfaces</i>, which are one sort of nested classes and interfaces. 
+However, nested classes and interfaces also encompass nested top-level 
+classes and interfaces, which are not inner classes or interfaces.
+<p><a name="16681"></a>
+A full treatment of the compilation of nested classes and interfaces is outside the scope of this chapter. However, interested readers can refer to the Inner Classes Specification at <code><a href="http://java.sun.com/products/jdk/1.1/docs/
+guide/innerclasses/spec/innerclasses.doc.html">http://java.sun.com/products/jdk/1.1/docs/guide/innerclasses/spec/innerclasses.doc.html</a></code>.<p>
+
+
+<hr>
+<sup>1</sup><a name="13842"></a>
+ This goto instruction is strictly unnecessary, but is generated by the <code>javac</code> compiler of Sun's JDK release 1.0.2.<p>
+<!-- This inserts footnotes--><p>
+<a href="VMSpecTOC.doc.html">Contents</a> | <a href="Instructions2.doc.html">Prev</a> | <a href="Threads.doc.html">Next</a> | <a href="VMSpecIX.fm.html">Index</a>
+<p>
+<font size="-1"><i>The Java</i><sup><font size=-2>TM</font></sup><i> Virtual Machine Specification </i><br>
+<!-- HTML generated by Suzette Pelouch on March 31, 1999 -->
+<i><a href="Copyright.doc.html">Copyright &#169 1999 Sun Microsystems, Inc.</a>
+All rights reserved</i>
+<br>
+Please send any comments or corrections to <a href="mailto:jvm@java.sun.com">jvm@java.sun.com</a>
+</font>
+</body></html>
